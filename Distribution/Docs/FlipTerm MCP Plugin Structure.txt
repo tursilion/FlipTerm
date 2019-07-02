@@ -1,0 +1,55 @@
+FlipTerm MCP Plugins
+--------------------
+
+FlipTerm supports extending it's MCP capabilities through plugin DLLs. These DLLs process only the amount of MCP required for their own functionality, which simplifies their creation and allows them to be more easily ported to other applications, as well.
+
+This is version 1.0 of this specification. It is expected to expand this spec as necessary as time goes on, however, backwards compatibility is expected to be maintained.
+
+FlipTerm plugins must export the following functions, with behaviour as described:
+
+int MCPPlugin_Initialize(char *pszRegKey)
+-This function initializes the DLL. It must disable processing of received strings pending receipt of the mcp-negotiate-can for it's packages. It must be possible to call this function at any time to reset the DLL's state. If the DLL can not initialize, it should return 0. However, be aware that it may be called again. Passes a pointer to the application registry key for storing configuration. (DLLs are recommended to store data under <registry key>\Plugins\<plugin name> ). This Registry key is under HKEY_CURRENT_USER, not HKEY_LOCAL_MACHINE. Successful initialization should return the version of this specification that the DLL comforms to, multiplied by 10. (IE: As of this writing all plugins should return 10 on success.)
+
+int MCPPlugIn_GetNumberPackages()
+-This function returns the number of packages contained in the DLL. It must return at least 1.
+
+const char *MCPPlugin_GetPackageName(int n)
+-Returns a static pointer to the name of package 'n', starting at 0. Return NULL if the value is out of range. Names must comply with the naming conventions in the MCP 2.1 specification.
+
+int MCPPlugin_GetPackageLowVersion(int n)
+-Returns an integer representing the lowest version of package 'n' supported (multiplied by 10, so that 2.1 will return 21). 'n' starts at 0.
+
+int MCPPlugin_GetPackageHighVersion(int n)
+-Returns an integer representing the highest version of package 'n' supported (multiplied by 10, so that 2.1 will return 21). 'n' starts at 0.
+
+bool MCPPlugin_ProcessString(char *pStr, HWND hWnd, char **pOut)
+-This function will be called containing MCP strings offered for processing. The following strings will be received:
+-mcp-negotiate-can - Packages within a DLL must be disabled until this string, with the appropriate arguments, identifies that the server understands that package
+-mcp multi-line data - Packages must process the data only if they recognize the data tag. It's critical that DLLs utilize a procedure to guarantee unique data tags within a session (sample code is provided in the DLL skeleton framework)
+-mcp cord commands - Packages must process the data only if the ID or type, as appropriate, is recognized.
+-mcp simple data - Packages must again process the data only if relevant. The session key is guaranteed to be valid and need not be checked.
+-A function that processes the string will return true. It may optionally set the char pointer pOut to point to a string to return to the server. This string may contain multiple lines, separated with \n. This buffer must be allocated on the program's heap, not the DLL's heap, so that it may be correctly freed. (Sample code is provided in the DLL skeleton framework.) The DLL is not expected to track the session key, the string should contain a string appropriate for sprintf() including a single '%s' for the session key. The string is currently limited to 32767 characters, and must end with \n.
+-The hWnd handle is the output window from which this request came. This information can be used to extract useful information about the client. More importantly, this handle is necessary to track multiple windows accessing the DLL. The Active flag must be on a per-window basis, requiring the DLL to keep track of the handles for which it is active.
+-Internal mcp messages, which may optionally be processed. These will not have your plugin's name. These are currently defined:
+--#$#mcp-internal <key> type: focus
+---Indicates that the source window has acquired focus
+
+void MCPPlugin_CloseSession(HWND hWnd)
+-While sessions are opened with the ProcessString() function, there is no automatic way to close a session. Therefore, this function is called when the muck disconnects, allowing the DLL to remove the entry from it's list
+
+void MCPPlugin_About()
+-This function should pop up a message box containing information about the author of this plugin. The plugin is added under the Help menu in FlipTerm and this function called when selected. This gives the user information about the plugin, lets you plug your work (no pun intended), and provides feedback that the plugin loaded successfully. 
+
+The following two functions allow for more generic plugins (optionally).
+
+bool MCPPlugin_WantPlainText()
+-This function should return true if the plug wants to see ALL strings, not just MCP strings. 
+MCP will go to the MCP function, all other strings will go to the plain text function.
+
+char *MCPPlugin_ProcessTextString(char *pStr, bool fActive)
+-This function will receive each string before it's printed to the screen. fActive reflects
+whether the view sending the string is currently active. It may return an arbitrary string 
+(which must be allocated from the program's heap) to reflect a new version of the string, or 
+NULL for no change. This string may include control characters and ANSI codes, which should
+be preserved where possible if a new string is returned.
+

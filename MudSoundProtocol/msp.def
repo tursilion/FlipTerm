@@ -1,0 +1,11 @@
+EXPORTS
+	MCPPlugin_Initialize			@1
+	MCPPlugin_GetNumberPackages		@2
+	MCPPlugin_GetPackageName		@3
+	MCPPlugin_GetPackageLowVersion	@4
+	MCPPlugin_GetPackageHighVersion	@5
+	MCPPlugin_ProcessString			@6
+	MCPPlugin_CloseSession			@7
+	MCPPlugin_WantPlainText			@8
+	MCPPlugin_ProcessTextString		@9
+	MCPPlugin_About					@10

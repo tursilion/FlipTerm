@@ -1,0 +1,83 @@
+@program mm-basic.karna
+1 99999 d
+1 i
+
+$include $lib/standard
+$include $lib/muckmate
+
+: do_Image
+dup not if "[!] See who/what?" .tell exit then
+match
+dup #-1 dbcmp if "[>] Be more specific." .tell exit then
+dup #-2 dbcmp if "[>] Be more specific." .tell exit then
+dup program? if "[>] Invalid object." .tell exit then
+dup "_muckmate/image" getpropstr not if 
+	"[!] This object has no defined image." .tell exit
+then
+dup "_muckmate/image" getpropstr swap mm_getFileName " " swap strcat strcat
+mm_Init swap mm_Image
+;
+
+: do_Music
+dup not if "[!] Listen to what music?" .tell exit then
+match
+dup #-1 dbcmp if "[>] Be more specific." .tell exit then
+dup #-2 dbcmp if "[>] Be more specific." .tell exit then
+dup program? if "[>] Invalid object." .tell exit then
+dup "_muckmate/music" getpropstr not if 
+	"[!] This object has no defined music." .tell exit
+then
+dup "_muckmate/music" getpropstr swap mm_getFileName " " swap strcat strcat
+mm_Init swap mm_Music
+;
+
+: do_Web
+dup not if "[!] View the website of whom?" .tell exit then
+match
+dup #-1 dbcmp if "[>] Be more specific." .tell exit then
+dup #-2 dbcmp if "[>] Be more specific." .tell exit then
+dup program? if "[>] Invalid object." .tell exit then
+dup "_muckmate/web" getpropstr not if 
+	"[!] This object has no defined website." .tell exit
+then
+dup "_muckmate/web" getpropstr swap mm_getFileName " " swap strcat strcat
+mm_Init swap mm_Web
+;
+
+: do_Flash
+dup not if "[!] View which Shockwave Flash movie?" .tell exit then
+match
+dup #-1 dbcmp if "[>] Be more specific." .tell exit then
+dup #-2 dbcmp if "[>] Be more specific." .tell exit then
+dup program? if "[>] Invalid object." .tell exit then
+dup "_muckmate/flash" getpropstr not if 
+	"[!] This object has no defined Shockwave Flash movie." .tell exit
+then
+dup "_muckmate/flash" getpropstr swap mm_getFileName " " swap strcat strcat
+mm_Init swap mm_Flash
+;
+
+: do_Video
+dup not if "[!] View which MPEG movie?" .tell exit then
+match
+dup #-1 dbcmp if "[>] Be more specific." .tell exit then
+dup #-2 dbcmp if "[>] Be more specific." .tell exit then
+dup program? if "[>] Invalid object." .tell exit then
+dup "_muckmate/video" getpropstr not if 
+	"[!] This object has no defined MPEG movie." .tell exit
+then
+dup "_muckmate/video" getpropstr swap mm_getFileName " " swap strcat strcat
+mm_Init swap mm_Video
+;
+
+: main
+command @ "@image" stringcmp 0 = if do_Image exit then
+command @ "@music" stringcmp 0 = if do_Music exit then
+command @ "@flash" stringcmp 0 = if do_Flash exit then
+command @ "@web" stringcmp 0 = if do_Web exit then
+command @ "@video" stringcmp 0 = if do_Video exit then
+;
+
+.
+c
+q

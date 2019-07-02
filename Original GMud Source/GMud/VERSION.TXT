@@ -1,0 +1,85 @@
+Bug Fixes / enhancements from 1.7a to 1.7b
+	Last minute bug when users had no worlds... fixed.
+Bug Fixes / enhancements from 1.5a to 1.7a
+	Added Local Echo option, which toggles wether commands you type are printed in the 
+		output window... If your mud is already echoing what you type, disable this option.
+	Minor reworking / spell checking of document.
+	I think there was this silly message in 1.5a's dialog box, it's fixed now.
+	Added Paste File option
+	Added Copy from output window, made it automagically pause and unpause, just use left
+		mouse button, and it auto-copys when you let up on the mouse button.
+	Added Pause Option
+	Added Log to File option.
+	Changed from sending NL/LF to NL when you hit enter key, was causing probs on some muds.
+	Added Command line parameters, format:
+		gmud worldname  (connects to the world name) or
+		gmud host port	(Adds the world to the world list and connects to the host)
+Bug Fixes / enhancements from 1.0c to 1.5a
+	Added multiple trigger / macro setups
+        moved data file back to GMUD directory
+        Added description field to worlds
+	Dialogs went through minor rework
+	Fixed rare GPF in connect dialog.
+	fixed bug causing sound for triggers when no sound was selected.
+	lots of little bugs / anomalities fixed
+	Minor upgrades to documentation.
+	TONS of stuff that I can't remember now...
+
+Bug Fixes / enhancements from 1.0b to 1.0c
+	corrupt .rc file left out menu option for showing macro bar.
+
+Bug Fixes / enhancements from 1.0a to 1.0b
+	ANSI Color! Yeah :)
+	fixed bug allowing you to enter a blank world name.
+	fixed bug where name server would fail if there were extra spaces after host name.
+	alot more small bugs fixed.
+	hopefully not too many bugs introduced with ANSI...
+
+Bug Fixes / enhancements from 0.9b to 1.0a
+	Changed file naming convention to GMD32XXx.ZIP
+		where XX is major/minor version number, 
+		and x is alphabetic bug fix / confidence level release:)
+	Added more buttons to the toolbar to represent common GMUD functions.
+	Added option to wrap options dialog to indent wrapped lines.
+	Fixed a bizzare bug that wouldn't let it save foreground color of black.
+	Increased scrollback buffer size to 500 lines.
+	Further increased output window speed, and input window response time.
+
+Bug Fixes / enhancements from 0.8a to 0.9b
+	fixed another problem with muds that prompt.
+	Added connected worlds list, showing which worlds have had activity,
+	  and allowing the user to switch between them by clicking on the list.
+	fixed bug not allowing numeric addresses.
+    Email address of author changed to Entropy@infobahn.icubed.com
+
+Bug fixes / enhancements from 0.7a to 0.8a
+
+	fixed problems with the way some servers implement tabs, and carriage returns.
+	fixed minor internal bug with newlines when 2 windows were opened at once.
+	fixed problems that might cause spacing to appear strange on certain mud servers.
+
+	It seems that alot of servers do things very differently, and have hidden codes 
+	that are supposed to prompt the client for certain information... if you see any
+	thing strange with your mud server, or know of any specifications for such hidden
+	codes, please forward me a copy or drop me a letter.
+	Entropy@infobahn.icubed.com
+
+Bug fixes / enhancements from 0.6a to 0.7a
+
+	fixed problem with logging on to certain servers.
+
+	fixed problem dealing with muds that have single line prompts, 
+	where you wouldn't see the prompt because the client was waiting
+	for a carriage return.
+
+	major performance improvements to output window scrolling speed.
+	    (Should I allow the user to slow down scrolling now?)
+
+	slightly more responsive input window.
+
+Bug fixes / enhancements from 0.5a to 0.6a
+
+	Fixed keyboard buffer arrow key GPF.
+	Saves screen wrap preferences.
+	Performance / appearance enhancements to output window scrolling.
+	Added user selectable text / background color.

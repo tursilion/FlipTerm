@@ -1,0 +1,44 @@
+MuckMate MCP Wrapper v1.0 - by Tursi
+------------------------------------
+
+MuckMate is a standalone external program created by Karna of MtakiSoft
+that extends the standard text-based Muck experience by adding sounds,
+music, and images WITHOUT any dependance on what muck client you choose
+to use.
+
+Under the standard MuckMate usage, the Mud Server contacts the client
+directly when it wants to communicate information to MuckMate. MuckMate
+then has enough information to go out and fetch the desired resource
+itself.
+
+This works well in most situations and provides the 100% independance
+from the Mud client that the author was intending. You get the extra
+features without having to switch clients.
+
+There are two potential problems with this approach, however.
+
+The first is almost entirely an administration issue. Players running
+a personal firewall or otherwise monitoring connections to their machine
+may be alarmed to see incoming connections being made to their system.
+This is easily addressed so long as the Wizards of the muck make very
+clear to their users that this will happen as a part of the MuckMate
+extension. The port is well-defined and so can easily be watched for.
+
+The second is the problem of players behind a NAT or other firewall that
+prevents incoming connections from reaching their machine. Other than
+the overkill of UPNP, or punching the port directly through the firewall,
+there doesn't seem to be any solution.
+
+MCP is a mechanism by which a 7-bit ASCII based Mud may send 'Out of band'
+information to a client that supports it. This permits nearly anything
+beyond text to be implemented, however, it is up to the client to provide
+the necessary services. MCP is supported by the server FuzzBall 6, and by
+the clients Trebuchet and FlipTerm. There may be others.
+
+This wrapper attempts to provide a thin layer between MCP and MuckMate,
+which permits adding a great number of features with very minimal client
+support. The client must only understand enough MCP to send a command to
+MuckMate. By moving the connection to MuckMate to the local client, the
+firewall problems are also addressed.
+
+--- more to come ---

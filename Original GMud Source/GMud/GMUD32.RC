@@ -1,0 +1,700 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""res\\Mud32.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "\r\n"
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "#include ""afxres.rc""  \t// Standard components\r\n"
+    "#include ""afxolesv.rc""\t// OLE server resources\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\Mud32.ico"
+IDR_MudTYPE             ICON    DISCARDABLE     "res\\Mud32doc.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP  MOVEABLE PURE   "res\\toolbar.bmp"
+IDB_BITMAP1             BITMAP  DISCARDABLE     "res\\bitmap1.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "Edit &Trigger List",          ID_FILE_EDITTRIGGERLIST
+        MENUITEM "Edit &World list",            ID_FILE_EDITWORLDLIST
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+        MENUITEM "&Macro Window",               ID_VIEW_MACROWINDOW
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&New",                        ID_WINDOW_NEW_OPEN_DOC
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About Mud32...",             ID_APP_ABOUT
+    END
+END
+
+IDR_MudTYPE MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Connect",                    ID_SERVER_CONNECT
+        MENUITEM "&Disconnect",                 ID_SERVER_DISCONNECT
+        MENUITEM SEPARATOR
+        MENUITEM "Toggle &Logging",             ID_FILE_TOGGLELOGGING
+        MENUITEM "Toggle local &Echoing",       ID_FILE_TOGGLELOCALECHOING
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "Paste &File",                 ID_PASTE_FILE
+        MENUITEM "Edit &Alias list",            ID_EDIT_ALIASLIST
+        MENUITEM "Edit &World list",            ID_FILE_EDITWORLDLIST
+        MENUITEM "Edit &Trigger List",          ID_FILE_EDITTRIGGERLIST
+        MENUITEM "&Sound settings",             ID_SOUNDS_SETTINGS
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+        MENUITEM "&Macro Window",               ID_VIEW_MACROWINDOW
+        MENUITEM "&Connected World Window",     ID_VIEW_WORLDWINDOW
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&New Window",                 ID_WINDOW_NEW_OPEN_DOC
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
+        MENUITEM "screen &Wrap...",             ID_VIEW_WRAP
+        MENUITEM "&Font",                       ID_VIEW_FONT
+        MENUITEM "Co&Lor",                      ID_WINDOW_COLOR
+        MENUITEM "&Pause",                      ID_WINDOW_PAUSE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About Mud32...",             ID_APP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    VK_F1,          IDC_BUTTON1,            VIRTKEY, NOINVERT
+    VK_F10,         IDC_BUTTON10,           VIRTKEY, NOINVERT
+    VK_F2,          IDC_BUTTON2,            VIRTKEY, NOINVERT
+    VK_F3,          IDC_BUTTON3,            VIRTKEY, NOINVERT
+    VK_F4,          IDC_BUTTON4,            VIRTKEY, NOINVERT
+    VK_F5,          IDC_BUTTON5,            VIRTKEY, NOINVERT
+    VK_F6,          IDC_BUTTON6,            VIRTKEY, NOINVERT
+    VK_F7,          IDC_BUTTON7,            VIRTKEY, NOINVERT
+    VK_F8,          IDC_BUTTON8,            VIRTKEY, NOINVERT
+    VK_F9,          IDC_BUTTON9,            VIRTKEY, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  34, 22, 250, 135
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About GMud32"
+FONT 8, "MS Sans Serif"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,18,20
+    LTEXT           "GeNewIc Mud Client for Winsock, version 1.7b",
+                    IDC_STATIC,39,10,207,8
+    LTEXT           "Copyright © 1995 Daniel L Kelly. All Rights Reserved.",
+                    IDC_STATIC,39,28,207,8
+    DEFPUSHBUTTON   "&OK",IDOK,105,115,32,14,WS_GROUP
+    LTEXT           "Win-95 / Win-NT / Win32s",IDC_STATIC,39,19,207,8
+    LTEXT           "To support further development of this program, send $20 to:",
+                    IDC_STATIC,39,37,207,8
+    LTEXT           "Dan Kelly",IDC_STATIC,50,50,134,8
+    LTEXT           "1136 Mellon Street Apt. #1",IDC_STATIC,50,60,134,8
+    LTEXT           "Pittsburgh, PA 15206-1526",IDC_STATIC,50,70,134,8
+    CTEXT           "Send Bug Reports and enhancement requests to : Entropy@Infobahn.Icubed.Com",
+                    IDC_STATIC,3,88,243,8
+    CTEXT           "Get the latest version in ftp://papa.indstate.edu/winsock-l/mud/",
+                    IDC_STATIC,2,100,245,10
+END
+
+IDD_VIEW_SETTINGS DIALOG DISCARDABLE  0, 0, 235, 108
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Output window wrapping"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "&80 columns",IDC_80columns,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,33,24,75,10
+    CONTROL         "Wrap to &screen",IDC_wrapscreen,"Button",
+                    BS_AUTORADIOBUTTON,33,39,75,10
+    CONTROL         "&Indent wrapped lines by 2 spaces",IDC_CHECK1,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,33,62,159,10
+    CONTROL         "&Character",IDC_characterwrap,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP,139,24,66,10
+    CONTROL         "&Word",IDC_wordwrap,"Button",BS_AUTORADIOBUTTON,139,39,
+                    71,10
+    DEFPUSHBUTTON   "&OK",IDOK,125,88,50,14,WS_GROUP
+    PUSHBUTTON      "&Cancel",IDCANCEL,59,88,50,14,WS_GROUP
+    LTEXT           "Wrap to nearest",IDC_STATIC,139,7,71,13
+    LTEXT           "Virtual Screen Width",IDC_STATIC,33,7,85,7
+END
+
+IDD_CONNECT DIALOG DISCARDABLE  0, 0, 353, 171
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Connect to a Mud Server"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LISTBOX         IDC_WORLDLIST,5,11,115,148,LBS_SORT | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_HOSTNAME,165,11,182,12,ES_AUTOHSCROLL | 
+                    ES_OEMCONVERT
+    EDITTEXT        IDC_PORT,165,24,40,12,ES_AUTOHSCROLL | ES_OEMCONVERT
+    PUSHBUTTON      "Change &Trigger set",IDC_CHANGE_TRIGGER,263,38,74,12
+    PUSHBUTTON      "Change &Macro set",IDC_CHANGE_MACRO,263,51,74,12
+    EDITTEXT        IDC_DESCRIPTION,129,85,218,23,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_CONNECTSTRING,129,116,219,29,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_OEMCONVERT | 
+                    ES_WANTRETURN | WS_VSCROLL
+    DEFPUSHBUTTON   "C&onnect",IDOK,129,151,38,14
+    PUSHBUTTON      "&Add",IDC_ADD,174,151,38,14
+    PUSHBUTTON      "&Delete",IDC_DELETE_WORLD,219,151,38,14
+    PUSHBUTTON      "&Rename",IDC_RENAME_WORLD,264,151,38,14
+    PUSHBUTTON      "E&xit",IDCANCEL,309,151,38,14
+    CTEXT           "MUD Name",IDC_STATIC,5,2,115,8
+    RTEXT           "Host Name:",IDC_STATIC,123,14,42,8
+    RTEXT           "Port:",IDC_STATIC,123,26,42,8
+    LTEXT           "Text to output upon connect",IDC_STATIC,130,108,117,8
+    RTEXT           "Trigger Set:",IDC_STATIC,122,39,42,8
+    CONTROL         "Static",IDC_TRIGSETNAME,"Static",SS_LEFTNOWORDWRAP | 
+                    WS_GROUP,165,39,96,8
+    RTEXT           "Macro Set:",IDC_STATIC,122,53,42,8
+    CONTROL         "Static",IDC_MACROSETNAME,"Static",SS_LEFTNOWORDWRAP | 
+                    WS_GROUP,165,53,96,8
+    LTEXT           "Description",IDC_STATIC,131,77,47,8
+    PUSHBUTTON      "Change &Alias set",IDC_CHANGE_ALIAS,263,64,74,12
+    RTEXT           "Alias Set:",IDC_STATIC,122,66,42,8
+    LTEXT           "Static",IDC_ALIAS_SET,165,66,96,8
+END
+
+IDD_RENAME DIALOG DISCARDABLE  0, 0, 186, 92
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Rename World"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_NEWNAME,49,43,129,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&Cancel",IDCANCEL,70,70,50,14
+    DEFPUSHBUTTON   "&OK",IDOK,127,71,50,14
+    RTEXT           "Rename",IDC_STATIC,3,9,34,8
+    RTEXT           "To",IDC_STATIC,3,44,34,15
+    LTEXT           "Static",IDC_OLDNAME,49,9,129,21
+END
+
+IDD_MACRO_BAR DIALOG DISCARDABLE  0, 0, 66, 167
+STYLE WS_CHILD | WS_BORDER
+FONT 7, "Small Fonts"
+BEGIN
+    PUSHBUTTON      "Edit Macros",IDC_BUTTON_EDIT,15,2,49,14
+    PUSHBUTTON      "Button1",IDC_BUTTON1,15,17,49,14
+    PUSHBUTTON      "Button2",IDC_BUTTON2,15,32,49,14
+    PUSHBUTTON      "Button3",IDC_BUTTON3,15,47,49,14
+    PUSHBUTTON      "Button4",IDC_BUTTON4,15,62,49,14
+    PUSHBUTTON      "Button5",IDC_BUTTON5,15,77,49,14
+    PUSHBUTTON      "Button6",IDC_BUTTON6,15,92,49,14
+    PUSHBUTTON      "Button7",IDC_BUTTON7,15,107,49,14
+    PUSHBUTTON      "Button8",IDC_BUTTON8,15,122,49,14
+    PUSHBUTTON      "Button9",IDC_BUTTON9,15,137,49,14
+    PUSHBUTTON      "Button10",IDC_BUTTON10,15,152,49,14
+    RTEXT           "F1",IDC_STATIC,1,20,11,8
+    RTEXT           "F2",IDC_STATIC,1,35,11,8
+    RTEXT           "F3",IDC_STATIC,1,50,11,8
+    RTEXT           "F4",IDC_STATIC,1,65,11,8
+    RTEXT           "F5",IDC_STATIC,1,80,11,8
+    RTEXT           "F6",IDC_STATIC,1,95,11,8
+    RTEXT           "F7",IDC_STATIC,1,110,11,8
+    RTEXT           "F8",IDC_STATIC,1,125,11,8
+    RTEXT           "F9",IDC_STATIC,1,140,11,8
+    RTEXT           "F10",IDC_STATIC,1,155,11,8
+END
+
+IDD_BUTTON_EDIT DIALOG DISCARDABLE  0, 0, 402, 233
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit Macro List"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&OK",IDOK,339,215,50,14
+    EDITTEXT        IDC_EDIT1,19,3,175,39,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT2,19,45,175,39,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT3,19,87,175,39,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT4,19,129,175,39,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT5,19,171,175,39,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT6,215,3,175,39,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT7,215,45,175,39,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT8,215,87,175,39,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT9,215,129,175,39,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT10,215,171,175,39,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    ES_WANTRETURN | WS_VSCROLL
+    PUSHBUTTON      "&Cancel",IDCANCEL,273,215,50,14
+    RTEXT           "F1",IDC_STATIC,3,18,13,8
+    RTEXT           "F4",IDC_STATIC,3,144,13,8
+    RTEXT           "F5",IDC_STATIC,2,186,13,8
+    RTEXT           "F2",IDC_STATIC,3,60,13,8
+    RTEXT           "F6",IDC_STATIC,197,18,13,8
+    RTEXT           "F3",IDC_STATIC,3,102,13,8
+    RTEXT           "F7",IDC_STATIC,197,60,13,8
+    RTEXT           "F8",IDC_STATIC,197,102,13,8
+    RTEXT           "F9",IDC_STATIC,197,144,13,8
+    RTEXT           "F10",IDC_STATIC,197,186,13,8
+END
+
+IDD_TRIGGER_DIALOG DIALOG DISCARDABLE  0, 0, 344, 149
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Triggers"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&OK",IDOK,299,129,38,14
+    COMBOBOX        IDC_TRIGGER_LIST,7,14,164,131,CBS_SIMPLE | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_MUDTEXT,177,25,153,31,ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_AUTOHSCROLL
+    EDITTEXT        IDC_FILENAME,177,81,153,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&Browse",IDC_BROWSE_FILE,179,98,49,14
+    PUSHBUTTON      "&Test",IDC_TEST_SOUND,237,98,49,14
+    PUSHBUTTON      "&Delete",IDC_DELETE,199,129,49,14
+    PUSHBUTTON      "&Add",IDADD,251,129,44,14
+    LTEXT           "Trigger Text, please note that case IS significant",
+                    IDC_STATIC,7,3,167,8
+    LTEXT           "Output simple Text to MUD when triggered.",IDC_STATIC,
+                    177,13,153,11
+    LTEXT           "Play sound file when triggered",IDC_PLAYFILE,177,69,153,
+                    8
+END
+
+IDD_TEXT_COLOR DIALOG DISCARDABLE  0, 0, 219, 117
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Change Text Color"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,159,98,50,14
+    COMBOBOX        IDC_COMBO1,15,20,100,50,CBS_DROPDOWNLIST | 
+                    CBS_OWNERDRAWFIXED | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO2,15,55,100,50,CBS_DROPDOWNLIST | 
+                    CBS_OWNERDRAWFIXED | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Enable &Ansi color",IDC_ENABLE_ANSI,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,15,82,151,10
+    PUSHBUTTON      "Cancel",IDCANCEL,101,98,50,14
+    GROUPBOX        "Text Color",IDC_STATIC,11,8,112,30
+    GROUPBOX        "Background Color",IDC_STATIC,11,43,112,30
+END
+
+IDD_CONNECTED_WORLD_BAR DIALOG DISCARDABLE  0, 0, 68, 68
+STYLE WS_CHILD
+FONT 7, "Small Fonts"
+BEGIN
+    LISTBOX         IDC_CONNECT_LIST,2,9,65,59,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CTEXT           "Click here to Drag",IDC_STATIC,2,1,63,8
+END
+
+IDD_SOUNDS_DIALOG DIALOG DISCARDABLE  0, 0, 164, 95
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "GMUD Sound Settings"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Enable &Trigger sounds",IDC_TRIGGER_SOUND,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,40,18,114,10
+    CONTROL         "Enable &Bell sound",IDC_BELL_SOUND,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,40,34,115,10
+    CONTROL         "&Connect sound",IDC_CONNECT_BEEP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,40,50,113,10
+    DEFPUSHBUTTON   "OK",IDOK,90,75,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,24,75,50,14
+END
+
+IDD_NAME_DIALOG DIALOG DISCARDABLE  0, 0, 207, 61
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "New"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_NAME,10,20,185,12,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,110,40,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,50,40,50,14
+    CTEXT           "Enter a name for your new world",IDC_PROMPT,15,5,175,10
+END
+
+IDD_SELARRAY_EDIT DIALOG DISCARDABLE  0, 0, 237, 166
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&Done",IDOK,179,143,50,14
+    LISTBOX         IDC_ARRAY_LIST,5,5,165,155,LBS_SORT | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "&EDIT",IDC_EDIT,180,55,49,14
+    PUSHBUTTON      "&Copy",IDC_COPY,180,77,49,14
+    PUSHBUTTON      "&New",IDC_NEW,180,99,49,14
+    PUSHBUTTON      "&Delete",IDC_DELETE,180,121,49,14
+END
+
+IDD_REPLACE_FILE DIALOG DISCARDABLE  0, 0, 235, 95
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "File already exists"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&Overwrite",IDOK,76,76,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,178,76,50,14
+    PUSHBUTTON      "Append",IDC_APPEND,127,76,50,14
+    LTEXT           "The Following file already exists:",IDC_STATIC,15,9,203,
+                    8
+    LTEXT           "Static",IDC_FILENAME,15,24,208,10
+    LTEXT           "You can either &Overwrite the file, erasing any contents it may have had, or &Append to the file, keeping whatever is there, and adding on to the end of it, or cancel the logging operation.",
+                    IDC_STATIC,15,42,211,29
+END
+
+IDD_ALIAS_EDIT DIALOG DISCARDABLE  0, 0, 327, 168
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit Aliases"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,270,147,50,14
+    PUSHBUTTON      "&Delete",IDC_DELETE,211,147,50,14
+    PUSHBUTTON      "&Insert",IDC_INSERT,155,147,50,14
+    LISTBOX         IDC_ALIAS_LIST,7,7,144,154,LBS_SORT | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_ALIAS_OUTPUT,153,7,167,118,ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL
+    PUSHBUTTON      "&Edit",IDC_EDIT,156,130,50,14
+END
+
+IDD_ALIAS_SINGLE_EDIT DIALOG DISCARDABLE  0, 0, 306, 164
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Alias"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_INPUT,7,18,231,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_OUTPUT,7,50,231,107,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    WS_VSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,249,119,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,249,143,50,14
+    LTEXT           "Alias text to look for",IDC_STATIC,7,7,62,8
+    LTEXT           "Text to output to mud",IDC_STATIC,7,36,71,8
+END
+
+IDD_DIALOG1 DIALOG DISCARDABLE  0, 0, 186, 92
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,129,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,129,24,50,14
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x21L
+#else
+ FILEFLAGS 0x20L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "GeNewIc\0"
+            VALUE "FileDescription", "32 bit Mud client for windoze NT / windoze 95 running Winsock\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "Mud32\0"
+            VALUE "LegalCopyright", "Copyright © 1995 Genewic, Dan Kelly\0"
+            VALUE "OriginalFilename", "Mud32.EXE\0"
+            VALUE "ProductName", "GeNewIc Mud Client for Winsock, version 0.5alpha\0"
+            VALUE "ProductVersion", "1.0a\0"
+            VALUE "SpecialBuild", "Alpha\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ALIAS_EDIT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 320
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 161
+    END
+
+    IDD_ALIAS_SINGLE_EDIT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 299
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 157
+    END
+
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 85
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDP_SOCKETS_INIT_FAILED "Windows sockets initialization failed."
+END
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    IDR_MAINFRAME           "Mud"
+    IDR_MudTYPE             "\nMud\nMud\n\n\nMud\nMud Document"
+END
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "Mud32"
+    AFX_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+    ID_FILE_SAVE_COPY_AS    "Save a copy of the active document with a new name\nSave Copy"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application\nExit"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_WINDOW_NEW           "Opens a new window\nNew Window"
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Show Copy Selection window\nShow Copy Selection Window"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_TOOLBAR         "Show or hide the toolbar\nToggle ToolBar"
+    ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle StatusBar"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "Change the window size"
+    AFX_IDS_SCMOVE          "Change the window position"
+    AFX_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    AFX_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    AFX_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    AFX_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "Restore the window to normal size"
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+    AFX_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_SERVER_CONNECT       "Connect to a Mud server\nConnect"
+    ID_SERVER_DISCONNECT    "Disconnect from the server.\nDisconnect"
+    ID_VIEW_WRAP            "Change wrapping options for all windows\nScreen Wrap"
+    ID_WINDOW_NEW_OPEN_DOC  "Opens a new window\nNew Window"
+    ID_FILE_EDITWORLDLIST   "Edit the list of worlds.\nEdit world list"
+    ID_VIEW_FONT            "Change the font for all windows\nChange Font"
+    ID_FILE_EDITTRIGGERLIST "Edit the list of triggers\nEdit Triggers"
+    ID_WINDOW_COLOR         "Change the foreground/background color and toggle ANSI support\nColors / Ansi"
+    ID_SOUNDS_SETTINGS      "Options for controlling when GMUD makes sounds\nSounds Settings"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_MACROWINDOW     "Show or hide the Macro Window\nToggle Macro Window"
+    ID_VIEW_WORLDWINDOW     "Show or hide the Connected World list\nToggle Connected World list"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_WINDOW_PAUSE         "Pause the window, stopping receiving from the mud server\nPause"
+    ID_FILE_TOGGLELOGGING   "Turn On / Off Disk Logging.\nLog to Disk"
+    ID_FILE_TOGGLELOCALECHOING 
+                            "If this option is checked, all text sent to the mud will be echoed to the output window.\nEcho"
+    ID_PASTE_FILE           "Select a file, and paste it to the mud."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#include "res\Mud32.rc2"  // non-Microsoft Visual C++ edited resources
+
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+#include "afxres.rc"  	// Standard components
+#include "afxolesv.rc"	// OLE server resources
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

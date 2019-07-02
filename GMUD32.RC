@@ -1,0 +1,922 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#include ""res\\Mud32.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "\r\n"
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "#include ""afxres.rc""  \t// Standard components\r\n"
+    "#include ""afxolesv.rc""\t// OLE server resources\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\Mud32.ico"
+
+IDR_MudTYPE             ICON                    "RES\\icon1.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\toolbar.bmp"
+
+IDB_NUMBERS             BITMAP                  "RES\\NumberBar.bmp"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MudTYPE MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Logging...",                 ID_FILE_TOGGLELOGGING
+        MENUITEM "Paste &File...",              ID_FILE_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "&Connect...",                 ID_FILE_CONNECT
+        MENUITEM "&Disconnect",                 ID_FILE_DISCONNECT
+        MENUITEM SEPARATOR
+        MENUITEM "&Save Settings",              ID_FILE_SAVESETTINGS
+        MENUITEM "&Export Settings",            ID_FILE_EXPORTSETTINGS
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_FILE_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Aliases...",                 ID_EDIT_ALIASLIST
+        MENUITEM "Macros...",                   IDC_MACROBTN_EDIT
+        MENUITEM "&Triggers...",                ID_EDIT_TRIGGERLIST
+        MENUITEM SEPARATOR
+        MENUITEM "&Worlds...",                  ID_EDIT_WORLDLIST
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Connected World Window",     ID_VIEW_WORLDWINDOW
+        MENUITEM "&Macro Window",               ID_VIEW_MACROWINDOW
+        MENUITEM "&Number Bar",                 ID_VIEW_WINDOWBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM SEPARATOR
+        MENUITEM "Browse Log Folder",           ID_VIEW_BROWSELOG
+    END
+    POPUP "Options"
+    BEGIN
+        MENUITEM "S&witches...",                ID_OPTIONS_SWITCHES
+        MENUITEM "Screen &Wrap...",             ID_OPTIONS_WRAP
+        MENUITEM "&Sound Settings...",          ID_OPTIONS_SOUND
+        MENUITEM SEPARATOR
+        MENUITEM "Default &Font...",            ID_OPTIONS_FONT
+        MENUITEM "Default &Log Folder...",      ID_OPTIONS_DEFAULTLOGFOLDER
+        MENUITEM "Default Screen Co&lors...",   ID_OPTIONS_COLOR
+        MENUITEM "System &Message Color...",    ID_OPTIONS_SYSTEMMESSAGECOLOR
+        MENUITEM SEPARATOR
+        MENUITEM "Global S&ystem Colors...",    ID_OPTIONS_DEFAULTCOLORS
+    END
+    POPUP "&Plugins"
+    BEGIN
+        MENUITEM SEPARATOR
+    END
+    POPUP "URLs"
+    BEGIN
+        MENUITEM SEPARATOR
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&New Window",                 ID_WINDOW_NEW_OPEN_DOC
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile Horizontal",            ID_WINDOW_TILE_HORZ
+        MENUITEM "Tile &Vertical",              ID_WINDOW_TILE_VERT
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
+        MENUITEM "&Pause",                      ID_WINDOW_PAUSE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About FlipTerm...",          ID_HELP_ABOUT
+    END
+END
+
+IDR_MAINFRAME MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Save Settings",              ID_FILE_SAVESETTINGS
+        MENUITEM "&Export Settings",            ID_FILE_EXPORTSETTINGS
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_FILE_EXIT
+    END
+    POPUP "Edit"
+    BEGIN
+        MENUITEM "&Aliases...",                 ID_EDIT_ALIASLIST
+        MENUITEM "Macros...",                   IDC_MACROBTN_EDIT
+        MENUITEM "&Triggers...",                ID_EDIT_TRIGGERLIST
+        MENUITEM SEPARATOR
+        MENUITEM "&Worlds...",                  ID_EDIT_WORLDLIST
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Connected World Window",     ID_VIEW_WORLDWINDOW
+        MENUITEM "&Macro Window",               ID_VIEW_MACROWINDOW
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+    END
+    MENUITEM "Options",                     65535, GRAYED
+    MENUITEM "Plugins",                     65535, GRAYED
+    POPUP "URLs"
+    BEGIN
+        MENUITEM SEPARATOR
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&New",                        ID_WINDOW_NEW_OPEN_DOC
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About FlipTerm...",          ID_HELP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS
+BEGIN
+    "0",            IDC_WINDOW10,           VIRTKEY, CONTROL, NOINVERT
+    "0",            IDC_WINDOW10,           VIRTKEY, ALT, NOINVERT
+    "1",            IDC_WINDOW1,            VIRTKEY, CONTROL, NOINVERT
+    "1",            IDC_WINDOW1,            VIRTKEY, ALT, NOINVERT
+    "2",            IDC_WINDOW2,            VIRTKEY, CONTROL, NOINVERT
+    "2",            IDC_WINDOW2,            VIRTKEY, ALT, NOINVERT
+    "3",            IDC_WINDOW3,            VIRTKEY, CONTROL, NOINVERT
+    "3",            IDC_WINDOW3,            VIRTKEY, ALT, NOINVERT
+    "4",            IDC_WINDOW4,            VIRTKEY, CONTROL, NOINVERT
+    "4",            IDC_WINDOW4,            VIRTKEY, ALT, NOINVERT
+    "5",            IDC_WINDOW5,            VIRTKEY, CONTROL, NOINVERT
+    "5",            IDC_WINDOW5,            VIRTKEY, ALT, NOINVERT
+    "6",            IDC_WINDOW6,            VIRTKEY, CONTROL, NOINVERT
+    "6",            IDC_WINDOW6,            VIRTKEY, ALT, NOINVERT
+    "7",            IDC_WINDOW7,            VIRTKEY, CONTROL, NOINVERT
+    "7",            IDC_WINDOW7,            VIRTKEY, ALT, NOINVERT
+    "8",            IDC_WINDOW8,            VIRTKEY, CONTROL, NOINVERT
+    "8",            IDC_WINDOW8,            VIRTKEY, ALT, NOINVERT
+    "9",            IDC_WINDOW9,            VIRTKEY, CONTROL, NOINVERT
+    "9",            IDC_WINDOW9,            VIRTKEY, ALT, NOINVERT
+    VK_DOWN,        IDC_HISTORYNEXT,        VIRTKEY, ALT, NOINVERT
+    VK_F1,          IDC_MACROBTN1,          VIRTKEY, NOINVERT
+    VK_F10,         IDC_MACROBTN10,         VIRTKEY, NOINVERT
+    VK_F2,          IDC_MACROBTN2,          VIRTKEY, NOINVERT
+    VK_F3,          IDC_MACROBTN3,          VIRTKEY, NOINVERT
+    VK_F4,          IDC_MACROBTN4,          VIRTKEY, NOINVERT
+    VK_F5,          IDC_MACROBTN5,          VIRTKEY, NOINVERT
+    VK_F6,          IDC_MACROBTN6,          VIRTKEY, NOINVERT
+    VK_F7,          IDC_MACROBTN7,          VIRTKEY, NOINVERT
+    VK_F8,          IDC_MACROBTN8,          VIRTKEY, NOINVERT
+    VK_F9,          IDC_MACROBTN9,          VIRTKEY, NOINVERT
+    VK_UP,          IDC_HISTORYPREV,        VIRTKEY, ALT, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 34, 22, 250, 135
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About FlipTerm"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "&OK",IDOK,105,115,32,14,WS_GROUP
+    PUSHBUTTON      "http://harmlesslion.com",IDC_BUTTON2,20,85,215,25
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "FlipTerm Mud Client for Windows - Derived from GMud 1.7b",IDC_STATIC,39,10,207,8
+    LTEXT           "Original Program by Daniel L Kelly",IDC_STATIC,39,28,207,8
+    LTEXT           "Win9x / NT / 2k / XP",IDC_STATIC,39,19,207,8
+    LTEXT           "Patched, cleaned up, then hacked all over again by Tursi",IDC_STATIC,39,37,207,8
+    LTEXT           "Released for FlipSide Muck under the",IDC_STATIC,50,50,134,8
+    LTEXT           "terms of the original code agreement.",IDC_STATIC,50,60,134,8
+    LTEXT           "This software may not be sold.",IDC_STATIC,50,70,134,8
+    LTEXT           "Release Version 1.11.2\r\n6 Jun 2016 - 9:25am",IDC_STATIC,147,113,95,16
+END
+
+IDD_VIEW_SETTINGS DIALOG 0, 0, 235, 108
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Output window wrapping"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "&80 columns",IDC_80columns,"Button",BS_AUTORADIOBUTTON | WS_GROUP,33,24,75,10
+    CONTROL         "Wrap to &screen",IDC_wrapscreen,"Button",BS_AUTORADIOBUTTON,33,39,75,10
+    CONTROL         "&Indent wrapped lines by 2 spaces",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,33,62,159,10
+    CONTROL         "&Character",IDC_characterwrap,"Button",BS_AUTORADIOBUTTON | WS_GROUP,139,24,66,10
+    CONTROL         "&Word",IDC_wordwrap,"Button",BS_AUTORADIOBUTTON,139,39,71,10
+    DEFPUSHBUTTON   "&OK",IDOK,125,88,50,14,WS_GROUP
+    PUSHBUTTON      "&Cancel",IDCANCEL,59,88,50,14,WS_GROUP
+    LTEXT           "Wrap to nearest",IDC_STATIC,139,7,71,13
+    LTEXT           "Virtual Screen Width",IDC_STATIC,33,7,85,7
+END
+
+IDD_CONNECT DIALOGEX 0, 0, 353, 186
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Connect to a Mud Server"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    LISTBOX         IDC_WORLDLIST,5,11,115,168,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_HOSTNAME,165,11,145,12,ES_AUTOHSCROLL | ES_OEMCONVERT
+    EDITTEXT        IDC_PORT,165,24,40,12,ES_AUTOHSCROLL | ES_OEMCONVERT
+    CONTROL         "Ignore high ASCII (ie: accented chars)",IDC_7BIT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,211,26,134,9
+    PUSHBUTTON      "Change &Trigger set",IDC_CHANGE_TRIGGER,263,38,74,12
+    PUSHBUTTON      "Change &Macro set",IDC_CHANGE_MACRO,263,51,74,12
+    PUSHBUTTON      "Change &Alias set",IDC_CHANGE_ALIAS,263,64,74,12
+    EDITTEXT        IDC_DESCRIPTION,129,100,218,12,ES_MULTILINE | ES_AUTOVSCROLL | ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_CONNECTSTRING,129,121,219,12,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_OEMCONVERT | ES_WANTRETURN | WS_VSCROLL
+    CONTROL         "Enable AutoLog",IDC_AUTOLOG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,129,137,128,11
+    CONTROL         "AutoConnect",IDC_AUTOCONNECT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,129,152,57,11
+    CONTROL         "AutoReconnect",IDC_AUTORECONNECT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,191,152,67,11
+    CONTROL         "Never",IDC_LOGAPPEND,"Button",BS_AUTORADIOBUTTON | WS_GROUP,293,135,37,8
+    CONTROL         "Once a Day",IDC_LOGDAILY,"Button",BS_AUTORADIOBUTTON,293,144,52,9
+    CONTROL         "Always",IDC_LOGNEW,"Button",BS_AUTORADIOBUTTON,293,154,38,8
+    DEFPUSHBUTTON   "C&onnect",IDOK,129,166,38,14
+    PUSHBUTTON      "&Add",IDC_ADD,174,166,38,14
+    PUSHBUTTON      "&Delete",IDC_DELETE_WORLD,219,166,38,14
+    PUSHBUTTON      "&Rename",IDC_RENAME_WORLD,264,166,38,14
+    PUSHBUTTON      "E&xit",IDCANCEL,309,166,38,14
+    CTEXT           "MUD Name",IDC_STATIC,5,2,115,8
+    RTEXT           "Host Name:",IDC_STATIC,123,14,42,8
+    RTEXT           "Port:",IDC_STATIC,123,26,42,8
+    LTEXT           "Text to output upon connect",IDC_STATIC,130,113,117,8
+    RTEXT           "Trigger Set:",IDC_STATIC,122,39,42,8
+    CONTROL         "Static",IDC_TRIGSETNAME,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,165,39,96,8
+    RTEXT           "Macro Set:",IDC_STATIC,122,53,42,8
+    CONTROL         "Static",IDC_MACROSETNAME,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,165,53,96,8
+    LTEXT           "Description",IDC_STATIC,131,92,47,8
+    RTEXT           "Alias Set:",IDC_STATIC,122,66,42,8
+    LTEXT           "Static",IDC_ALIAS_SET,165,66,96,8
+    RTEXT           "Create New AutoLog:",IDC_STATIC,261,137,29,25
+    PUSHBUTTON      "&Font",IDC_CHANGEFONT,263,76,24,14
+    PUSHBUTTON      "&Color",IDC_CHANGECOLOR,287,76,26,14
+    LTEXT           "Font:",IDC_STATIC,147,78,17,8
+    LTEXT           "Static",IDC_FONT_SETTING,165,78,96,8
+    PUSHBUTTON      "Reset",IDC_RESET,313,76,24,14
+    CONTROL         "IRC",IDC_IRC,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,314,13,28,10
+END
+
+IDD_RENAME DIALOG 0, 0, 186, 92
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Rename World"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_NEWNAME,49,43,129,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&Cancel",IDCANCEL,70,70,50,14
+    DEFPUSHBUTTON   "&OK",IDOK,127,71,50,14
+    RTEXT           "Rename",IDC_STATIC,3,9,34,8
+    RTEXT           "To",IDC_STATIC,3,44,34,15
+    LTEXT           "Static",IDC_OLDNAME,49,9,129,21
+END
+
+IDD_MACRO_BAR DIALOG 0, 0, 66, 167
+STYLE DS_SETFONT | WS_CHILD | WS_BORDER
+FONT 7, "Small Fonts"
+BEGIN
+    PUSHBUTTON      "Edit Macros",IDC_MACROBTN_EDIT,15,2,49,14
+    PUSHBUTTON      "Button1",IDC_MACROBTN1,15,17,49,14
+    PUSHBUTTON      "Button2",IDC_MACROBTN2,15,32,49,14
+    PUSHBUTTON      "Button3",IDC_MACROBTN3,15,47,49,14
+    PUSHBUTTON      "Button4",IDC_MACROBTN4,15,62,49,14
+    PUSHBUTTON      "Button5",IDC_MACROBTN5,15,77,49,14
+    PUSHBUTTON      "Button6",IDC_MACROBTN6,15,92,49,14
+    PUSHBUTTON      "Button7",IDC_MACROBTN7,15,107,49,14
+    PUSHBUTTON      "Button8",IDC_MACROBTN8,15,122,49,14
+    PUSHBUTTON      "Button9",IDC_MACROBTN9,15,137,49,14
+    PUSHBUTTON      "Button10",IDC_MACROBTN10,15,152,49,14
+    RTEXT           "F1",IDC_STATIC,1,20,11,8
+    RTEXT           "F2",IDC_STATIC,1,35,11,8
+    RTEXT           "F3",IDC_STATIC,1,50,11,8
+    RTEXT           "F4",IDC_STATIC,1,65,11,8
+    RTEXT           "F5",IDC_STATIC,1,80,11,8
+    RTEXT           "F6",IDC_STATIC,1,95,11,8
+    RTEXT           "F7",IDC_STATIC,1,110,11,8
+    RTEXT           "F8",IDC_STATIC,1,125,11,8
+    RTEXT           "F9",IDC_STATIC,1,140,11,8
+    RTEXT           "F10",IDC_STATIC,1,155,11,8
+END
+
+IDD_BUTTON_EDIT DIALOG 0, 0, 402, 233
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit Macro List"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&OK",IDOK,339,215,50,14
+    EDITTEXT        IDC_EDIT1,19,3,175,39,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT2,19,45,175,39,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT3,19,87,175,39,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT4,19,129,175,39,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT5,19,171,175,39,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT6,215,3,175,39,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT7,215,45,175,39,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT8,215,87,175,39,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT9,215,129,175,39,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL
+    EDITTEXT        IDC_EDIT10,215,171,175,39,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL
+    PUSHBUTTON      "&Cancel",IDCANCEL,273,215,50,14
+    RTEXT           "F1",IDC_STATIC,3,18,13,8
+    RTEXT           "F4",IDC_STATIC,3,144,13,8
+    RTEXT           "F5",IDC_STATIC,2,186,13,8
+    RTEXT           "F2",IDC_STATIC,3,60,13,8
+    RTEXT           "F6",IDC_STATIC,197,18,13,8
+    RTEXT           "F3",IDC_STATIC,3,102,13,8
+    RTEXT           "F7",IDC_STATIC,197,60,13,8
+    RTEXT           "F8",IDC_STATIC,197,102,13,8
+    RTEXT           "F9",IDC_STATIC,197,144,13,8
+    RTEXT           "F10",IDC_STATIC,197,186,13,8
+END
+
+IDD_TRIGGER_DIALOG DIALOG 0, 0, 344, 149
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Triggers"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&OK",IDOK,297,129,35,14
+    EDITTEXT        IDC_MUDTEXT,177,25,153,21,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL
+    EDITTEXT        IDC_FILENAME,177,62,153,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&Browse",IDC_BROWSE_FILE,179,79,49,14
+    PUSHBUTTON      "&Test",IDC_TEST_SOUND,237,79,49,14
+    PUSHBUTTON      "&Delete",IDC_DELETE,179,129,35,14
+    PUSHBUTTON      "&Add",IDADD,218,129,35,14
+    CTEXT           "Trigger Text, case is NOT significant.",IDC_STATIC,7,3,167,8
+    LTEXT           "Output simple Text to MUD when triggered.",IDC_STATIC,177,13,153,11
+    LTEXT           "Play sound file when triggered",IDC_PLAYFILE,177,50,153,8
+    CONTROL         "Change text color when triggered",IDC_CHANGECOLOR,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,179,100,130,10
+    COMBOBOX        IDC_COMBO1,179,112,154,50,CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | WS_VSCROLL | WS_TABSTOP
+    LISTBOX         IDC_TRIGGERLIST,9,16,156,110,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Update Trigger",IDC_RENAME,9,129,156,14
+    PUSHBUTTON      "Anti-&Idle",IDC_NEWANTIIDLE,258,129,35,14
+END
+
+IDD_TEXT_COLOR DIALOG 0, 0, 219, 117
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Change Text Color"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,159,98,50,14
+    COMBOBOX        IDC_COMBO1,15,20,100,50,CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO2,15,55,100,50,CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Enable &Ansi color",IDC_ENABLE_ANSI,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,82,151,10
+    PUSHBUTTON      "Cancel",IDCANCEL,101,98,50,14
+    GROUPBOX        "Text Color",IDC_FGBOX,11,8,112,30
+    GROUPBOX        "Background Color",IDC_BGBOX,11,43,112,30
+END
+
+IDD_CONNECTED_WORLD_BAR DIALOGEX 0, 0, 69, 70
+STYLE DS_SETFONT | WS_CHILD | WS_BORDER
+EXSTYLE WS_EX_TOOLWINDOW
+FONT 7, "Small Fonts", 0, 0, 0x0
+BEGIN
+    LISTBOX         IDC_CONNECT_LIST,2,9,65,59,LBS_NOINTEGRALHEIGHT | LBS_NOSEL | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_SOUNDS_DIALOG DIALOG 0, 0, 164, 95
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "FlipTerm Sound Settings"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Enable &Trigger sounds",IDC_TRIGGER_SOUND,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,40,18,114,10
+    CONTROL         "Enable &Bell sound",IDC_BELL_SOUND,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,40,34,115,10
+    CONTROL         "&Connect sound",IDC_CONNECT_BEEP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,40,50,113,10
+    DEFPUSHBUTTON   "OK",IDOK,90,75,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,24,75,50,14
+END
+
+IDD_NAME_DIALOG DIALOG 0, 0, 207, 61
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "New"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_NAME,10,20,185,12,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,110,40,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,50,40,50,14
+    CTEXT           "Enter a name for your new world",IDC_PROMPT,15,5,175,10
+END
+
+IDD_SELARRAY_EDIT DIALOG 0, 0, 237, 166
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,179,143,50,14
+    LISTBOX         IDC_ARRAY_LIST,5,5,165,155,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "&Edit",IDC_EDIT,180,55,49,14
+    PUSHBUTTON      "&Copy",IDC_COPY,180,77,49,14
+    PUSHBUTTON      "&New",IDC_NEW,180,99,49,14
+    PUSHBUTTON      "&Delete",IDC_DELETE,180,121,49,14
+END
+
+IDD_REPLACE_FILE DIALOG 0, 0, 235, 111
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "File already exists"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "&Overwrite",IDOK,76,89,50,14
+    PUSHBUTTON      "&Append",IDC_APPEND,127,89,50,14
+    PUSHBUTTON      "&Cancel",IDCANCEL,178,89,50,14
+    LTEXT           "The Following file already exists:",IDC_STATIC,15,9,203,8
+    LTEXT           "Static",IDC_FILENAME,15,24,208,23
+    LTEXT           "You can either &Overwrite the file, erasing any contents it may have had, or &Append to the file, keeping whatever is there, and adding on to the end of it, or cancel the logging operation.",IDC_STATIC,15,54,211,29
+END
+
+IDD_ALIAS_EDIT DIALOG 0, 0, 327, 168
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit Aliases"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,270,147,50,14
+    LISTBOX         IDC_ALIAS_LIST,7,7,144,154,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_ALIAS_OUTPUT,153,7,167,118,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL
+    PUSHBUTTON      "&Edit",IDC_EDIT,156,130,50,14
+    PUSHBUTTON      "&Insert",IDC_INSERT,155,147,50,14
+    PUSHBUTTON      "&Delete",IDC_DELETE,211,147,50,14
+END
+
+IDD_ALIAS_SINGLE_EDIT DIALOG 0, 0, 306, 164
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Alias"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_INPUT,7,18,231,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_OUTPUT,7,50,231,107,ES_MULTILINE | ES_AUTOHSCROLL | WS_VSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,249,119,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,249,143,50,14
+    LTEXT           "Alias text to look for",IDC_STATIC,7,7,62,8
+    LTEXT           "Text to output to mud",IDC_STATIC,7,36,71,8
+END
+
+IDD_SWITCHES DIALOGEX 0, 0, 278, 226
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Switches"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,221,205,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,163,205,50,14
+    CONTROL         "Use Command Line Interface - typed commands like '/help'. Uncheck this if they interfere.",IDC_USECLI,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,13,15,116,24
+    CONTROL         "Local Echo - display a copy of everything you send to the MUD.",IDC_LOCALECHO,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,13,46,116,24
+    CONTROL         "Show Activity - Displays 'Activity in World xxx' when another window gets new text.",IDC_SHOWACTIVITY,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,13,77,116,24
+    CONTROL         "Multi-Line Input - allows editing on multiple lines. Turn off for the old GMud style single line.",IDC_MULTILINEINPUT,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,13,108,116,24
+    CONTROL         "Force ANSI Reset at end of line - use if your MUD colors never turn back to normal after a change.",IDC_FORCEANSIRESET,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,137,15,123,24
+    CONTROL         "Command Stacking - send multiple commands separated with this character:",IDC_COMMANDSTACKING,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,137,46,108,24
+    CONTROL         "Confirm Disconnect - Asks 'Are you Sure?' when you click the disconnect button",IDC_CONFIRMDISCONNECT,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,137,77,116,24
+    CONTROL         "Show Reminder on Select/Copy - When selecting text, a reminder that it is available for pasting.",IDC_SHOWCOPYNOTICE,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,137,139,126,24
+    EDITTEXT        IDC_COMMANDCHAR,247,51,15,12,ES_AUTOHSCROLL
+    CONTROL         "Review buffer to end of line. Turn off to leave cursor at the beginning of the line instead.",IDC_REVIEWEND,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,13,139,116,24
+    CONTROL         "Automatically bring up world connection dialog when opening a new window.",IDC_NEWWINDOW,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,137,170,116,24
+    CONTROL         "Enable Numeric Keypad 'MapKeys' - send compass commands when pressed.",IDC_MAPKEYS,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,13,170,116,24
+    CONTROL         "Confirm Close - Asks 'Are you Sure?' when you attempt to close a window.",IDC_CONFIRMCLOSE,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,137,108,116,24
+END
+
+IDD_DISCONNECT DIALOG 0, 0, 186, 76
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Disconnect"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,25,36,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,110,35,50,14
+    CTEXT           "",IDC_STATIC1,7,7,172,22
+    CONTROL         "Don't ask me this again.",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,48,57,89,12
+END
+
+IDD_TIMER DIALOG 0, 0, 165, 19
+STYLE DS_SETFONT | WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "1:22:56 Connected / 123456 Lines",IDC_TEXT,7,5,153,8
+    CONTROL         "",IDC_STATIC,"Static",SS_GRAYFRAME,1,3,3,12
+END
+
+IDD_COLORS DIALOG 0, 0, 199, 220
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Default Color Adjust"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,142,199,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,74,199,50,14
+    LTEXT           "Black",IDC_STATIC,7,13,19,8
+    LTEXT           "Red",IDC_STATIC,7,35,14,8
+    LTEXT           "Green",IDC_STATIC,7,57,20,8
+    LTEXT           "Yellow",IDC_STATIC,7,79,22,8
+    LTEXT           "Blue",IDC_STATIC,7,101,15,8
+    LTEXT           "Magenta",IDC_STATIC,7,123,29,8
+    LTEXT           "Cyan",IDC_STATIC,7,145,17,8
+    LTEXT           "White",IDC_STATIC,7,167,20,8
+    LTEXT           "Bright Black",IDC_STATIC,103,13,39,8
+    LTEXT           "Bright Red",IDC_STATIC,103,35,34,8
+    LTEXT           "Bright Green",IDC_STATIC,103,57,40,8
+    LTEXT           "Bright Yellow",IDC_STATIC,103,79,42,8
+    LTEXT           "Bright Blue",IDC_STATIC,103,101,35,8
+    LTEXT           "Bright Magenta",IDC_STATIC,103,123,49,8
+    LTEXT           "Bright Cyan",IDC_STATIC,103,145,37,8
+    LTEXT           "Bright White",IDC_STATIC,103,167,40,8
+    CONTROL         "",IDC_BUTTON1,"Button",BS_OWNERDRAW | WS_TABSTOP,45,7,16,14
+    CONTROL         "",IDC_BUTTON2,"Button",BS_OWNERDRAW | WS_TABSTOP,45,29,16,14
+    CONTROL         "",IDC_BUTTON3,"Button",BS_OWNERDRAW | WS_TABSTOP,45,51,16,14
+    CONTROL         "",IDC_BUTTON4,"Button",BS_OWNERDRAW | WS_TABSTOP,45,73,16,14
+    CONTROL         "",IDC_BUTTON5,"Button",BS_OWNERDRAW | WS_TABSTOP,45,95,16,14
+    CONTROL         "",IDC_BUTTON6,"Button",BS_OWNERDRAW | WS_TABSTOP,45,117,16,14
+    CONTROL         "",IDC_BUTTON7,"Button",BS_OWNERDRAW | WS_TABSTOP,45,139,16,14
+    CONTROL         "",IDC_BUTTON8,"Button",BS_OWNERDRAW | WS_TABSTOP,45,161,16,14
+    CONTROL         "",IDC_BUTTON9,"Button",BS_OWNERDRAW | WS_TABSTOP,161,7,16,14
+    CONTROL         "",IDC_BUTTON10,"Button",BS_OWNERDRAW | WS_TABSTOP,161,29,16,14
+    CONTROL         "",IDC_BUTTON11,"Button",BS_OWNERDRAW | WS_TABSTOP,161,51,16,14
+    CONTROL         "",IDC_BUTTON12,"Button",BS_OWNERDRAW | WS_TABSTOP,161,73,16,14
+    CONTROL         "",IDC_BUTTON13,"Button",BS_OWNERDRAW | WS_TABSTOP,161,95,16,14
+    CONTROL         "",IDC_BUTTON14,"Button",BS_OWNERDRAW | WS_TABSTOP,161,117,16,14
+    CONTROL         "",IDC_BUTTON15,"Button",BS_OWNERDRAW | WS_TABSTOP,161,139,16,14
+    CONTROL         "",IDC_BUTTON16,"Button",BS_OWNERDRAW | WS_TABSTOP,161,161,16,14
+    PUSHBUTTON      "&Defaults",IDC_DEFAULT,7,199,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,11,2,0
+ PRODUCTVERSION 1,11,2,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "Derived from GMud32 by Dan Kelly"
+            VALUE "FileDescription", "32 bit Mud client for Win 9x/ME/NT/2K/XP/Vista"
+            VALUE "FileVersion", "6 Jun 2016"
+            VALUE "InternalName", "FlipTerm"
+            VALUE "LegalCopyright", "Original Copyright © 1995 Genewic, Dan Kelly - Updates © 2002-2016 by Mike Brent"
+            VALUE "OriginalFilename", "FlipTerm.EXE"
+            VALUE "ProductName", "FlipTerm - MUD client based on GMud32"
+            VALUE "ProductVersion", "1.11.2.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+    END
+
+    IDD_CONNECTED_WORLD_BAR, DIALOG
+    BEGIN
+        RIGHTMARGIN, 68
+        BOTTOMMARGIN, 69
+    END
+
+    IDD_ALIAS_EDIT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 320
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 161
+    END
+
+    IDD_ALIAS_SINGLE_EDIT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 299
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 157
+    END
+
+    IDD_SWITCHES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 271
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 219
+    END
+
+    IDD_DISCONNECT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 69
+    END
+
+    IDD_TIMER, DIALOG
+    BEGIN
+        RIGHTMARGIN, 160
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 15
+    END
+
+    IDD_COLORS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 192
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 213
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDP_SOCKETS_INIT_FAILED "Windows sockets initialization failed."
+END
+
+STRINGTABLE
+BEGIN
+    IDR_MAINFRAME           "FlipTerm"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_APP_TITLE       "FlipTerm"
+    AFX_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+    ID_FILE_SAVE_COPY_AS    "Save a copy of the active document with a new name\nSave Copy"
+END
+
+STRINGTABLE
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application\nExit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE
+BEGIN
+    ID_WINDOW_NEW           "Opens a new window\nNew Window"
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Show Copy Selection window\nShow Copy Selection Window"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+END
+
+STRINGTABLE
+BEGIN
+    ID_VIEW_TOOLBAR         "Show or hide the toolbar\nToggle ToolBar"
+    ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle StatusBar"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCSIZE          "Change the window size"
+    AFX_IDS_SCMOVE          "Change the window position"
+    AFX_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    AFX_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    AFX_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    AFX_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCRESTORE       "Restore the window to normal size"
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+    AFX_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE
+BEGIN
+    ID_SERVER_CONNECT       "Connect to a Mud server\nConnect"
+    ID_SERVER_DISCONNECT    "Disconnect from the server.\nDisconnect"
+    ID_OPTIONS_WRAP         "Change wrapping options for all windows\nScreen Wrap"
+    ID_WINDOW_NEW_OPEN_DOC  "Opens a new window\nNew Window"
+    ID_EDIT_WORLDLIST       "Edit the list of worlds.\nEdit world list"
+    ID_OPTIONS_FONT         "Change the font for all windows\nChange Font"
+    ID_OPTIONS_COLOR        "Change the foreground/background color and toggle ANSI support\nDefault Colors / Ansi"
+    ID_OPTIONS_SOUND        "Options for controlling when FlipTerm makes sounds\nSounds Settings"
+END
+
+STRINGTABLE
+BEGIN
+    ID_EDIT_TRIGGERLIST     "Edit the list of triggers\nEdit Triggers"
+    ID_HELP_ABOUT           "See creation information and homepage.\nAbout"
+    ID_FILE_PASTE           "Select a file, and paste it to the mud.\nPaste File"
+    ID_FILE_CONNECT         "Connect to a Server\nConnect"
+    ID_FILE_DISCONNECT      "Disconnect from this server.\nDisconnect"
+    ID_FILE_EXIT            "Exit the application.\nExit"
+    ID_OPTIONS_ACTIVITY     "When enabled, displays %%% Activity in world ...\nToggle activity display"
+    ID_OPTIONS_CLI          "When checked, enables typed commands (see /help)\nToggle CLI"
+    ID_OPTIONS_MULTILINEINPUT 
+                            "When enabled, a multi-line input is available, and up/down arrows are used for editting.\nToggle multi-line mode."
+END
+
+STRINGTABLE
+BEGIN
+    ID_VIEW_MACROWINDOW     "Show or hide the Macro Window\nToggle Macro Window"
+    ID_VIEW_WORLDWINDOW     "Show or hide the Connected World list\nToggle Connected World list"
+END
+
+STRINGTABLE
+BEGIN
+    ID_WINDOW_PAUSE         "Pause the window, stopping receiving from the mud server\nPause"
+    ID_FILE_TOGGLELOGGING   "Turn On / Off Disk Logging.\nLog to Disk"
+    ID_OPTIONS_ECHO         "If this option is checked, all text sent to the mud will be echoed to the output window.\nEcho"
+    ID_EDIT_ALIASLIST       "Edit the list of aliases\nEdit Aliases"
+    IDC_WINDOW1             "Jump to window 1\nAlt+1"
+    IDC_WINDOW2             "Jump to window 2\nAlt+2"
+    IDC_WINDOW3             "Jump to window 3\nAlt+3"
+    IDC_WINDOW4             "Jump to window 4\nAlt+4"
+    IDC_WINDOW5             "Jump to window 5\nAlt+5"
+    IDC_WINDOW6             "Jump to window 6\nAlt+6"
+    IDC_WINDOW7             "Jump to window 7\nAlt+7"
+    IDC_WINDOW8             "Jump to window 8\nAlt+8"
+    IDC_WINDOW9             "Jump to window 9\nAlt+9"
+    ID_EDIT_ALIASES         "Edit the list of Aliases\nEdit Aliases"
+END
+
+STRINGTABLE
+BEGIN
+    ID_DIRECT_CONNECT       "ID_DIRECT"
+    ID_HELP_CUSTOM          "Get information about this plugin."
+    ID_HELP_CUSTOM1         "Get information about this plugin."
+    ID_HELP_CUSTOM2         "Get information about this plugin."
+    ID_HELP_CUSTOM3         "Get information about this plugin."
+    ID_HELP_CUSTOM4         "Get information about this plugin."
+    ID_HELP_CUSTOM5         "Get information about this plugin."
+    ID_HELP_CUSTOM6         "Get information about this plugin."
+    ID_HELP_CUSTOM7         "Get information about this plugin."
+    ID_HELP_CUSTOM8         "Get information about this plugin."
+    ID_HELP_CUSTOM9         "Get information about this plugin."
+    ID_HELP_CUSTOM10        "Get information about this plugin."
+    ID_URL_1                "Open this URL in your default browser"
+END
+
+STRINGTABLE
+BEGIN
+    ID_OPTIONS_DEFAULTLOGFOLDER 
+                            "Set the default folder for log files.\\Default log folder."
+    ID_VIEW_BROWSELOG       "Opens the default log folder for easy browsing.\nOpen Log Folder"
+    ID_OPTIONS_SWITCHES     "Set miscellaneous program switches\nSet global switches"
+    ID_OPTIONS_DEFAULTCOLORS 
+                            "Change the actual colors used by the program\nEdit program color set"
+    ID_OPTIONS_SYSTEMMESSAGECOLOR 
+                            "Change the colors used for System Messages and input text\nSystem Message color"
+    ID_FILE_EXPORTSETTINGS  "Export your FlipTerm settings to a Registry file"
+END
+
+STRINGTABLE
+BEGIN
+    IDC_MACROBTN_EDIT       "Edit Macros"
+END
+
+STRINGTABLE
+BEGIN
+    ID_URL_2                "Open this URL in your default browser"
+    ID_URL_3                "Open this URL in your default browser"
+    ID_URL_4                "Open this URL in your default browser"
+    ID_URL_5                "Open this URL in your default browser"
+    ID_URL_6                "Open this URL in your default browser"
+    ID_URL_7                "Open this URL in your default browser"
+    ID_URL_8                "Open this URL in your default browser"
+    ID_URL_9                "Open this URL in your default browser"
+    ID_URL_10               "Open this URL in your default browser"
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#include "res\Mud32.rc2"  // non-Microsoft Visual C++ edited resources
+
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+#include "afxres.rc"  	// Standard components
+#include "afxolesv.rc"	// OLE server resources
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

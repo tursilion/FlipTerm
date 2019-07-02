@@ -1,0 +1,81 @@
+@program lib-muckmate.karna
+1 99999 d
+1 i
+
+$include $lib/standard
+
+$def mm_Error001 "[!] SOCKET ERROR. [Server down or connection occupied.]" .tell
+
+( For mm_Music and mm_Image, the format is:                  )
+( s1 = Server address; ie: www.flamehouse.org                )
+( s2 = File location; ie: /users/image.jpg                   )
+( s3 = Server port; ie: 80                                   )
+( s4 = File name; ie: 1Karna --                              )
+(      USE mm_getFileName for this! It is important.         )
+
+: mm_Init ( -- SOCKET )
+me @ clean_descriptors descrcon conipnum 10698 sockopen
+"noerr" stringcmp if mm_Error001 exit then
+;
+
+: mm_Image ( SOCKET s1 -- )
+"IMAGE " swap strcat 
+socksend not if mm_Error001 exit then
+;
+
+: mm_Music ( SOCKET s1 -- )
+"MUSIC " swap strcat 
+socksend not if mm_Error001 exit then
+;
+
+: mm_Flash ( SOCKET s1 -- )
+"FLASH " swap strcat
+socksend not if mm_Error001 exit then
+;
+
+: mm_Web ( SOCKET s1 -- )
+"WEB " swap strcat
+socksend not if mm_Error001 exit then
+;
+
+: mm_Video ( SOCKET s1 -- )
+"VIDEO " swap strcat
+socksend not if mm_Error001 exit then
+;
+
+: mm_getFileName ( d -- s )
+dup dtos "" "#" subst over name strcat swap pop
+"" " " subst
+"" "\\" subst
+"" "\"" subst
+"" "/" subst
+"" "?" subst
+"" "*" subst
+"" "?" subst
+"" ":" subst
+"" "<" subst
+"" ">" subst
+"" "." subst
+"" "|" subst
+;
+
+PUBLIC mm_Init
+PUBLIC mm_Image
+PUBLIC mm_Music
+PUBLIC mm_getFileName
+PUBLIC mm_Flash
+PUBLIC mm_Web
+PUBLIC mm_Video
+
+.
+c
+q
+
+@set lib-muckmate.karna=_defs/mm_Init:"$lib/muckmate" match "mm_Init" call
+@set lib-muckmate.karna=_defs/mm_Image:"$lib/muckmate" match "mm_Image" call
+@set lib-muckmate.karna=_defs/mm_Music:"$lib/muckmate" match "mm_Music" call
+@set lib-muckmate.karna=_defs/mm_Flash:"$lib/muckmate" match "mm_Flash" call
+@set lib-muckmate.karna=_defs/mm_Web:"$lib/muckmate" match "mm_Web" call
+@set lib-muckmate.karna=_defs/mm_Video:"$lib/muckmate" match "mm_Video" call
+@set lib-muckmate.karna=_defs/mm_getFileName:"$lib/muckmate" match "mm_getFileName" call
+@register lib-muckmate.karna=lib/muckmate

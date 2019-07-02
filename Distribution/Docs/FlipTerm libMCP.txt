@@ -1,0 +1,52 @@
+FlipTerm's libMCP is an effort to bring basic MCP functionality to a muck that does not natively support MCP. It provides a basic API, negotiation, and communication with the client application.
+
+Limits with this approach: 
+1. It requires the user to log in before it negotiates with the client. This is not a problem with
+FlipTerm or Trebuchet. I don't know of any other clients that support MCP.
+
+2. Most mucks do not permit actions to start with '#', which is required for this approach to work. Modifying the muck to permit actions starting with '#$#' is required, and this is an exercise for the muck programmer. ;)
+
+3. Slightly less secure - the session key is stored on the user in a prop, which may permit spoofing of messages if someone is able to view the key.
+
+Installation
+------------
+
+libMCP was created for FuzzBall 5.x. It should be portable to other mucks with little effort. To install, load the program up and dedicate an action to it (ie: 'mcp'). Execute it with 'mcp #setup', and it will create the links, defs, and actions required. Specifically it needs to create #$#mcp-negotiate-can, #$#mcp-negotiate-end, and #$#mcp actions, load _defs on the program for the public functions, and it adds a call to itself on room #0/_connect/ as 00_MCP.
+
+Other user commands:
+mcp #list - list the packages currently configured. A package must be configured with the program in order to be negotiated with the client.
+
+mcp #add <packagename> <minver> <maxver> - add the specified package with the versions as specified. The versions should be a digit, decimal, digit style (ie: 2.1). While other parts of this package expect to see versions without the decimal, here they must have it.
+
+mcp #remove <packagename> - removes the specified package from the list
+
+mcp #help - summarize these commands
+
+Programming
+-----------
+
+libMCP contains several public functions used to make developing applications that work under MCP easier. It's probably not portable to FB6's mechanism, but should not be hard to convert if needed.
+
+MCPSendLine (MCPout -- ) - Passed an MCP string, send it to the client. The string should contain a fully formatted MCP message, excluding the #$#, and passing %S for the key. For example: 
+"my-mcp-test %S Arg1:Hello" MCPSendLine
+will format and send the string to the user with the current session key.
+
+MCPGetArg (MCPIn, ArgName -- ArgValue) - Passed an MCP string, retrieve the named argument. For example:
+"my-mcp-test %S Arg1:Hello" "Arg1" MCPGetArg
+will return 'Hello' on the stack.
+
+MCPGetMinVer (MCPIn -- MiNVer) - Passed an MCP string, extracts the min-version argument times 10 (ie: 1.1 = 11)
+
+MCPGetmaxVer (MCPIn -- MaxVer) - Same as minver, but for max-version
+
+MCPIsSupported (Package, MinVer, Maxver)  - returns 1 if the requested package is accepted by the client, or 0 if not. For example:
+"my-mcp" "10" "15" MCPIsSupported
+Will return '1' if the client has indicated support of the 'my-mcp' package, version 1.0 to 1.5. You should always test your function against this before outputting any strings to the user.
+
+Finally, any program that needs to run at connect, but after MCP negotiation is complete, can be registered on the program under /AfterEnd/. These programs will be CALLed in order (alphabetically). Set them as so: set $lib/mcp=/AfterEnd/MyProgram:1234
+
+Should a user wish to disable MCP from this library, they simply need to set themselves _MCPEnable:N
+Note that this is only checked in Connect and MCPIsSupported, since proper MCP apps must check support before
+sending strings.
+
+For more information, read the MCP 2.1 documentation, included with this package.

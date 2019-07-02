@@ -1,0 +1,1720 @@
+Welcome to FlipTerm!
+
+FlipTerm is based on the GMud 1.7b code base, and all the original documentation
+and source code is included with this distribution. If you don't care about source
+code, feel free to delete the /src folder - it won't hurt anything!
+
+This program is distributed under the terms of the original license, which states
+that derived works may be distributed freely so long as they aren't taking full
+credit, which I'm not. Please read the relevant documentation for the original
+licensing. This software may not be sold, although reasonable media and copying
+fees are fine so long as you offer me a free copy. ;)
+
+The reason for this update was two-fold. First, I needed a client that had ALL
+the features I wanted in one place, and I always liked GMud. So when I found the
+source code, I got to work.
+
+Second, FlipSide added support for enhanced graphics in the muck, and I needed a
+terminal program to bolt my protocol to. You'll find a description of the extension
+in another document. There's also a .DLL available in the source folder for use in
+your own projects - please read the documentation available there.
+
+
+
+----------------------
+Command Line Interface
+----------------------
+Type /help. If you're the sort who would use this, that's all you need.
+
+----------
+KeyPresses
+----------
+
+Many shortcuts are available in FlipTerm.
+
+CHANGE WINDOWS:
+Control-Tab - next window
+Alt-1, Alt-2, Alt-3, etc - Change directly to Window 1, 2, 3, etc (up to number 10 for '0')
+(Control-1, etc, works now too.)
+
+SCROLL SCREEN:
+Page up and Page down
+
+REVIEW COMMAND HISTORY:
+Control P -or-   (p for Previous)
+Control Up Arrow -or-
+Alt Up Arrow -or-
+Up Arrow (in single line entry mode) - Previous command
+
+Control N -or-    (N for Next)
+Control Down Arrow -or-
+Alt Down Arrow -or-
+Down Arrow (in single line entry mode) - Next command after going back
+
+ERASE COMMAND WINDOW:
+Control U -or-
+Escape (Esc)
+
+MOVEMENT KEYS ('MapKeys' must be enabled in the switches menu, and Num Lock
+must be on)
+Note: these keys are special in that they send the command immediately and
+do not affect the command buffer (ie: you can move while in the middle of 
+typing! ;) ) The following keys are on the numeric keypad.
+7,8,9,4,6,1,2,3 - Compass directions (ie: NORTH, NORTHEAST, SOUTHWEST, etc)
+5 - DOWN
+0 - UP
+The text will be sent in lowercase normally. To use uppercase, engage Caps Lock.
+
+Updates from GMud 1.7b to FlipTerm 1.0
+--------------------------------------
+(Some of this is new, some of this was in GMud 1.9b, the most common version)
+(There may be more than this, but this is what I've got)
+
+-Many crash/compiler bugs/warnings fixed (works fine in 2000 and XP)
+-Changed behaviour of ANSI color, background, if set to black,
+will now use whatever you've selected. This looks much better.
+-Renamed to FlipTerm
+-Added command line (/command) commands (orignally just /set and /reconnect)
+-- /connect <world> to connect to a world by name
+-- /quit to exit the program
+-- /disconnect to disconnect the world
+-- /new to open a new window
+-- /close to close the window
+-- /help for command help
+-- /w<string> and /W<string> to SpeedWalk
+-- /window <x> to switch to Window number x
+-Command line commands can be disabled
+-Reorganized menus
+-Added local echo toggle
+-Added activity messages
+-Added Multi-line input
+-Added command stacking
+-Added unix-style Control-P, Control-N and Control-U for previous, next and
+clear in the history/input window, and control-Up and Down arrow for multi-
+line input mode.
+-Fixed wrap-to-screen (even 1.9 sometimes got this wrong)
+-Saves window position
+-Font settings fixed
+-Cursor positioning when scrolling through history improved
+-Added 'Alt-S' to send text from input window
+-Supports Alt+<number> Keyboard shortcuts to change windows
+-Automatic logging per world
+-Autoconnect
+-Autoreconnect
+-Colored triggers
+-Default log folder
+-Sets .log file association (if currently not set)
+-Log folder browse button for convenience
+-Wheel mouse support for scrollback
+-Encoded connection string in registry (to not show plaintext passwords)
+-Cut and paste end of line corrected
+-Timestamps in the logs
+-MCP 2.1
+
+--------------------------------------------
+Email Update history
+--------------------------------------------
+These messages were sent to myself and my beta test team and are 
+provided here as a history of the project in case I missed anything above.
+--------------------------------------------
+--
+2/24/02
+--
+NOTES: You MUST delete your old WorldLis.MUD file, or Aliases can not be
+appropriately tested. Shouldn't affect anything else, and I'm not sure how
+your workaround of creating a default Alias list will help. It might be
+enough. If you have any problems - start over from scratch.
+
+FIXED:
+-saving of window position.
+-clicking macro button 1 fixed
+-added support for control-P (prev), control-N (next), control-U (clear)
+[Yes, I know Gmud already has up, down and esc, but they bug me ;) ]
+-Internal fix - renamed the menu items to match their new positions
+-Added "%%% Activity in window ..." display on activity (and config)
+-Added toggle for the CLI
+-Increased count in color bar dropdowns to 6 lines (by reducing the size of
+the lines)
+-Made the ugly separator bar a normal reasonable size
+-Added ability to select a multi-line input mode
+-Fixed the font setting in the input window
+-Fixed shortcut keys alt+1, etc (which I broke)
+-Fixed menu greying (it was greying out exit!)
+-Fixed File->Exit
+-Potentially fixed the Alias woes (there were nasty typos that got it mixed
+up with the Trigger list - you *must* delete your WorldLis.MUD or it will
+stay corrupted.)
+-Tweaked control key handling to prevent sticking on missed messages
+-Tough if you don't like the depressed buttons OR my artwork. ;)
+
+TODO still:
+-80/wrap to screen bug (reproduced)
+-Move configuration and world list from INI to registry
+-Add autolog feature
+
+--
+2/24/02
+--
+NOTES:
+-Just a quick update before dinner ;)
+-Now giving you release builds rather than debug builds (true of last build)
+
+FIXED:
+-Alias button is disabled when all windows are closed
+-Added control-Up and control-Down for history (works in both modes)
+
+TODO:
+-Command Stacking
+-Speed Walk (need description)
+-Automatic logging
+-Move config to registry
+-Wrap to screen bug
+
+--
+2/25/02
+--
+NOTES:
+-Still not quite ready for production use - continue to use it in it's own
+folder. New installs need to be set up from scratch.
+-All known bugs (or at least serious ones) are fixed.
+
+FIXES:
+-Added SpeedWalk as a command-line command (type /help)
+-Command stacking is hard-coded to use ";", and can be enabled under
+Options. (Disabled because it breaks, for example, winks ;)  )
+-Macro keys were broken in last release - fixed now
+-Wrap to screen fixed (*finally*)
+-Colored system messages (must have ANSI color on)
+-Fixed available colors to match what the system uses for ANSI (this may
+cause it to lose your color settings if you set it to something slightly off
+before, like I did).
+-Fixed typing of ( and & (not sure if they were broken in the last release
+or not)
+
+TODO:
+-Move configuration to Registry
+-Add auto-logging feature per world
+-Add ability of triggers to color lines of text
+-Add ability to export MUD list to a text file
+-Add ability to import text file of MUDs
+-Add ability to import MUD list from GMud 1.9 config
+-Add ability to import MUD list from SimpleMU config
+-Add ability to import MUD list from MUSHclient config
+(no intention of importing settings from these configs - just the name,
+address and port. How many are done depends on how hard it ends up being.)
+
+--
+3/4/02
+--
+Minor update, a few things that were bugging me:
+
+-The '%%% Activity in world ...' message is now correctly colored
+-When going through the history, the cursor is moved to the END of the line
+instead of staying at the beginning. ;)
+
+I wouldn't normally bother with this notice, but this way I don't have to
+say that I never told you. ;)
+
+Work is dragging me down again, thus the slowdown. On the plus side, I
+mostly fixed a serious issue today, I think. Depends what the test shows in
+the morning. ;)
+
+--
+3/25/02
+--
+Finally did some work on it. Found some previously unknown bugs, and
+added a few features I realized I needed ;)
+
+WHAT'S NEW:
+-Cursor at end of line when scrolling through history
+-Alt-S will send text as well as Enter (I keep doing this from habit
+with ICQ)
+-Multiline defaults to ON
+-All Configuration moved to Registry (Arg! What a pain this was!)
+It's in HKEY_CURRENT_USER, so the
+settings will be per user, not per machine.
+-Changed Connected World List to take a single click instead of a
+double to change world
+-Added 'Save Settings' option under file
+-Fixed form to add Aliases, Triggers and Macros (would not allow
+adding of new sets)
+
+TODO:
+-Automatic logging per world
+-Colored lines by trigger
+-Export/Import World List (considering dropping this)
+-Import GMud 1.9 World List (considering dropping this)
+-Import SimpleMU World List (considering dropping this)
+-Import MUSHclient World List (considering dropping this)
+-Automatic connect on startup
+-Automatic reconnect when disconnected
+-Log storage configuration
+-Button to browse log directory
+-Wheel mouse support for scrollback
+
+NOTES:
+-Sorry, you will once again lose your old config. I promise this is
+the last time, though - it's where I want it to be now, and will not
+change any further. :) This configuration update was the big job -
+and it was much bigger than I expected, too.
+
+--
+3/26/02
+--
+WHAT'S NEW:
+-Automatic logging per world (append/create new)
+-Colored text triggers!
+-AutoReconnect
+-AutoConnect (on one world only)
+-Removed startup argument support (conflicts with autoconnect)
+
+WHAT'S FIXED:
+-Bugfix in saving user variables for the world
+-Bugfix in handling overwrite/append of logs
+-Fixed a memory leak I introduced last build
+
+TODO:
+-Need to strip ANSI out of logs
+-Fix AutoConnect for more than one world (this one is frustrating!)
+-Log storage configuration (defaults to C:\, but you can browse to
+store logs anywhere)
+-Button to browse log directory
+-Wheel mouse support for scrollback
+-MCP parsing
+-FlipSide's Graphics (yes, finally close enough to put this on the
+list)
+
+REQUEST FOR COMMENTS:
+-Would the logging be better if it were set to always append, and you
+specify when to make a new file (ie: Each Connect, Once a Day,
+Never)? I think I prefer that, but tell me if you agree.
+
+NOTES:
+-I saved the old version as 'flipterm.old.zip' at the same
+path, in case you wanted to archive it.
+-Dropped the import/export functions - they're just a lot more
+trouble than they are worth
+
+--
+3/27/02
+--
+WHAT'S NEW:
+-New Beta testers - hi! :) See the notes section below.
+-Autolog now supports three modes for starting a new file:
+            Always - A new file is opened every time the world is
+connected
+            Daily - A new file is opened the first time each day the
+world is connected, and appended to after that
+            Never - The auto-log file is always appended to
+-Automatically offers to create a log directory in My Documents when
+first run
+-Detects when log folder is moved or deleted
+-Menu option to select default logfile (and offers to update autologs
+to match)
+-Menu option and toolbar button to automatically browse the default
+log folder
+-When possible to do so safely, FlipTerm will add an association to
+*.log files so that they open in the same application as *.txt files
+(normally Notepad).
+-Added basic support for the wheel on a wheel mouse
+
+WHAT'S FIXED:
+-Better error message when autolog is enabled for append mode, and
+the same world is connected to more than once
+-Removed leftover requirements for WORLDLIS.MUD file (wouldn't start
+if missing)
+-Encrypted connection string (I need to know whether this works for
+everyone, and if it doesn't, what version of Windows?)
+-Autoconnect can now handle as many mucks as you want to autoconnect
+to
+-Clipboard copy (highlighting text automatically copies it) now does
+end of line correctly
+-No longer writing system messages into the log (and no ANSI problems
+in the text)
+-Fixed bug where it would think it was logging even if an error
+occurred that prevented it
+-Crash bug if you pressed the log button with no world open
+
+NOTES:
+-This is obviously the LOG release!
+-To install, just unzip the program to a convenient folder and run
+FlipTerm.exe. No installation is required, however, you will need to
+set up your worlds.
+-Autolog is not compatible with opening the same world more than once
+unless the mode is set to 'Always' open a new file. No harm will be
+done if you try, you will simply be warned that the autolog can not
+append when another window is already appending.
+-You can always log manually and choose the filename, as well as
+whether to append or overwrite, if appropriate. The above limitations
+are only on automatic logging.
+-Now requires Internet Explorer 4.0 or higher if on Windows 95 (which
+I don't support anyway...)
+-The purpose of the *.log association is to allow users who do not
+have *.log files associated with anything to be able to simply
+double-click on *.log files and read them normally. This association
+is only checked the first time the program sets up the log directory,
+and will only occur if: (1) *.log files currently have NO association
+at all, and  (2) *.txt files DO have an association. The information
+from the *.txt setup is copied to *.log - if the *.txt program is
+changed after this, it should affect *.log as well.
+-5 steps forward, 4 steps back. This version I've noticed two
+possibly serious errors - dropping of output when scrolling quickly,
+and number of macros/triggers growing as time goes on. If you notice
+the drop, let me know. The macros/aliases/triggers problem I'll fix
+next release (and provide a cleanup tool). I recommend not using them
+until next release.
+
+TODO:
+-Fix dropping/corrupting of output during fast scroll
+-Fix the new Trigger/Macro/Alias set every boot
+-Provide a .reg file to clean up the Triggers/Macros/Aliases
+-MCP parsing for graphics
+-FlipSide's graphics themselves
+
+--
+3/29/02
+--
+WHAT'S NEW:
+Nothing - just fixes.
+
+WHAT'S FIXED:
+-Crash bug - if a muck closed on a window you were not looking at,
+the program would crash
+-Width of text output to windows other than the one you were looking
+at was wrong if the windows were maximized (whew)
+-When you closed all the child windows, it was impossible to create a
+new one
+-The text format of the logs is now correct for windows (end of line
+was messing up frequently)
+-Size of the log overwrite/replace/cancel dialog box was increased to
+allow longer pathnames
+
+TODO:
+-Need new icons - I think .. fell through on me. :/
+-MCP parsing for graphics
+-FlipSide's graphics themselves
+
+NOTES:
+-This version still includes the FlipTerm Registry Cleanup.exe. Use
+it if you find you have multiple "default" sets of aliases, triggers
+and macros.
+
+--
+3/30/02
+--
+We'll beat this thing yet! ;)
+
+WHAT'S NEW:
+-Timestamps in the logs when they're opened and closed
+-Onscreen message when the log is closed by a disconnect (just to be
+sure you've been told)
+-MCP 2.1 negotiation including cords and multi-line
+
+WHAT'S FIXED:
+-Improved auto-log error messages to include the filename it's trying
+to write
+-Restricted trigger audio file dialog to WAV files
+-Log filename and path selection dialogs would permit illegal paths
+and filenames (if you are getting errors opening the log, please
+reselect your default log folder and your log filenames in the new
+version)
+-Probable memory leak in the output routine
+
+NOTES:
+-This version still includes the FlipTerm Registry Cleanup.exe. Use
+it if you find you have multiple "default" sets of aliases, triggers
+and macros.
+-The MCP code required re-writing the main display loop, so it's
+possible we'll see new bugs on received data from mucks. I hope to
+have caught them all.
+-The TODO list has had the previously vague 'FlipSides graphics
+themselves' expanded into the next series of steps. I'd like for this
+stuff to be accepted by other mucks, someday, so I'm following an
+existing spec and I'm going to document it all.
+-The MCP code will not do much by itself - but if you want to see it
+work, just connect to Furrymuck (furry.com 9999). You don't need to
+log in. You'll see an extra system message before the title page that
+says "%%% MCP Capability Established" FlipTerm has actually had a
+little conversation with the server at that point, which essentially
+tells it we don't support anything yet.
+
+TODO:
+-Still need new icons - volunteers?
+-Document FlipTerm extension to MCP to allow MUF to do the
+negotiation
+-Document the plugin structure and interface
+-Create skeleton .DLL for plugins so others can expand it
+-Document the 3D graphical extension
+-Write the graphical plugin
+-Actually load and access the plugins
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+3/31/02
+--
+WHAT'S NEW:
+-Directory structure for distribution laid out
+-FlipTerm MCP handling document created
+-FlipTerm Plugin document created
+-Created skeleton "dummy plugin" DLL
+-FlipTerm loads and processes the DLLs (look under 'help' to see a list)
+
+WHAT'S FIXED:
+-Minor modifications to the MCP negotiation sequence
+
+NOTES:
+-MCP is "MUD Client Protocol", for those who were wondering ;)
+-If you still need the FlipTerm Registry Cleanup tool, just let me
+know
+-Unless something else goes wrong, or I need to change the way something 
+works, FlipTerm itself is now complete (except I need new icons) and I've 
+only the MUF  code and plugin left to write.
+-I may still need to extend the plugin structure, though, so all the 
+documentation here is as beta as the code. ;)
+-Unzip to the same folder as usual - note that new folders will be created. 
+You can safely delete the SRC folder and the Old Gmud Docs folder if you don't 
+want to use up the disk space. :)
+
+TODO:
+-Icons!!
+-Document the 3D graphical extension
+-Write the graphical plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+4/1/02
+--
+WHAT'S NEW:
+-Added support for ANSI reverse text
+-Helper note when you copy and paste text for the first time - to tell you it's 
+been copied. A message box will pop up and tell you it's been copied, and ask 
+whether you want to see the reminder again.
+
+WHAT'S FIXED:
+-conflict between command-line commands /window and /w (speedwalk)
+-improved memory handling by removing debug libraries (why they were forced into 
+the release build, I dunno)
+-Lots of fixes to color, hopefully to fix the dimming/redraw problem. See the notes
+-Colored 'Bad Speedwalking character' message
+
+TODO:
+-Colored triggers are not working
+-Icons?
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+NOTES:
+-Color presented a host of problems with being reliably set that finally led me to 
+just redo the painting and ANSI parsing systems. The new system has the advantage 
+of translating the colors only once, instead of constantly, so should draw the 
+screen faster.
+-The changes to the color system means that you will probably lose your color 
+preferences - please just go set them again
+
+--
+4/1/02 again
+--
+WHAT'S NEW:
+-Nothing, just an important bugfix
+
+WHAT'S FIXED:
+-Garbled text caused by the new paint routines - was caused by partial lines being 
+pulled back OUT of the buffer and having the color codes added a second time. ;) 
+I didn't notice that at 5am ;)
+
+NOTES:
+-The text should be working correctly now.
+
+TODO:
+-Colored triggers are not working
+-Icons?
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+4/2/02
+--
+WHAT'S NEW:
+-Sets default to word wrap instead of character wrap by default
+
+WHAT'S FIXED:
+-Removed unnecessary references to more unused forms
+-Rewrote the text printing code to match my drawing code. Puh.
+-Wrap to screen should no longer lose characters under the scroll bar 
+(it's still possible, depending on your font, but far less likely)
+-Colored triggers now work and tend to use the right color, too ;)
+-Black text is legal (it wasn't before. Trust me.) 
+-Minor rare crash bug in the dummy plugin fixed
+
+NOTES:
+-Seems my changes to the color code were further reaching than I could 
+anticipate at 5am. On the other side, I'm pleased to say I've also 
+rewritten the character output routine, and it's a lot cleaner and 
+simpler as well, plus it seems to work.
+-Some modifications were done to the color routine. It absolutely 
+hates black text, but I've forced it in.
+-I'm back to work now, so these frequent updates will become a little 
+less frequent, I fear. Thanks for everyone's work, though, keep it up. :)
+
+TODO:
+-Icons?
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+4/6/02
+--
+WHAT'S NEW:
+-Oddly, I should be in bed. ;) But I feel fine, at least.
+
+WHAT'S FIXED:
+-Broken words in the middle of blocks of text, I think. 
+-Text is only copied to the clipboard if it is actually highlighted 
+(previously the clipboard was erased for pretty much any click)
+-'New Window' will automatically bring up the World Connect dialog, 
+too. Blank windows are kinda silly. ;)
+-Disconnect button now asks if you're sure. This behaviour can 
+optionally be overridden so that it doesn't have to ask every time
+-If your default color is a bright version, and the muck requests 
+that exact bright text, it will instead choose the dim text so that 
+it stands out from your default, even if it's not quite correct. 
+I can't properly test this, but the right solution is to use the 
+'dim' text for default :)
+
+NOTES:
+-The broken words, I think it's all good now. It looks good from 
+here, but eh, I never seem to hit the test cases everyone else gets. 
+That's why I have you! ;)
+-The color decisions come after a chat with Netolu. If you're 
+currently using a 'bright' color for your default, try selecting the 
+dimmer version for more correct color. I don't want to force the use 
+of just the dim colors - but that's an easy option, too :) Technically, 
+for proper color the settings should be a black background and 
+medium-grey (dim white) text. But we're trying to be flexible :)
+
+TODO:
+-Icons.
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+-Add Alt Up and Down history keys (this was oddly not quite 
+straightforward)
+-Add a way to configure the 'helper' dialogs, so they can be 
+turned back on if desired
+-Create proper 'do you want to disconnect?' dialog so we don't 
+need to use 'cancel' to disable it (misleading)
+-Add a way to adjust the relative brightnesses of the ANSI colors
+
+--
+7 Apr 02
+--
+WHAT'S NEW:
+-Still nothing.
+
+WHAT'S FIXED:
+-Round 3 of the color battles, and it's doing what it's supposed 
+to now, near as I can tell
+-Added locking of the internal lists to hopefully correct the 
+garbled text that Azima is seeing
+
+NOTES:
+-When you find a problem, please email me the best description of 
+any problem you see that you can, and how I can reproduce it for myself 
+if you know. Because I work on this only in between other things, and 
+I only make it online when everything else is done, email guarantees 
+I have something to go on when I'm ready. There's no guarantee our 
+schedules will overlap for live talking, and you're not being picky! 
+I need to know the problems so I can correct them before release.
+-Anytime locks are involved, there's the possibility of a 'deadlock' 
+stopping things dead. So let me know if it appears to freeze up and 
+won't display new text. The locking is fairly simple, so I don't 
+expect it, but just to warn you.
+
+TODO:
+-Icons.
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+-Add Alt Up and Down history keys (this was oddly not quite 
+straightforward)
+-Add a way to configure the 'helper' dialogs, so they can be 
+turned back on if desired
+-Create proper 'do you want to disconnect?' dialog so we don't 
+need to use 'cancel' to disable it (misleading)
+-Add a way to adjust the relative brightnesses of the ANSI colors
+
+--
+8 Apr 02
+--
+WHAT'S NEW:
+-Worlds have a '7 bit' flag that strips out high characters. It 
+defaults to ON to hide control codes, but may be optionally 
+turned off
+-'Force Ansi Reset', under options, forces the ANSI colors back 
+to the default at the end of every line 
+-Added 'Switches' to the options menu, replaces the list of 
+switches under Options with a form, and adds a few new ones
+-Now possible to set the command stacking character on the 
+switches form
+-Found and included the original README.TXT explaining why the 
+author quit GMud and granting permission to reuse
+-An icon. Heck with it. :)
+-Alt + Up and Down arrows for input history
+
+WHAT'S FIXED:
+-Check to ensure the screen doesn't scroll unless SOMETHING was 
+displayed (should stop the doubling up of lines)
+-Proper disconnect dialog
+
+NOTES:
+-'high characters' are usually characters such as the ones with 
+accent characters for non-english languages. Some mucks use 
+them, or extensions to VT100 that we don't support. By hiding 
+those characters we reduce 'noise' on those mucks. However, if 
+you NEED them, simply uncheck the box on that world and they 
+will be visible
+-Discarded the color adjust... what I had in mind didn't strike 
+me as being valuable enough to be worth the work I'd have to do
+-I added the 'Force ANSI Reset' after being on a muck that didn't 
+reset the ANSI codes correctly - after viewing a block of red text, 
+for example, EVERYTHING afterwards was red. ;) This forces 
+FlipTerm to reset the colors after every line. It's going to 
+be a matter of taste whether you want that.
+-That gets me caught up on the bugs and features again - 
+plugin time?
+
+TODO:
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+8 Apr 02
+--
+WHAT'S NEW:
+Nothing - this is a quck fix release ;)
+
+WHAT'S FIXED:
+-The broken menu :)
+
+NOTES:
+-Several of you reported the broken menus in several different 
+ways. ;) Cool. It was my fault - trying to simplify the code 
+and I went one step too far. ;)
+-Note the new TODOs. The 'possible' bugs, I need more 
+information on.
+
+TODO:
+-Possible scrolling (or not scrolling) bug
+-Possible pause bug
+-Make the trigger form more intuitive
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+9 Apr 02
+--
+WHAT'S NEW:
+I think nothing, since I did three releases yesterday. ;)
+
+WHAT'S FIXED:
+-The scrolling issues, hopefully. Redid the system for 
+determining when to scroll and when to wait. ;) Hope this 
+helps, Nef. :)
+-Cleaned up the tab order on the connection dialog and 
+removed the 'static' label that wasn't supposed to be there ;)
+-Fixed another crash bug in the dummy plugin 
+(not sure how it ever worked! :) )
+
+NOTES:
+-Pause bug was a feature! ;)
+-Input window now limited to 10k, shouldn't crash on HUGE 
+pastes. ;)
+-Remember you can always read the flipterm.txt file for 
+all the previous release notes, if you forget how something 
+works ;)
+
+TODO:
+-Make the trigger form more intuitive
+-Add ability to edit default colors
+-Add setting to have different colors/font settings per world
+-Audit the switches - some of them belong per world, too
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+10 Apr 02
+--
+Very little for bug reports, that's probably either a good 
+sign, or a very disturbing calm before the storm. ;)
+
+WHAT'S NEW:
+-Connect timer in status bar
+-Line counter in status bar
+-Input window is now sizable (in multi-line input mode)
+-System message when pausing output
+
+WHAT'S FIXED:
+-Removed some more unused code/classes from the source
+
+NOTES:
+-The sizing of the input window is a little hacky - the code 
+doesn't use proper framed windows. But, I think my workaround 
+for that is working pretty well. Note that the input window 
+size is a global setting and will be used for all newly 
+opened windows.
+-Did some work on Telnet negotiation - that's a lot trickier 
+than I expected. Not sure whether I'll proceed with it. It's 
+not like this is a common tool for connecting to Unix shells. ;)
+
+TODO:
+-Make the trigger form more intuitive
+-Add ability to edit default colors
+-Add setting to have different colors/font settings per world
+-Audit the switches - some of them belong per world, too
+-Telnet negotiation?
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+11 Apr 02
+--
+WHAT'S NEW:
+-Paused windows no longer scroll automatically upon release
+-Added 'MORE' indicator to the status bar (note the clock, 
+line count and more prompt only update once per second)
+-Added numbered Window selection toolbar
+-[VERY] basic Telnet negotiation - see notes
+
+WHAT'S FIXED:
+-Still more code simplification and cleanup
+-Receiving of packets containing multiple strings (probably 
+only under telnet)
+-Fixed a problem preventing settings from being saved (caused 
+by the connect timer, surprisingly ;) )
+
+NOTES:
+-The Stan-Compliant Pause Functionality is now in Effect
+-The 'more' indicator in the bottom status line will light up 
+any time you are not at the bottom of the buffer - scroll 
+down :)
+-The new numbered window selection bar provides shortcuts to 
+the first 9 windows, mapping directly to the keys alt+1-9.
+(Alt-0 opens a Window selection dialog). These numbers go red 
+when there is pending activity in that window. As with all
+the toolbars, this window may be dragged about and even 
+undocked from FlipTerm. 
+-The telnet negotiation is not intended to be anything overly 
+practical - using a Unix shell from FlipTerm, for example, is 
+an amusing example of silliness. The main point was that I saw 
+too many clients bleating about how GMud doesn't do any 
+negotiation and they do. FlipTerm negotiates - it's enough to 
+log in, but we basically tell the other end that we don't 
+support anything it asks us about. (Net: it turns out this is 
+the funky codes that Red Dragon sends at login, except for the 
+^L. I still can't explain that.) For what it's worth, my problems 
+with it last night were due to 2:30am syndrome when nothing 
+makes sense.) Anyway, please do not submit bugs on the telnet 
+support - it's at the bottom of my interest level. ;)
+-Calling it an early night at 12:45 for a change. ;)
+
+TODO:
+-Make the trigger form more intuitive
+-Add ability to edit default colors
+-Add setting to have different colors/font settings per world
+-Audit the switches - some of them belong per world, too
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+14 Apr 02
+--
+WHAT'S NEW:
+-'Default System Colors' under options will allow you to 
+remap the 16 colors used by FlipTerm to anything your 
+system supports. This is for those who don't care for 
+the fully-saturated colormap :)
+
+WHAT'S FIXED:
+-Scroll range on the scroll bar - should work for more 
+than 500 lines now 
+-Reworked the Trigger dialog - see Notes
+-More unused code removal/cleanup
+
+NOTES:
+-The trigger dialog now functions more like the world 
+dialog - you click 'add', you get prompted for the 
+trigger text, and then you edit it. It greys out the 
+controls when no trigger is selected, and should be 
+self-explanatory now. It also confirms deletes, which 
+is new behaviour.
+
+TODO:
+-Add setting to have different colors/font settings per 
+world
+-Audit the switches - some of them belong per world, too
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+14 Apr 02
+--
+WHAT'S NEW:
+-'Default Color' dialog now loads the current colors into 
+the custom color portion of the color picker. It's a 
+minor thing. ;)
+-Ability to set custom colors and font for each world. 
+Major thing. ;)
+-The names of the options in the options menu have 
+been changed and moved
+
+WHAT'S FIXED:
+-'Create Autolog' selections on World dialog - 
+'Never' no longer sticks on.
+-Double-spacing as displayed by some mucks was 
+being ignored - should work now.
+-More code cleanup!
+
+NOTES:
+-The custom color/font selection still recognizes the concept 
+of a universal 'default'. When set to 'default', the color 
+and font information is read from the global settings, 
+otherwise the world settings will override it. Color and 
+Font are separate settings, and one may be set to custom 
+while the other is still default. Custom color settings are 
+indicated by an asterix (*) on the color change button on 
+the connect form. Custom font settings will display the 
+font name, or the word 'Default'.
+-This color/font customization touched large portions of the 
+code, so there's a reasonably good chance for new bugs. I 
+don't *want* any, but if you see them, lemme know. ;)
+-If only because the World form is so crowded already, and 
+nobody has actually requested it, I'm going to drop the 
+ability to set the switches independantly on the worlds as 
+well. I think the number of switches for which it's valuable 
+is fairly limited and for the most part, everyone runs the 
+same settings everywhere. Correct me if I'm wrong very 
+soon, cause I want this sucker done. ;)
+
+TODO:
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+14 Apr 02
+--
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-Saving ANSI on/off setting with world (fixed that earlier 
+but didn't email it)
+-Telnet negotiation would sometimes hang - that's been 
+corrected
+-Fixed another end of line bug - looks much better now
+
+NOTES:
+-Netolu is such a troublemaker - always finding 
+problems ;)
+-Added a lot more stuff to the Telnet code - it should 
+recognize and discard a lot more, and anything it doesn't 
+know should now properly be left alone
+
+TODO:
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+20 Apr 02
+--
+WHAT'S NEW:
+-When you manually turn on the log, it will ask whether you'd 
+like to log all the way back to the beginning of the buffer. 
+Handy if you turn it on after the session has already started. 
+Azima requested, but I'd had it in mind anyway. ;)
+
+WHAT'S FIXED:
+-Positioning bug when resizing the input window - it shifted 
+things over a pixel or three. Thank Netolu's sharp eyes for 
+that catch.
+
+NOTES:
+-Guess that's about it? Good! Client seems nice and stable, 
+and so does the dummy plug in. Now I can finally build on it.
+
+TODO:
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+27 Apr 02
+--
+Please *READ* the notes on this one. :) Especially if you 
+wanted your autolog filenames to include the date. ;)
+
+RELEASE: 27 Apr 02 - 2:16am
+
+WHAT'S NEW:
+-Modified the naming scheme for autolog. You may now enter 
+special characters to indicate parts of the current date 
+and time for the log name. See the notes.
+-Added a new switch to disable the way the connect dialog 
+automatically appears when you open a new window
+-Added another new switch to change the review buffer - 
+when you turn it off, it leaves the cursor at the beginning 
+of the text instead of jumping to the end (classic GMud 
+behaviour)
+-Added 'Output Resumed' message when un-pausing
+-Added ability to change the color of System messages
+-Added three new shortcut buttons - Switches, System Message 
+Color, Global System Colors
+-Fonts can now save the weight (ie: bold) and Italic settings
+-Added build date and time to the About box.
+
+WHAT'S FIXED:
+-Obscure window change bug in the connected world list - if 
+you selected the window that was currently open (for instance, 
+double- or triple-clicking), then hit space, the next window 
+in the list would be selected. Fixed so that focus always 
+returns to the main window.
+-Sizing bug - if you had the form maximized, then closed all 
+world windows, then opened a new one, the window would resize 
+incorrectly. Fixed that.
+-Plugin help - didn't work with more than one plugin. Fixed.
+-Control key sometimes was not cleared when changing focus 
+(so it thought it was still pressed)
+-Improved the descriptions on the switches dialog
+-Crash bug - if a line was longer than the width of the 
+output window (or longer than 80 columns with 80 wrap on) 
+which can not be word-wrapped, and there was a space in the 
+line BEFORE the excessively long part, it would get stuck in 
+a loop and scroll forever.
+-Added shortcut keys to all three buttons on the Overwrite/
+Append/Cancel form
+-Mousewheel scrolling - minimized the line 'stretching'. Nearly 
+everyone complained, so I did it a different way. Seems to 
+work better, though it's not quite so smooth. ;)
+-Fixed a bug that gave incorrect results when using non-default 
+fonts per world
+-Autolog remembers the last filename used - so if you turn it 
+off, then turn it on again, it remembers the old name
+-Changed AutoReconnect to autoreconnect only if an error caused 
+the connection to abort (ie: lagged out)
+
+NOTES:
+-Possible fix - not sure what was really broken - I noticed 
+a case where the output could get out of sync - ie: you'd 
+type a line, but the line you typed three or four lines 
+ago is the one that gets sent. I modified the logic in 
+the send function a bit to make sure it sends as much as 
+possible, instead of just one line - that way if it falls 
+behind, it can catch up. The original author hinted in his 
+notes that he had seen this, too, but he blamed an old 
+version of Windows NT. ;) I noticed it with command stacking, 
+since that puts a load on the send function. Anyway, I think 
+it's fixed. if you notice any problems sending text, let me 
+know. If it happens, just close the window and open a new 
+one, that will clear things out and not affect the rest of 
+your windows. :)
+-Autolog - The original naming sequence took whatever you 
+entered for the name, and adding a number to it that always 
+increased. This method is still used with normal filename, 
+except there is now an underscore (_) separating the name 
+and the number. The new system, and perhaps more interesting, 
+lets you enter the current date as part of the filename. 
+To embed part of the date, enter "%x", where 'x' is a letter 
+that indicates what you are interested in. Slashes (/) and 
+colons (:), which are common in dates but illegal in filenames, 
+are converted automatically to dashes (-) and periods (.). 
+I'll give a few examples here. ;) Hold onto this list for 
+reference if you want to use this feature. Note that it 
+matters if it's uppercase or lowercase! 
+%a - Abbreviated weekday name (Mon, Tue, Wed)
+%A - full weekday name (Monday, Tuesday Wednesday)
+%b - Abbreviated month name (Jan, Feb, Mar)
+%B - full month name (January, February, March)
+%c - current date and time (depends on your system settings - 
+I get '04-26-02 20.50.35' (date/time) )
+%#c - *long* date and time representation (ie: Friday, April 
+26, 2002, 20.59.15)
+%d - day of month (01 - 31)
+%H - 24-hr formatted hour (00-23)
+%I - 12-hr formatted hour (01-12)
+%j - day of year by number (001 - 366)
+%m - month by number (01 - 12)
+%M - Minute (00 - 59)
+%p - A.M./P.M. indicator
+%S - Seconds (00 - 59)
+%U - Week of year (Sunday is first day of week, 00 - 53)
+%w - Weekday by number (0 - 6, Sunday is 0)
+%W - Week of year (Monday is first day of week, 00 - 53)
+%x - Date representation (depends on your settings, I get 
+04-26-02)
+%#x - *long* date representation, as with %#c
+%X - Time representation (depends on your settings, I get 
+20.56.25)
+%y - Year without century (00 - 99)
+%Y - Year with century (ie: 2002)
+%z or %Z - Time zone name or abbreviation (depends on 
+system settings and zone, I get the full words 'Pacific 
+Daylight Time')
+You can also remove leading zeros, if any, on the following 
+codes by adding a # sign (So that '09' reads instead as '9'):
+%#d, %#H, %#I, %#j, %#m, %#M, %#S, %#U, %#w, %#W, %#y, %#Y
+
+-I did some investigation as to speeding up the paint/scroll 
+routine. There's quite honestly a lot of stuff going on in 
+there. My code is substantially simpler than the original 
+code, but I have to admit it's doing a lot more work. I've 
+made some minor tweaks, but I suspect that the tradeoff is 
+going to become speed vs maintainability, and I'd rather have 
+the latter than scroll 5 pages in half a second instead of 
+two. Some day in the distant future I may revisit that, but 
+right now, this code works, is solid, and I'd like to leave 
+it as is. 
+-The autoreconnect change came about after someone noted to 
+me that when they typed 'QUIT', it reconnected to the muck. 
+So I changed it to autoreconnect only if an error occurred, 
+never on a clean disconnect (ie: either you or the server 
+disconnected on purpose). Question: is this preferable? I know 
+some people like this kind of feature to defeat mucks that 
+idle you out. I personally very much dislike that behaviour, 
+but you are all my test bed. Give me feedback on this question. 
+Should it always reconnect, or only when an error occurs?
+
+TODO:
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+28 Apr 02
+--
+RELEASE:28 Apr 02 - 1:53am
+
+WHAT'S NEW:
+Nothing
+
+WHAT'S FIXED:
+-If a long is longer than the wrap width but never contains 
+any spaces, it would spin forever on it 
+-Word wrap was broken in the last release. I knuckled down, 
+stopped trying to be fancy, and added a couple more checks. 
+-Changed the selection function so that if you don't actually 
+select any text, it doesn't clear out the clipboard
+-Fixed potential case in the selection code where it would 
+stay paused (without telling you) when you clicked the screen
+-Fixed bug (I think) where using different fonts in different 
+windows would cause the wordwrap in background windows to 
+mess up (I think) ;)
+
+NOTES:
+-Word-Wrap should work now. I've run it as narrow as 15 
+columns wide. I've tested with GIMONGOUS fonts. I've tested 
+with ittsybitsyteenyweenyfonts. I've squashed my window and 
+stretched it across both monitors. 
+-More code cleanup
+
+TODO:
+-Document the 3D extension
+-Write the 3D plugin
+-MUF program for FlipSide to do the negotiation
+-Copy the graphics to FlipSide
+
+--
+9 Jun 02
+--
+RELEASE:9 Jun 02 - 2:21pm
+
+WHAT'S NEW:
+-Updated plugin format so that plugins can process 
+strings of text as well as MCP commands. Still 
+version 1.0 as we haven't released yet.
+-Added speech plugin to read the screen for you. 
+It's kind of preliminary and not installed by default - 
+copy it to the plugins folder to try it. See the notes.
+-Added 'Swedish Chef' plugin. It's fun and silly and 
+hard to read. ;)
+
+WHAT'S FIXED:
+-When a punctuation mark was the last character on a 
+line, only the punctuation would wrap. Fixed.
+-Command stacking was always on with '|', regardless 
+of the switch settings. Now pays attention.
+-MCP - when 20 bad keys are received, if you choose 
+not to disable MCP, it will reset the counter.
+-Plugins that report a low version of 0 (invalid) are 
+not negotiated with the server (this permits text-only 
+plugins like Speech and Chef)
+
+WHAT'S WORKED ON:
+-The odd line breaks in the logs. It's pretty hard 
+for me to reproduce.
+-Updated the plugin structure to allow more 
+flexibility in the DLLs
+
+NOTES:
+-I don't recommend the speech plugin for serious use. 
+It's main problem (besides keeping up) is that once 
+it's loaded, you can't UNLOAD it. You close FlipTerm, 
+but it's still there in the background. Until I solve 
+that, it's just a toy. Therefore, it is not in the 
+'plugins' directory by default.
+-If you do decide to play with it, you may need 
+Microsoft's speech libraries. They are installed by 
+default in XP but not in anything earlier (I think). 
+See http://www.microsoft.com/speech/. I think you may 
+need to install the entire Speech SDK (68mb), as I 
+can't find a download that installs just the libraries. 
+(Perhaps they expect the developer to include them.. 
+that would be the redistributables. I don't, at least 
+not right now.) Anyway, I'm not sure what the 
+requirements are. 
+-The 3D plugin is now included, but it doesn't do 
+anything yet. Like the Plugin Skeleton, it just 
+sits there.
+-Swedish Chef (remember the muppets?) is a silly 
+sample plugin that makes everything look like the 
+Swedish Chef said it. Click Help->Swedish Chef to 
+turn it on and off. (It defaults to off).
+-Nobody gave me feedback on the Reconnect feature 
+changes, so it's staying as-is. ;)
+
+TODO:
+Well, the work with the text-based plugins suggested 
+there is a bit left to do:
+-Text-based plugins that return strings (ie: Chef) 
+remove all color from the string - they should get 
+the color and handle it themselves.
+-'rainbow text' plugin to demonstrate the color handling
+-Need a dialog to enable/disable and configure plugins
+-Plugins need to be configurable
+-Document the 3D extension
+-Document the color handling system for plugin authors
+-Complete the 3D plugin (needs everything)
+-Complete the Speech plugin (needs ability to stop 
+voice, and needs to actually exit on close)
+-MUF program for FlipSide to do the Negotiation
+-Copy the graphics to FlipSide
+--
+10 Jun 02
+--
+RELEASE: 10 Jun 02 - 1:36am
+
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-Several memory allocation crashes caused by new heap 
+code in the last version
+
+NOTES:
+-Don't run the previous version, it's almost guaranteed 
+to crash often :) However, all the notes from the last 
+email still apply - read them. :)
+
+TODO:
+-Text-based plugins that return strings (ie: Chef) remove 
+all color from the string - they should get the color 
+and handle it themselves.
+-Need a dialog to enable/disable and configure plugins
+-Plugins need to be configurable
+-Document the 3D extension
+-Document the color handling system for plugin authors
+-Complete the 3D plugin (needs everything)
+-Complete the Speech plugin (needs ability to stop voice, 
+and needs to actually exit on close)
+-MUF program for FlipSide to do the Negotiation
+-Copy the graphics to FlipSide
+--
+7 Jul 02
+--
+RELEASE: 7 Jul 02 - 20:39
+
+WHAT'S NEW:
+-Built with latest version of the Microsoft Platform SDK
+-The 'Show Activity' switch will also flash the title bar 
+if activity occurs while another program is active (I found 
+I'd been forgetting I had the muck window open ;) )
+-Added a copy of MyAnsiNext() to the plugin skeleton to 
+help parse ANSI codes
+-Plugins are announced as they load on startup
+-Added separate menu item for Plugins
+
+WHAT'S FIXED:
+-Activity indicator now says 'Activity in world..' instead 
+of 'Activity in window...' (to match the documentation)
+-The quick-select number bar - if you closed a window while 
+another window showed activity, it would sometimes leave the 
+red number up for a window that no longer exists. Fixed that.
+-Text-only plugins now receive the full original ANSI string, 
+so be aware of that when parsing text
+
+NOTES:
+-I've fought the speech plugin some more, and just given up 
+on it - I can't get it to exit. I'll include the source 
+code but it's not supported.
+
+TODO:
+-Document the 3D extension
+-Complete the 3D plugin (needs everything)
+-MUF program for FlipSide to do the Negotiation
+-Copy the graphics to FlipSide
+--
+9 Aug 02
+--
+RELEASE: 9 Aug 02 1:17
+
+WHAT'S NEW:
+-Added a new MCP (optional) command to the plugins
+-Real work done on the 3D Plugin - it does stuff now
+-MUF program to do initial negotiation
+
+WHAT'S FIXED:
+-I've honestly lost track, but I think very little
+
+NOTES:
+-The new MCP command is #$#mcp-internal, used for passing messages between the plugin and FlipTerm only. It has a single required argument, 'type', which contains a string. Currently the only defined type is 'focus', which is sent when the active window changes. All plugins always receive mcp-internal messages, even if you return true (that you processed it). However, continue to indicate whether you processed the message for future compatibility.
+-Currently the 3D plugin only has the functionality of the original demo. It can't save any settings, and the zoom doesn't work. But you can load a file and scroll around in it, and FlipTerm correctly communicates with it when to start and stop (and set the title bar, partially)
+-To use the 3D plugin, right-click on it's window, then from the file selector, select one of the included JPGs. I've included 3 randomly selected pics from El Dogrado. To 'look around', hold the left mouse button on the window, and move the mouse. You can change the picture again by right-clicking again. And yes, any JPG will load, but may not look that good. ;)
+-The source for the 3D plugin still uses ImgSource, which I can't distribute the key for. I'll try to fix that before the real release.
+-MCP is only enabled at FlipSide if you connect while in the Crossroads, so to see the plugin you'll need to be in there.
+-The MUF may be slightly less useful outside of FlipSide than hoped - I had to modify FuzzBall slightly to permit it to work
+-The rush is on, we want to launch this for FlipSide's Open House, which starts September 1 or so. :) So the entire TODO list may not get done
+
+TODO:
+-3D Plugin must be configurable
+-3D Plugin must receive commands for image loading from FlipSide
+-3D Plugin must be able to download images (probable future)
+-MUF program to communicate with 3D plugin
+-Set up the graphics on FlipSide
+--
+11 Aug 02
+--
+RELEASE: 11 Aug 02 23:37
+
+WHAT'S NEW:
+-3D Plugin has full Configuration
+-3D Plugin runs on open source JPG library
+-Added IsSupported function to libMCP.MUF
+-Added MCPShow3D.muf and Set3D.MUF
+-Added documention on libMCP and 3DPlugin use
+-Added El Dogrado graphics set for FlipSide
+-Added NULL.jpg graphics for undefined rooms
+
+WHAT'S FIXED:
+-Fixed registry path as passed to plugins
+-Fixed argument seeking in libMCP
+-Completed 3DPlugin handling
+-Touched up documentation
+-Tweaked registry access across all sample plugins
+
+TODO:
+-Create installer
+-3D Plugin must be able to download images (future)
+-Set up the graphics on FlipSide
+--
+14 Aug 02
+--
+RELEASE: 14 Aug 02 - 11:51pm
+
+WHAT'S NEW:
+-New Installer! Please see the Notes!
+-3d Plugin now has a 'reset' button to reposition all views to the
+default location
+-3d Plugin window text parameter changed from 'World' to 'Tag'
+-3d plugin supports HTTP downloading and automatic image updates
+
+WHAT'S FIXED:
+-3d Plugin was saving it's configuration in the wrong registry tree
+(HKLM vs HKCU)
+-Updated plugin notes to specify which registry tree to use
+-Default path for the 3D plugin is now current folder, not my test
+path ;)
+-Clarification of the message when the 3d plugin can't find it's
+config
+-Installer now sets default for 3d Plugin, so these shouldn't be an
+issue anyway
+-3D view windows remember where they were last at, based on the muck
+world name
+-Fixed handle leak in 3D view configuration
+-3D Window repositions when it's size is changed
+-3D Plugin configuration form stays on top of the main form until
+closed
+
+NOTES:
+-FlipTerm is now shipped as a single self-installing executable -
+simply run InstallFlipTerm.exe and follow the prompts. This installer
+is created by NullSoft, the makers of WinAmp, and is nicely licensed
+to be completely free. It more than fits our needs, and is very
+reliable.
+-PLEASE DELETE YOUR OLD FLIPTERM FOLDER BEFORE
+INSTALLING THE NEW ONE. Your settings in the registry
+will be preserved, however, you do not need ANY of the old files.
+(NOTE: if you have Logs in the FlipTerm folder, you might want
+to save those. ;) Please check what you're deleting.)
+-The installer will auto configure the tricky stuff like the plugins
+and paths, so it should be plug and play. Your old settings in the
+registry WILL be saved, except for the 3d plugin due to the bug
+mentioned above. (But if you do a default install, that won't
+matter.)
+-The installer also gives us nice UNinstall support, which will
+let you completely wipe your system of FlipTerm. Note, the
+uninstaller (Add/Remove Programs, or the Uninstall shortcut)
+*WILL* delete all your settings, including worlds! So test it
+only if you mean it. ;)
+-You do not have to install everything. As my testers, I ask that you
+please install at least the main program and the plugins. Everything
+else is optional. :)
+-I spent *substantial* time on checking out the issue of broken lines
+in the log files. To the best that I could determine, logging is now
+working properly for live logs. If you log after starting a session,
+and say 'yes' to "would you like to log back to the beginning of the
+buffer?', the old lines copied to the log file will be formatted to
+the width they are onscreen, and therefore may look poorly formatted
+in the log. Fixing this is going to have to be part of a larger
+overhaul of the buffer system. However, everything logged AFTER you
+turn on logging should be *fine*. If it's not, please help me work
+out under what circumstances it's not. :)
+
+TODO:
+-Abort a current download if a new one is started
+-Set the correct tag on the window after a download
+-MCP commands come up as invalid if the network breaks them up (this is fixable)
+--
+18 Aug 02
+--
+RELEASE: 18 Aug 02 9:12pm
+
+WHAT'S NEW:
+-Release Candidate 1
+
+WHAT'S FIXED:
+-Installer minor text changes
+-3DView Aborts a download if a new one is started before the last one ends
+-3DView Image is remembered when window is resized or reset, and will re-open the picture
+-3DView When window is closed, the image will not be downloaded but will be remembered
+-3DView Improved parsing of URLs and Filenames
+-3DView Background downloads do not interfere with the window
+-3DView Window tag is correctly set after a download
+-3DView buffer overrun in the window title corrected
+-3DView memory leak and possible hang if download thread failed to start
+-Main program - potential fix for fragmented MCP commands (I can't get it to happen now! ;) )
+
+NOTES:
+-If you downloaded the previous version with installer, just install this one over top, do not uninstall. Otherwise, follow the instructions in the last email (delete your current FlipTerm folder, then run the installer).
+--
+20 Aug 02
+--
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-Split line fix didn't work (thanks Sarabi)
+-3D Plugin failed to check for trailing \ on path (wouldn't load NULL.jpg) (thanks Netolu)
+-3D Plugin did not create download folders (so nothing could download) (thanks Netolu)
+
+NOTES:
+-You can work around both problems (and indeed, you might not have seen them). For the first, under the plugin setup, make sure that the path ends with a backslash (\). For the second, browse to the image cache (where NULL.jpg is), and create an empty folder named 'FlipSide'.
+-Cache folder creation is not recursive - images must be nested only 1 folder deep. Documentation updated to reflect this.
+--
+26 Aug 02
+--
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-3D Plugin correctly updates timestamps on changed images (so doesn't
+keep downloading them)
+-Last version (several versions?) had completely broken text plugins (ie: Chef) - fixed that
+-(Potential?) fix for missing blank lines, again. Silvyr, I can't connect to that muck to test :)
+
+NOTES:
+-Only a week or so left... please let's make sure we've got everything right!
+-Note the new URL - my new page is up! :)
+--
+1 Oct 02
+--
+(First non-Beta Team update release)
+WHAT'S NEW:
+-About box changed to release version 1.0
+-Fixed tab behaviour when white on white or black on black is encountered (I doubt anyone saw this ;) )
+-Fixed appearance of garbled characters on certain talkers, possibility of crash or endless looping in the same code fixed
+-Fixed bad log filenames being generated if the muck name includes any of these chars: \ / : * ? " < > |
+-Fixed text color when set to same as background color and background is not black (text will be black)
+-Fixed handling of ANSI Inverse text
+-Made triggers case INsensitive
+-Added message box to instruct when trying to edit macros, aliases or triggers without a world selected
+-Fixed missing blank lines again ;)
+
+NOTES:
+Thanks to Michael Marquart for submitted most of the above bugs, and Silvyr for bugging me about the missing line one. ;)
+
+--
+16 Oct 02
+--
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-Improved color parsing to correct one noted crash and several potential crashes
+
+NOTES:
+Thanks to Michael Marquart and the Blame Canada talker for helping out :)
+
+--
+4 Dec 02
+--
+WHAT'S NEW:
+-Changed default font to FixedSys instead of Courier New
+
+NOTES:
+Not worth doing a release for.
+
+----------
+9 March 03
+----------
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-Compatibility with early Windows 95 and possibly Windows NT restored
+
+NOTES:
+-Now requires the SHFOLDER.DLL, included with the installer and any 
+recent version of Windows. This is a file provided for Microsoft to address
+getting folder names on older versions of Windows.
+
+---------
+29 Mar 03
+---------
+WHAT'S NEW:
+-Updated 3D plugin with a NoWrap flag for non 360-degree images
+
+WHAT'S FIXED:
+-Removed the broken scripting engine
+
+--------
+6 May 03
+--------
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-3D plugin wrap flag is preserved on reset/reopen
+
+NOTES:
+-Not enough for a new release
+
+----------
+10 June 03
+----------
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-MCP handlers now strip off ANSI (line is truncated at 'esc')
+-Better whitespace handling in MCP
+-This also fixes the 3D Plugin handling of NULL images
+
+----------
+27 July 03
+----------
+WHAT'S NEW:
+-Different text color for input text (global setting under the System Color menu)
+
+WHAT'S FIXED:
+-Nothing
+
+------------
+30 August 03
+------------
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-Log to disk no longer includes MCP commands
+
+------------
+8 January 04
+------------
+WHAT'S NEW:
+-URL menu item tracks the last 10 detected URLs (even saved across sessions)
+ (Thanks to FoxxFire and RabitGuy for the idea)
+-File->Export Settings to dump a registry file of your configuration
+
+WHAT'S FIXED:
+-No longer randomly copies strings to the clipboard when you connect to a muck
+
+-------------
+10 January 04
+-------------
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-Corrected indexing error which led to too many URLs in the URL dropdown, some
+ of which may be greyed out.
+
+-------------
+25 January 04
+-------------
+WHAT'S NEW:
+-Added anti-idle timeout in the Triggers dialog
+
+WHAT'S FIXED:
+-Nothing
+
+-------------
+25 January 04 (again)
+-------------
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-The anti-idle timer code wasn't even close. Better now.
+
+-----------
+8 August 05
+-----------
+WHAT'S NEW:
+-'MapKeys' in the switches dialog will let you use the numeric keypad to send
+ single keypress movement commands (compass directions, plus 5=down and 0=up).
+ Make sure Num Lock is on to use this feature.
+
+WHAT'S FIXED:
+-Nothing
+
+-----------
+31 October 05
+-----------
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-Fixed the trigger/macro edit selection box to use OK instead of Done, which
+ conflicted with DELETE
+
+--------------
+23 November 05
+--------------
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-Rebuild the Src\ folder so that the project loads and builds without fiddling
+with it in Visual Studio
+
+------------
+5 January 06
+------------
+WHAT'S NEW:
+-Added 'Are you sure?' program quit confirmation
+
+WHAT'S FIXED:
+-Version numbers in the resources 
+
+--------------
+24 December 07
+--------------
+WHAT'S NEW:
+-Updated to new Visual Studio
+-Close window confirmation (relies on Close Program config)
+
+WHAT'S FIXED:
+-Crash bug on window close during connect attempt
+
+----------
+9 April 08
+----------
+WHAT'S NEW:
+-Speedwalk can now send uppercase text with /W (opposed to /w)
+-Mapkeys send lowercase by default, engage caps lock for uppercase
+
+WHAT'S FIXED:
+-Nothing
+
+-------------
+18 October 08
+-------------
+WHAT'S NEW:
+-URL detection now includes https: and www.
+
+WHAT'S FIXED:
+-URL detection is case insensitive
+
+-------------
+5 December 08
+-------------
+WHAT'S NEW:
+-Limited IRC support 
+-Anti-Idle triggers no longer cause an activity notice or local echo
+-Trigger copy dialog fixed (never worked!)
+
+WHAT'S FIXED: 
+-nothing
+
+-------------
+7 December 08
+-------------
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED: 
+-IRC arrive/depart messages display better
+-Tweaked local echo for IRC to display your string as others may see it
+
+-------------
+15 December 08
+-------------
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED: 
+-IRC channel test is non-case sensitive (so everything doesn't appear as PRIVMSG)
+
+-------------
+22 February 09
+-------------
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED: 
+-Removed text from connected world bar so it can be undocked again
+
+-------------
+23 February 11
+-------------
+WHAT'S NEW:
+-Nothing
+
+WHAT'S FIXED:
+-Repacked crash fix - should not crash if you get unexpectedly logged out.
