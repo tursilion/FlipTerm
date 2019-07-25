@@ -12,7 +12,7 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-BEGIN_MESSAGE_MAP(CConnectedBar, CDialogBar)
+BEGIN_MESSAGE_MAP(CConnectedBar, CPaneDialog)
 	//{{AFX_MSG_MAP(CConnectedBar)
 	ON_LBN_SELCHANGE(IDC_CONNECT_LIST, OnSelchangeConnectList)
 	ON_WM_SETFOCUS()
@@ -33,7 +33,7 @@ CConnectedBar::CConnectedBar()
 
 void CConnectedBar::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogBar::DoDataExchange(pDX);
+	CPaneDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CConnectedBar)
 	//}}AFX_DATA_MAP
 }

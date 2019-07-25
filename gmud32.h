@@ -1,8 +1,9 @@
 // Mud32.h : main header file for the Mud32 application
 //
+#pragma once
 
 #ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
+	#error "include 'stdafx.h' before including this file for PCH"
 #endif
 
 #ifndef MUD_APP_DEFINED
@@ -16,76 +17,35 @@ const HANDLE TheHeap=GetProcessHeap();	// Our shared memory heap
 #define malloc(x) HeapAlloc(TheHeap, 0, x)
 #define free(x) HeapFree(TheHeap, 0, x)
 
-#define PLUGIN_MENU_INDEX 5
-#define URL_MENU_INDEX 6
+#define URL_MENU_INDEX 4
 
 extern bool g_ClosingApp;
-
-typedef struct _dllinfo {
-
-	_dllinfo() {
-		MCPPlugin_Initialize=NULL;
-		MCPPlugin_GetNumberPackages=NULL;
-		MCPPlugin_GetPackageName=NULL;
-		MCPPlugin_GetPackageLowVersion=NULL;
-		MCPPlugin_GetPackageHighVersion=NULL;
-		MCPPlugin_ProcessString=NULL;
-		MCPPlugin_CloseSession=NULL;
-		MCPPlugin_About=NULL;
-		hDll=NULL;
-		pNext=NULL;
-	}
-
-	int (*MCPPlugin_Initialize)(char *inRegKey);
-	int (*MCPPlugin_GetNumberPackages)();
-	const char *(*MCPPlugin_GetPackageName)(int n);
-	int (*MCPPlugin_GetPackageLowVersion)(int n);
-	int (*MCPPlugin_GetPackageHighVersion)(int n);
-	bool (*MCPPlugin_ProcessString)(char *pStr, HWND hWnd, char **pOut);
-	void (*MCPPlugin_CloseSession)(HWND hWnd);
-	bool (*MCPPlugin_WantPlainText)();
-	char *(*MCPPlugin_ProcessTextString)(char *pStr, bool fActive);
-	void (*MCPPlugin_About)();
-	HMODULE hDll;
-	_dllinfo *pNext;
-
-} DLLInfo;
 
 /////////////////////////////////////////////////////////////////////////////
 // CMudApp:
 // See Mud32.cpp for the implementation of this class
 //
 
-class CMudApp : public CWinApp
+class CMudApp : public CWinAppEx
 {
 public:
 	CMudApp();
 	void DoSave();
-	void LoadMCPPlugins();
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMudApp)
 	public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
-	//}}AFX_VIRTUAL
 
 // Implementation
+	UINT  m_nAppLook;
+	BOOL  m_bHiColorIcons;
 
-	//{{AFX_MSG(CMudApp)
+	virtual void PreLoadState();
+	virtual void LoadCustomState();
+	virtual void SaveCustomState();
+
 	afx_msg void OnAppAbout();
-	afx_msg void OnPluginHelp0();
-	afx_msg void OnPluginHelp1();
-	afx_msg void OnPluginHelp2();
-	afx_msg void OnPluginHelp3();
-	afx_msg void OnPluginHelp4();
-	afx_msg void OnPluginHelp5();
-	afx_msg void OnPluginHelp6();
-	afx_msg void OnPluginHelp7();
-	afx_msg void OnPluginHelp8();
-	afx_msg void OnPluginHelp9();
-	afx_msg void OnPluginHelp10();
 	afx_msg void OnURL1();
 	afx_msg void OnURL2();
 	afx_msg void OnURL3();
@@ -113,7 +73,6 @@ public:
 	afx_msg void OnExport();
 	afx_msg void OnHistorynext();
 	afx_msg void OnHistoryprev();
-	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -146,12 +105,10 @@ public:
 	int m_NumLines;
 	
 	CMultiDocTemplate* pDocTemplate;
-
-
-	DLLInfo DLLList;
 };
 
 CMudApp *GetApp();
+extern CMudApp theApp;
 
 // various windows messages
 #define WM_FONTCHANGED		12345

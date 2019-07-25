@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // CButtonBar window
 
-class CButtonBar : public CDialogBar
+class CButtonBar : public CPaneDialog
 {
 // Construction
 public:

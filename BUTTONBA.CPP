@@ -22,7 +22,7 @@ CButtonBar::~CButtonBar()
 }
 
 
-BEGIN_MESSAGE_MAP(CButtonBar, CDialogBar)
+BEGIN_MESSAGE_MAP(CButtonBar, CPaneDialog)
 	//{{AFX_MSG_MAP(CButtonBar)
 	ON_WM_SETFOCUS()
 	ON_COMMAND(IDC_BUTTON1, OnButton1)
@@ -40,13 +40,13 @@ END_MESSAGE_MAP()
 
 void CButtonBar::OnSetFocus(CWnd* pOldWnd)
 {
-//	CDialogBar::OnSetFocus(pOldWnd);	
+//	CPaneDialog::OnSetFocus(pOldWnd);	
 	pOldWnd->SetFocus();
 }
 
 BOOL CButtonBar::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pLResult) 
 {
-	return CDialogBar::OnChildNotify(message, wParam, lParam, pLResult);
+	return CPaneDialog::OnChildNotify(message, wParam, lParam, pLResult);
 }
 
 void CButtonBar::OnButton1() 
@@ -56,20 +56,20 @@ void CButtonBar::OnButton1()
 
 void CButtonBar::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized) 
 {
-	CDialogBar::OnActivate(nState, pWndOther, bMinimized);
+	CPaneDialog::OnActivate(nState, pWndOther, bMinimized);
 }
 
 void CButtonBar::OnChildActivate() 
 {
-	CDialogBar::OnChildActivate();
+	CPaneDialog::OnChildActivate();
 }
 
 LRESULT CButtonBar::OnMenuChar(UINT nChar, UINT nFlags, CMenu* pMenu) 
 {
-	return CDialogBar::OnMenuChar(nChar, nFlags, pMenu);
+	return CPaneDialog::OnMenuChar(nChar, nFlags, pMenu);
 }
 
 void CButtonBar::OnParentNotify(UINT message, LPARAM lParam) 
 {
-	CDialogBar::OnParentNotify(message, lParam);
+	CPaneDialog::OnParentNotify(message, lParam);
 }

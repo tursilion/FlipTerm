@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // CSwitches dialog
 
-class CSwitches : public CDialog
+class CSwitches : public CDialogEx
 {
 // Construction
 public:

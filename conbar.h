@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // CConnectedBar dialog
 
-class CConnectedBar : public CDialogBar
+class CConnectedBar : public CPaneDialog
 {
 
 // Construction

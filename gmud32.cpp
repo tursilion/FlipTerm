@@ -9,6 +9,8 @@
 #include <shlobj.h>
 #include "gmud32.h"
 
+#include "afxwinappex.h"
+#include "afxdialogex.h"
 #include "outwnd.h"
 #include "mainfrm.h"
 #include "childfrm.h"
@@ -27,28 +29,17 @@
 #include "switches.h"
 #include "colorset.h"
 
-
 #ifdef _DEBUG
+#define new DEBUG_NEW
 #undef THIS_FILE
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 void StartupThread(void *pDat);
 
-BEGIN_MESSAGE_MAP(CMudApp, CWinApp)
+BEGIN_MESSAGE_MAP(CMudApp, CWinAppEx)
 	//{{AFX_MSG_MAP(CMudApp)
 	ON_COMMAND(ID_HELP_ABOUT, OnAppAbout)
-	ON_COMMAND(ID_HELP_CUSTOM, OnPluginHelp0)
-	ON_COMMAND(ID_HELP_CUSTOM1, OnPluginHelp1)
-	ON_COMMAND(ID_HELP_CUSTOM2, OnPluginHelp2)
-	ON_COMMAND(ID_HELP_CUSTOM3, OnPluginHelp3)
-	ON_COMMAND(ID_HELP_CUSTOM4, OnPluginHelp4)
-	ON_COMMAND(ID_HELP_CUSTOM5, OnPluginHelp5)
-	ON_COMMAND(ID_HELP_CUSTOM6, OnPluginHelp6)
-	ON_COMMAND(ID_HELP_CUSTOM7, OnPluginHelp7)
-	ON_COMMAND(ID_HELP_CUSTOM8, OnPluginHelp8)
-	ON_COMMAND(ID_HELP_CUSTOM9, OnPluginHelp9)
-	ON_COMMAND(ID_HELP_CUSTOM10, OnPluginHelp10)
 	ON_COMMAND(ID_URL_1, OnURL1)
 	ON_COMMAND(ID_URL_2, OnURL2)
 	ON_COMMAND(ID_URL_3, OnURL3)
@@ -78,8 +69,8 @@ BEGIN_MESSAGE_MAP(CMudApp, CWinApp)
 	ON_COMMAND(IDC_HISTORYPREV, OnHistoryprev)
 	//}}AFX_MSG_MAP
 	// Standard file based document commands
-	ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
-	ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
+	ON_COMMAND(ID_FILE_NEW, &CWinAppEx::OnFileNew)
+	ON_COMMAND(ID_FILE_OPEN, &CWinAppEx::OnFileOpen)
 END_MESSAGE_MAP()
 
 extern unsigned long colormap[];
@@ -163,6 +154,12 @@ void CAboutDlg::OnURLBtn2()
 
 CMudApp::CMudApp()
 {
+	m_bHiColorIcons = FALSE;
+
+	// application ID string below is unique ID string; recommended
+	// format for string is CompanyName.ProductName.SubProduct.VersionInformation
+	SetAppID(_T("harmlesslion.FlipTerm.NoVersion"));
+
 	char buff[512];
 	GetCurrentDirectory(512,buff);
 	m_sDir=buff;
@@ -173,26 +170,8 @@ CMudApp::CMudApp()
 
 int CMudApp::ExitInstance() 
 {
-	DLLInfo *pDll, *pNext;
-
 	DoSave();
-
-	pDll=&DLLList;			// The first one is static
-	if (pDll->hDll) {
-		FreeLibrary(pDll->hDll);
-	}
-	pNext=pDll->pNext;
-
-	while (pNext) {
-		pDll=pNext;
-		if (pDll->hDll) {
-			FreeLibrary(pDll->hDll);
-		}
-		pNext=pDll->pNext;
-		delete pDll;
-	}
-
-	return CWinApp::ExitInstance();
+	return CWinAppEx::ExitInstance();
 }
 
 void CMudApp::DoSave() 
@@ -243,14 +222,28 @@ void CMudApp::DoSave()
 
 BOOL CMudApp::InitInstance()
 {
+	// InitCommonControlsEx() is required on Windows XP if an application
+	// manifest specifies use of ComCtl32.dll version 6 or later to enable
+	// visual styles.  Otherwise, any window creation will fail.
+	INITCOMMONCONTROLSEX InitCtrls;
+	InitCtrls.dwSize = sizeof(InitCtrls);
+	// Set this to include all the common control classes you want to use
+	// in your application.
+	InitCtrls.dwICC = ICC_STANDARD_CLASSES;
+	InitCommonControlsEx(&InitCtrls);
+
+	CWinAppEx::InitInstance();
+
 	if (!AfxSocketInit())
 	{
 		AfxMessageBox(IDP_SOCKETS_INIT_FAILED);
 		return FALSE;
 	}
 
-	SetRegistryKey("TursiSoft");	// Save all settings in Registry
-
+	EnableTaskbarInteraction();
+	SetRegistryKey("TursiSoft");	// Save all settings in Registry (should be harmlesslion now, but that's okay)
+	LoadStdProfileSettings(0);  // Load standard INI file options (including MRU)
+	
 	memset(&m_LogFont,0,sizeof(m_LogFont));
 	strcpy(m_LogFont.lfFaceName,GetProfileString("font","facename","FixedSys"));
 	m_LogFont.lfHeight=GetProfileInt("font","size",-12);
@@ -368,11 +361,20 @@ BOOL CMudApp::InitInstance()
 		if (hKey2) RegCloseKey(hKey2);
 		if (hKey) RegCloseKey(hKey);
 	}
+	
+	InitContextMenuManager();
+    InitShellManager();
+	InitKeyboardManager();
+	InitTooltipManager();
+	CMFCToolTipInfo ttParams;
+	ttParams.m_bVislManagerTheme = TRUE;
+	theApp.GetTooltipManager()->SetTooltipParams(AFX_TOOLTIP_TYPE_ALL,
+		RUNTIME_CLASS(CMFCToolTipCtrl), &ttParams);
 
 	// Register the application's document templates.  Document templates
 	// Serve as the connection between documents, frame windows and views.
 	pDocTemplate = new CMultiDocTemplate(
-		IDR_MudTYPE,
+		IDR_MAINFRAME,
 		RUNTIME_CLASS(CMudDoc),
 		RUNTIME_CLASS(CChildFrame), // custom MDI child frame
 		RUNTIME_CLASS(CMudView));
@@ -380,8 +382,11 @@ BOOL CMudApp::InitInstance()
 
 	// create main MDI Frame window
 	CMainFrame* pMainFrame = new CMainFrame;
-	if (!pMainFrame->LoadFrame(IDR_MAINFRAME))
+	if (!pMainFrame) return FALSE;
+	if (!pMainFrame->LoadFrame(IDR_MAINFRAME)) {
+		delete pMainFrame;
 		return FALSE;
+	}
 	m_pMainWnd = pMainFrame;
 	CMudDoc *pDoc=NULL;
 
@@ -424,9 +429,6 @@ BOOL CMudApp::InitInstance()
 		}
 	}
 
-	// Load plugins
-	LoadMCPPlugins();
-
 	CWorld *pWorld = NULL;
 	bool firstWindow=true;
 	// Enumerate through the loaded worlds and see which ones we need to connect
@@ -461,7 +463,7 @@ void CMudApp::OnWindowNewOpenDoc()
 {
 	CMudDoc *pDoc;
 	CFrameWnd* pFrame;
-	CMDIChildWnd * pChild =	((CMDIFrameWnd*)(m_pMainWnd))->MDIGetActive();
+	CMDIChildWnd * pChild =	((CMDIFrameWndEx*)(m_pMainWnd))->MDIGetActive();
 
 	if (pChild) {
 		pDoc=(CMudDoc *)pChild->GetActiveDocument();
@@ -622,253 +624,6 @@ void CMudApp::OnAppAbout()
 	aboutDlg.DoModal();
 }
 
-void CMudApp::OnPluginHelp0()
-{
-	if (DLLList.hDll) {
-		DLLList.MCPPlugin_About();
-	} else {
-		AfxMessageBox("Sorry, this help item is unavailable.");
-	}
-}
-void CMudApp::OnPluginHelp1()
-{
-	DLLInfo *pDll;
-	int cnt=1;
-
-	pDll=&DLLList;
-	
-	while (cnt) {
-		if (pDll->pNext) {
-			pDll=pDll->pNext;
-		} else {
-			AfxMessageBox("Sorry, this help item is unavailable.");
-			return;
-		}
-		cnt--;
-	}
-
-	if (pDll->hDll) {
-		pDll->MCPPlugin_About();
-	} else {
-		AfxMessageBox("Sorry, this help item is unavailable.");
-	}
-}
-void CMudApp::OnPluginHelp2()
-{
-	DLLInfo *pDll;
-	int cnt=2;
-
-	pDll=&DLLList;
-	
-	while (cnt) {
-		if (pDll->pNext) {
-			pDll=pDll->pNext;
-		} else {
-			AfxMessageBox("Sorry, this help item is unavailable.");
-			return;
-		}
-		cnt--;
-	}
-
-	if (pDll->hDll) {
-		pDll->MCPPlugin_About();
-	} else {
-		AfxMessageBox("Sorry, this help item is unavailable.");
-	}
-}
-void CMudApp::OnPluginHelp3()
-{
-	DLLInfo *pDll;
-	int cnt=3;
-
-	pDll=&DLLList;
-	
-	while (cnt) {
-		if (pDll->pNext) {
-			pDll=pDll->pNext;
-		} else {
-			AfxMessageBox("Sorry, this help item is unavailable.");
-			return;
-		}
-		cnt--;
-	}
-
-	if (pDll->hDll) {
-		pDll->MCPPlugin_About();
-	} else {
-		AfxMessageBox("Sorry, this help item is unavailable.");
-	}
-
-}
-void CMudApp::OnPluginHelp4()
-{
-	DLLInfo *pDll;
-	int cnt=4;
-
-	pDll=&DLLList;
-	
-	while (cnt) {
-		if (pDll->pNext) {
-			pDll=pDll->pNext;
-		} else {
-			AfxMessageBox("Sorry, this help item is unavailable.");
-			return;
-		}
-		cnt--;
-	}
-
-	if (pDll->hDll) {
-		pDll->MCPPlugin_About();
-	} else {
-		AfxMessageBox("Sorry, this help item is unavailable.");
-	}
-
-}
-void CMudApp::OnPluginHelp5()
-{
-	DLLInfo *pDll;
-	int cnt=5;
-
-	pDll=&DLLList;
-	
-	while (cnt) {
-		if (pDll->pNext) {
-			pDll=pDll->pNext;
-		} else {
-			AfxMessageBox("Sorry, this help item is unavailable.");
-			return;
-		}
-		cnt--;
-	}
-
-	if (pDll->hDll) {
-		pDll->MCPPlugin_About();
-	} else {
-		AfxMessageBox("Sorry, this help item is unavailable.");
-	}
-
-}
-void CMudApp::OnPluginHelp6()
-{
-	DLLInfo *pDll;
-	int cnt=6;
-
-	pDll=&DLLList;
-	
-	while (cnt) {
-		if (pDll->pNext) {
-			pDll=pDll->pNext;
-		} else {
-			AfxMessageBox("Sorry, this help item is unavailable.");
-			return;
-		}
-		cnt--;
-	}
-
-	if (pDll->hDll) {
-		pDll->MCPPlugin_About();
-	} else {
-		AfxMessageBox("Sorry, this help item is unavailable.");
-	}
-
-}
-void CMudApp::OnPluginHelp7()
-{
-	DLLInfo *pDll;
-	int cnt=7;
-
-	pDll=&DLLList;
-	
-	while (cnt) {
-		if (pDll->pNext) {
-			pDll=pDll->pNext;
-		} else {
-			AfxMessageBox("Sorry, this help item is unavailable.");
-			return;
-		}
-		cnt--;
-	}
-
-	if (pDll->hDll) {
-		pDll->MCPPlugin_About();
-	} else {
-		AfxMessageBox("Sorry, this help item is unavailable.");
-	}
-
-}
-void CMudApp::OnPluginHelp8()
-{
-	DLLInfo *pDll;
-	int cnt=8;
-
-	pDll=&DLLList;
-	
-	while (cnt) {
-		if (pDll->pNext) {
-			pDll=pDll->pNext;
-		} else {
-			AfxMessageBox("Sorry, this help item is unavailable.");
-			return;
-		}
-		cnt--;
-	}
-
-	if (pDll->hDll) {
-		pDll->MCPPlugin_About();
-	} else {
-		AfxMessageBox("Sorry, this help item is unavailable.");
-	}
-
-}
-void CMudApp::OnPluginHelp9()
-{
-	DLLInfo *pDll;
-	int cnt=9;
-
-	pDll=&DLLList;
-	
-	while (cnt) {
-		if (pDll->pNext) {
-			pDll=pDll->pNext;
-		} else {
-			AfxMessageBox("Sorry, this help item is unavailable.");
-			return;
-		}
-		cnt--;
-	}
-
-	if (pDll->hDll) {
-		pDll->MCPPlugin_About();
-	} else {
-		AfxMessageBox("Sorry, this help item is unavailable.");
-	}
-
-}
-void CMudApp::OnPluginHelp10()
-{
-	DLLInfo *pDll;
-	int cnt=10;
-
-	pDll=&DLLList;
-	
-	while (cnt) {
-		if (pDll->pNext) {
-			pDll=pDll->pNext;
-		} else {
-			AfxMessageBox("Sorry, this help item is unavailable.");
-			return;
-		}
-		cnt--;
-	}
-
-	if (pDll->hDll) {
-		pDll->MCPPlugin_About();
-	} else {
-		AfxMessageBox("Sorry, this help item is unavailable.");
-	}
-
-}
-
 void CMudApp::OnURL1()
 {
 	CString csTmp;
@@ -1015,7 +770,7 @@ void CMudApp::OnSave()
 	DoSave();		// Save settings
 
 	// We need to find a document to save the worlds, triggers, etc
-	CMDIFrameWnd *pWnd=(CMDIFrameWnd*)GetMainWnd()->GetActiveWindow();
+	CMDIFrameWndEx *pWnd=(CMDIFrameWndEx*)GetMainWnd()->GetActiveWindow();
 	if (pWnd) {
 		CMDIChildWnd * pChild= pWnd->MDIGetActive();
 		CMudView *pView;
@@ -1066,7 +821,7 @@ void CMudApp::OnOptionsLog()
 		
 		if (fn != m_sLogFolder) {
 			if (IDYES == AfxMessageBox("Would you like to update the paths for your autologs? (if any)\nChanges will take effect the next time the log is opened.", MB_ICONQUESTION | MB_YESNO)) {
-				CMDIFrameWnd *pWnd=(CMDIFrameWnd*)GetMainWnd()->GetActiveWindow();
+				CMDIFrameWndEx *pWnd=(CMDIFrameWndEx*)GetMainWnd()->GetActiveWindow();
 				if (pWnd) {
 					CMDIChildWnd * pChild= pWnd->MDIGetActive();
 					CMudView *pView;
@@ -1105,80 +860,6 @@ void CMudApp::OnOptionsLog()
 	}
 }
 
-void CMudApp::LoadMCPPlugins()
-{
-	struct _finddata_t myData;
-	long srch;
-	CString csStr;
-	CString csPath;
-	DLLInfo *pDll;
-	int plugNum;
-
-	// Load and initialize the DLLs and the internal array
-	// Each plugin, if it initialized successfully, will then
-	// be stored in the list
-	pDll=&DLLList;
-	csPath=m_sDir + "\\Plugins\\*.dll";
-
-	srch=_findfirst(csPath, &myData);
-
-	plugNum=0;
-	if (-1 != srch) {
-		do {
-			csStr.Format("%s\\Plugins\\%s", m_sDir.GetString(), myData.name);
-			pDll->hDll=LoadLibrary(csStr);
-			if (NULL != pDll->hDll) {
-				pDll->MCPPlugin_Initialize=(int (__cdecl *)(char *))GetProcAddress(pDll->hDll, "MCPPlugin_Initialize");
-				pDll->MCPPlugin_GetNumberPackages=(int (__cdecl *)(void))GetProcAddress(pDll->hDll, "MCPPlugin_GetNumberPackages");
-				pDll->MCPPlugin_GetPackageName=(const char *(__cdecl *)(int))GetProcAddress(pDll->hDll, "MCPPlugin_GetPackageName");
-				pDll->MCPPlugin_GetPackageLowVersion=(int (__cdecl *)(int))GetProcAddress(pDll->hDll, "MCPPlugin_GetPackageLowVersion");
-				pDll->MCPPlugin_GetPackageHighVersion=(int (__cdecl *)(int))GetProcAddress(pDll->hDll, "MCPPlugin_GetPackageHighVersion");
-				pDll->MCPPlugin_ProcessString=(bool (__cdecl *)(char *,HWND,char ** ))GetProcAddress(pDll->hDll, "MCPPlugin_ProcessString");
-				pDll->MCPPlugin_CloseSession=(void (__cdecl *)(HWND))GetProcAddress(pDll->hDll, "MCPPlugin_CloseSession");
-				pDll->MCPPlugin_WantPlainText=(bool (__cdecl *)(void))GetProcAddress(pDll->hDll, "MCPPlugin_WantPlainText");
-				pDll->MCPPlugin_ProcessTextString=(char *(__cdecl *)(char*,bool))GetProcAddress(pDll->hDll, "MCPPlugin_ProcessTextString");
-				pDll->MCPPlugin_About=(void (__cdecl *)(void))GetProcAddress(pDll->hDll, "MCPPlugin_About");
-
-				if ((!pDll->MCPPlugin_Initialize)||(!pDll->MCPPlugin_GetNumberPackages)||(!pDll->MCPPlugin_GetPackageName)||
-					(!pDll->MCPPlugin_GetPackageLowVersion)||(!pDll->MCPPlugin_GetPackageHighVersion)||(!pDll->MCPPlugin_ProcessString)||
-					(!pDll->MCPPlugin_About)||(!pDll->MCPPlugin_CloseSession)||(!pDll->MCPPlugin_WantPlainText)||(!pDll->MCPPlugin_ProcessTextString)) {
-					FreeLibrary(pDll->hDll);
-					pDll->hDll=NULL;
-					csStr.Format("%s does not appear to be a valid plugin. It should be removed from the Plugins directory.", myData.name);
-					AfxMessageBox(csStr);
-				} else {
-					if (!pDll->MCPPlugin_Initialize((char*)"SOFTWARE\\Tursisoft\\FlipTerm\\PlugIns")) {
-						FreeLibrary(pDll->hDll);
-						pDll->hDll=NULL;
-					} else {
-						CMDIChildWnd * pChild =	((CMDIFrameWnd*)(GetApp()->m_pMainWnd))->MDIGetActive();
-						CMudView *pView=(CMudView*)pChild->GetActiveView();
-						if (pView) {
-							pView->Printf("%%%%%% Successfully initialized plugin: %s\n", pDll->MCPPlugin_GetPackageName(0));
-						}
-					}
-				}
-			}
-			if (NULL != pDll->hDll) {
-				// all setup was successful
-				// Add it to the Plugins menu, if not already there
-				// No more than 12 items supported
-				CMenu *pMenu=m_pMainWnd->GetMenu();
-				if (pMenu) {
-					pMenu=pMenu->GetSubMenu(PLUGIN_MENU_INDEX);		// fixed location
-					if ((pMenu)&&(pMenu->GetMenuItemCount()<12)) {
-						pMenu->AppendMenu(MF_ENABLED, ID_HELP_CUSTOM+(plugNum++), pDll->MCPPlugin_GetPackageName(0));
-					}
-				}
-
-				pDll->pNext=new DLLInfo;
-				pDll=pDll->pNext;
-			}
-		} while (0 == _findnext(srch, &myData));
-	}
-}
-
-
 void CMudApp::OnHistorynext() 
 {
 	CMDIChildWnd * pChild=((CMainFrame*)m_pMainWnd)->MDIGetActive();
@@ -1195,5 +876,17 @@ void CMudApp::OnHistoryprev()
 	CMudView *pView=(CMudView*)pChild->GetActiveView();
 	if (!pView) return;
 	pView->HistoryPrev();
+}
+
+void CMudApp::PreLoadState()
+{
+}
+
+void CMudApp::LoadCustomState()
+{
+}
+
+void CMudApp::SaveCustomState()
+{
 }
 

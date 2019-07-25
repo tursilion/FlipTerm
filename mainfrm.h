@@ -4,11 +4,11 @@
 
 #ifndef MAINFRAME_DEFINED
 #define MAINFRAME_DEFINED
-
+#pragma once
 #include "buttonba.h"
 #include "conbar.h"
 
-class CMainFrame : public CMDIFrameWnd
+class CMainFrame : public CMDIFrameWndEx
 {
 	DECLARE_DYNAMIC(CMainFrame)
 public:
@@ -27,11 +27,10 @@ public:
 	int OutputMacro(CString);
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainFrame)
 	public:
+	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
-	//}}AFX_VIRTUAL
 
 // Implementation
 public:
@@ -42,21 +41,29 @@ public:
 #endif
 	CConnectedBar *GetWndConnected() { return &m_wndConnected; }
 
+    void OnUpdateControlBarMenu(CCmdUI* pCmdUI);
+    BOOL OnBarCheck(UINT nID);
+
 protected:  // control bar embedded members
-	CStatusBar  m_wndStatusBar;
-	CToolBar    m_wndToolBar;
-	CToolBar	m_wndNumbers;
-	CButtonBar	m_wndMacroBar;
-	CConnectedBar m_wndConnected;
-	BOOL 		m_bMacrosVisible;
-	BOOL		m_bConnectedVisible;
+	CMFCMenuBar     m_wndMenuBar;
+	CMFCStatusBar 	m_wndStatusBar;
+	CMFCToolBar 	m_wndToolBar;
+	CMFCToolBar		m_wndNumbers;
+	CButtonBar	    m_wndMacroBar;
+	CConnectedBar 	m_wndConnected;
+	BOOL 			m_bMacrosVisible;
+	BOOL			m_bConnectedVisible;
 
 	unsigned int nTimer;
 	
 // Generated message map functions
 protected:
-	//{{AFX_MSG(CMainFrame)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnWindowManager();
+	afx_msg void OnViewCustomize();
+	afx_msg LRESULT OnToolbarCreateNew(WPARAM wp, LPARAM lp);
+	afx_msg void OnApplicationLook(UINT id);
+	afx_msg void OnUpdateApplicationLook(CCmdUI* pCmdUI);
 	afx_msg void OnClose();
 	afx_msg void OnButtonEdit();
 	afx_msg void OnButton10();
@@ -73,7 +80,6 @@ protected:
 	afx_msg void OnEditAliaslist();
 	afx_msg void OnButton1();
 	afx_msg void OnTimer(UINT nIDEvent);
-	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
 

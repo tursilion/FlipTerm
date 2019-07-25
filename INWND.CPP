@@ -290,7 +290,7 @@ void CInWnd::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 							case 'D':
 								buffer="down"; break;
 							default:
-								CMDIChildWnd * pChild =	((CMDIFrameWnd*)(GetApp()->m_pMainWnd))->MDIGetActive();
+								CMDIChildWnd * pChild =	((CMDIFrameWndEx*)(GetApp()->m_pMainWnd))->MDIGetActive();
 								CMudView *pView=(CMudView*)pChild->GetActiveView();
 								pView->Printf("\n");
 								pView->Printf("%%%%%% Bad speedwalking character. See /help.\n\n");

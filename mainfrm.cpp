@@ -18,15 +18,18 @@
 #include "disconnect.h"
 
 #ifdef _DEBUG
+#define new DEBUG_NEW
 #undef THIS_FILE
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
+#define DOCKINGMODE DT_SMART
+//#define DOCKINGMODE DT_STANDARD
+//#define DOCKINGMODE DT_IMMEDIATE
 
-IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWnd)
+IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWndEx)
 
-BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
-	//{{AFX_MSG_MAP(CMainFrame)
+BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_WM_CREATE()
 	ON_WM_CLOSE()
 	ON_BN_CLICKED(IDC_MACROBTN_EDIT, OnButtonEdit)
@@ -43,14 +46,18 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
 	ON_MESSAGE(WM_UPDATE_WORLDS,OnUpdateWorlds)
 	ON_COMMAND(ID_EDIT_ALIASLIST, OnEditAliaslist)
 	ON_BN_CLICKED(IDC_MACROBTN1, OnButton1)
+	ON_WM_TIMER()
 	ON_COMMAND_EX(ID_VIEW_MACROWINDOW, OnBarCheck)
 	ON_COMMAND_EX(ID_VIEW_WINDOWBAR, OnBarCheck)
+	ON_COMMAND_EX(ID_VIEW_WORLDWINDOW, OnBarCheck)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_MACROWINDOW,OnUpdateControlBarMenu)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_WINDOWBAR,OnUpdateControlBarMenu)
-	ON_COMMAND_EX(ID_VIEW_WORLDWINDOW, OnBarCheck)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_WORLDWINDOW,OnUpdateControlBarMenu)
-	ON_WM_TIMER()
-	//}}AFX_MSG_MAP
+    ON_COMMAND(ID_WINDOW_MANAGER, &CMainFrame::OnWindowManager)
+	ON_COMMAND(ID_VIEW_CUSTOMIZE, &CMainFrame::OnViewCustomize)
+	ON_REGISTERED_MESSAGE(AFX_WM_CREATETOOLBAR, &CMainFrame::OnToolbarCreateNew)
+	ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnApplicationLook)
+	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnUpdateApplicationLook)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -121,6 +128,7 @@ static UINT BASED_CODE indicators[] =
 
 CMainFrame::CMainFrame()
 {
+	theApp.m_nAppLook = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_WIN_XP);
 	m_bMacrosVisible=FALSE;	
 	m_bConnectedVisible=FALSE;
 	nTimer=0;
@@ -133,9 +141,32 @@ CMainFrame::~CMainFrame()
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	if (CMDIFrameWnd::OnCreate(lpCreateStruct) == -1)
+	if (CMDIFrameWndEx::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	
+#if 0
+    // I'm not sold on tabs, and they seem to kill the ability to resize windows?
+    // BUT, this is all it takes to make it work.
+	CMDITabInfo mdiTabParams;
+	mdiTabParams.m_style = CMFCTabCtrl::STYLE_3D_ONENOTE; // other styles available...
+	mdiTabParams.m_bActiveTabCloseButton = TRUE;      // set to FALSE to place close button at right of tab area
+	mdiTabParams.m_bTabIcons = FALSE;    // set to TRUE to enable document icons on MDI taba
+	mdiTabParams.m_bAutoColor = TRUE;    // set to FALSE to disable auto-coloring of MDI tabs
+	mdiTabParams.m_bDocumentMenu = TRUE; // enable the document menu at the right edge of the tab area
+	EnableMDITabbedGroups(TRUE, mdiTabParams);
+#endif
+
+	if (!m_wndMenuBar.Create(this))
+	{
+		TRACE0("Failed to create menubar\n");
+		return -1;      // fail to create
+	}
+
+	m_wndMenuBar.SetPaneStyle(m_wndMenuBar.GetPaneStyle() | CBRS_SIZE_DYNAMIC | CBRS_TOOLTIPS | CBRS_FLYBY);
+
+	// prevent the menu bar from taking the focus on activation
+	CMFCPopupMenu::SetForceMenuFocus(FALSE);
+
 	if (!m_wndNumbers.Create(this, WS_CHILD | WS_VISIBLE | CBRS_TOP, ID_VIEW_WINDOWBAR) ||
 		!m_wndNumbers.LoadBitmap(IDB_NUMBERS) ||
 		!m_wndNumbers.SetButtons(numbers,
@@ -145,7 +176,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;      // fail to create
 	}
 
-	if (!m_wndToolBar.Create(this) ||
+    if (!m_wndToolBar.Create(this, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER, ID_VIEW_TOOLBAR) ||
 		!m_wndToolBar.LoadBitmap(IDR_MAINFRAME) ||
 		!m_wndToolBar.SetButtons(buttons,
 		  sizeof(buttons)/sizeof(UINT)))
@@ -161,67 +192,225 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("Failed to create status bar\n");
 		return -1;      // fail to create
 	}
-	// The IDs used are meaningless in this case
-	m_wndStatusBar.SetPaneInfo(1, IDOK, SBPS_NORMAL, 100);
+	// The IDs used are meaningless in this case, except for #0 (since MFC updates that)
+    {
+        UINT Id, Style;
+        int Width;
+        m_wndStatusBar.GetPaneInfo(0, Id, Style, Width);
+	    m_wndStatusBar.SetPaneInfo(0, Id, SBPS_STRETCH, 200);
+    }
+    m_wndStatusBar.SetPaneInfo(1, IDOK, SBPS_NORMAL, 100);
 	m_wndStatusBar.SetPaneInfo(2, IDCANCEL, SBPS_NORMAL, 50);
 	m_wndStatusBar.SetPaneInfo(3, IDRETRY, SBPS_NORMAL, 45);
 	nTimer=SetTimer(1, 1000, NULL);
 	
-	if(!m_wndMacroBar.Create(this,IDD_MACRO_BAR,CBRS_LEFT,ID_VIEW_MACROWINDOW))
+    DWORD myDockStyle = AFX_CBRS_FLOAT | AFX_CBRS_CLOSE;     // no tabs, no auto-hide, no resize, no rollup
+	if(!m_wndMacroBar.Create("Macros", this, TRUE, MAKEINTRESOURCE(IDD_MACRO_BAR), CBRS_LEFT, ID_VIEW_MACROWINDOW, AFX_CBRS_REGULAR_TABS, myDockStyle))
 	{
 		TRACE("Failed to create macrobar\n");
 		return -1;
 	}
 	m_bMacrosVisible=TRUE;
 
-	if(!m_wndConnected.Create(this,IDD_CONNECTED_WORLD_BAR,CBRS_LEFT,ID_VIEW_WORLDWINDOW))
+	if(!m_wndConnected.Create("Connected", this, TRUE, MAKEINTRESOURCE(IDD_CONNECTED_WORLD_BAR), CBRS_LEFT, ID_VIEW_WORLDWINDOW, AFX_CBRS_REGULAR_TABS, myDockStyle))
 	{
 		TRACE("Failed to create world window\n");
 		return -1;
 	}
 	m_bConnectedVisible=TRUE;
 
+    m_wndMenuBar.EnableDocking(CBRS_ALIGN_ANY);
 	m_wndNumbers.EnableDocking(CBRS_ALIGN_ANY);
 	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
-	m_wndMacroBar.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
-	m_wndConnected.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
+	m_wndMacroBar.EnableDocking(CBRS_ALIGN_ANY);
+	m_wndConnected.EnableDocking(CBRS_ALIGN_ANY);
 
 	EnableDocking(CBRS_ALIGN_ANY);
-	DockControlBar(&m_wndToolBar);
-	DockControlBar(&m_wndNumbers);
-	DockControlBar(&m_wndConnected,AFX_IDW_DOCKBAR_LEFT);
-	DockControlBar(&m_wndMacroBar,AFX_IDW_DOCKBAR_LEFT);
 
-	m_wndNumbers.SetBarStyle(m_wndNumbers.GetBarStyle() |CBRS_TOOLTIPS | CBRS_FLYBY);
-	m_wndToolBar.SetBarStyle(m_wndToolBar.GetBarStyle() |CBRS_TOOLTIPS | CBRS_FLYBY);
-	m_wndMacroBar.SetBarStyle(CBRS_FLOAT_MULTI|CBRS_TOOLTIPS|CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT|CBRS_FLYBY);
-	m_wndConnected.SetBarStyle(CBRS_FLOAT_MULTI|CBRS_TOOLTIPS|CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT|CBRS_FLYBY);
+	// new docking
+	DockPane(&m_wndMenuBar);
+	DockPane(&m_wndToolBar);
+	DockPane(&m_wndNumbers);
+    DockPane(&m_wndConnected);
+    DockPane(&m_wndMacroBar);
+
+	// enable docking window behavior
+	CDockingManager::SetDockingMode(DOCKINGMODE);
+	// enable Visual Studio 2005 style docking window auto-hide behavior
+	//EnableAutoHidePanes(CBRS_ALIGN_ANY);
+	// set the visual manager and style based on persisted value
+	OnApplicationLook(theApp.m_nAppLook);
+
+#if 0
+    // Enable toolbar and docking window menu replacement
+    // This allows automatic population of show/hide but only for
+    // the two toolbars, it's no good for the other windows we show/hide
+    // Figure out how to make OnBarCheck and OnUpdateControlBarMenu work for us.
+    m_wndToolBar.SetWindowText("Toolbar");
+    m_wndNumbers.SetWindowTextA("Numbers");
+	EnablePaneMenu(TRUE, 0, "", ID_TOOLBARS_PLACEHOLDER, FALSE, FALSE);
+#endif
+
+    // enable quick (Alt+drag) toolbar customization
+	CMFCToolBar::EnableQuickCustomization();
 
 	LoadBarState(AfxGetAppName());
 
-	UpdateButtons(); // show macro buttons
+    UpdateButtons(); // show macro buttons
 
 	return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
+{
+	if( !CMDIFrameWndEx::PreCreateWindow(cs) )
+		return FALSE;
+
+	// Modify the Window class or styles here by modifying the CREATESTRUCT cs
+	cs.style = WS_OVERLAPPED | WS_CAPTION | FWS_ADDTOTITLE
+		 | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU | WS_SIZEBOX;
+
+	return TRUE;
+}
+
 // CMainFrame diagnostics
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
 {
-	CMDIFrameWnd::AssertValid();
+	CMDIFrameWndEx::AssertValid();
 }
 
 void CMainFrame::Dump(CDumpContext& dc) const
 {
-	CMDIFrameWnd::Dump(dc);
+	CMDIFrameWndEx::Dump(dc);
 }
 
 #endif //_DEBUG
 
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame message handlers
+
+void CMainFrame::OnWindowManager()
+{
+	ShowWindowsDialog();
+}
+
+void CMainFrame::OnViewCustomize()
+{
+	CMFCToolBarsCustomizeDialog* pDlgCust = new CMFCToolBarsCustomizeDialog(this, TRUE /* scan menus */);
+	pDlgCust->Create();
+}
+
+LRESULT CMainFrame::OnToolbarCreateNew(WPARAM wp,LPARAM lp)
+{
+	LRESULT lres = CMDIFrameWndEx::OnToolbarCreateNew(wp,lp);
+	if (lres == 0)
+	{
+		return 0;
+	}
+
+	CMFCToolBar* pUserToolbar = (CMFCToolBar*)lres;
+	ASSERT_VALID(pUserToolbar);
+
+	BOOL bNameValid;
+	CString strCustomize;
+	bNameValid = strCustomize.LoadString(IDS_TOOLBAR_CUSTOMIZE);
+	ASSERT(bNameValid);
+
+	pUserToolbar->EnableCustomizeButton(TRUE, ID_VIEW_CUSTOMIZE, strCustomize);
+	return lres;
+}
+
+void CMainFrame::OnApplicationLook(UINT id)
+{
+	// this seems silly... right now we don't let the user change it, though they
+    // could in the registry, I guess :)
+	CWaitCursor wait;
+
+	theApp.m_nAppLook = id;
+
+	switch (theApp.m_nAppLook)
+	{
+	case ID_VIEW_APPLOOK_WIN_2000:
+		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManager));
+		break;
+
+	case ID_VIEW_APPLOOK_OFF_XP:
+		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerOfficeXP));
+		break;
+
+	case ID_VIEW_APPLOOK_WIN_XP:
+		CMFCVisualManagerWindows::m_b3DTabsXPTheme = TRUE;
+		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerWindows));
+		break;
+
+	case ID_VIEW_APPLOOK_OFF_2003:
+		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerOffice2003));
+		CDockingManager::SetDockingMode(DOCKINGMODE);
+		break;
+
+	case ID_VIEW_APPLOOK_VS_2005:
+		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerVS2005));
+		CDockingManager::SetDockingMode(DOCKINGMODE);
+		break;
+
+	case ID_VIEW_APPLOOK_VS_2008:
+		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerVS2008));
+		CDockingManager::SetDockingMode(DOCKINGMODE);
+		break;
+
+	case ID_VIEW_APPLOOK_WINDOWS_7:
+		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerWindows7));
+		CDockingManager::SetDockingMode(DOCKINGMODE);
+		break;
+
+	default:
+		switch (theApp.m_nAppLook)
+		{
+		case ID_VIEW_APPLOOK_OFF_2007_BLUE:
+			CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_LunaBlue);
+			break;
+
+		case ID_VIEW_APPLOOK_OFF_2007_BLACK:
+			CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_ObsidianBlack);
+			break;
+
+		case ID_VIEW_APPLOOK_OFF_2007_SILVER:
+			CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_Silver);
+			break;
+
+		case ID_VIEW_APPLOOK_OFF_2007_AQUA:
+			CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_Aqua);
+			break;
+		}
+
+		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerOffice2007));
+		CDockingManager::SetDockingMode(DOCKINGMODE);
+	}
+
+	RedrawWindow(NULL, NULL, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_FRAME | RDW_ERASE);
+
+	theApp.WriteInt(_T("ApplicationLook"), theApp.m_nAppLook);
+}
+
+void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetRadio(theApp.m_nAppLook == pCmdUI->m_nID);
+}
+
+
+BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParentWnd, CCreateContext* pContext)
+{
+	// base class does the real work
+
+	if (!CMDIFrameWndEx::LoadFrame(nIDResource, dwDefaultStyle, pParentWnd, pContext))
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
 
 BOOL CMainFrame::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
 {
@@ -271,7 +460,7 @@ void CMainFrame::OnClose()
 		}
 	}
 
-	CMDIFrameWnd::OnClose();
+	CMDIFrameWndEx::OnClose();
 }
 
 void CMainFrame::OnButtonEdit() 
@@ -500,7 +689,7 @@ int CMainFrame::UpdateWorlds()
 	m_wndConnected.EmptyList();
 	CMudView* pView = 0;
 	CMudDoc* pDocument =NULL;
-	CMDIChildWnd * pChild =	((CMDIFrameWnd*)(GetApp()->m_pMainWnd))->MDIGetActive();
+	CMDIChildWnd * pChild =	((CMDIFrameWndEx*)(GetApp()->m_pMainWnd))->MDIGetActive();
 	if(pChild )
 		pDocument = (CMudDoc *)pChild->GetActiveDocument();
 	if(pDocument)
@@ -593,5 +782,15 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		}
 	}
 
-	CMDIFrameWnd::OnTimer(nIDEvent);
+	CMDIFrameWndEx::OnTimer(nIDEvent);
+}
+
+void CMainFrame::OnUpdateControlBarMenu(CCmdUI* pCmdUI)
+{
+    CFrameWnd::OnUpdateControlBarMenu( pCmdUI );
+}
+
+BOOL CMainFrame::OnBarCheck(UINT nID)
+{
+    return CFrameWnd::OnBarCheck( nID );
 }

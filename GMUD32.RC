@@ -59,8 +59,6 @@ END
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\Mud32.ico"
 
-IDR_MudTYPE             ICON                    "RES\\icon1.ico"
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -77,7 +75,7 @@ IDB_NUMBERS             BITMAP                  "RES\\NumberBar.bmp"
 // Menu
 //
 
-IDR_MudTYPE MENU
+IDR_MAINFRAME MENU
 BEGIN
     POPUP "&File"
     BEGIN
@@ -123,10 +121,6 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Global S&ystem Colors...",    ID_OPTIONS_DEFAULTCOLORS
     END
-    POPUP "&Plugins"
-    BEGIN
-        MENUITEM SEPARATOR
-    END
     POPUP "URLs"
     BEGIN
         MENUITEM SEPARATOR
@@ -146,45 +140,6 @@ BEGIN
     END
 END
 
-IDR_MAINFRAME MENU
-BEGIN
-    POPUP "&File"
-    BEGIN
-        MENUITEM "&Save Settings",              ID_FILE_SAVESETTINGS
-        MENUITEM "&Export Settings",            ID_FILE_EXPORTSETTINGS
-        MENUITEM SEPARATOR
-        MENUITEM "E&xit",                       ID_FILE_EXIT
-    END
-    POPUP "Edit"
-    BEGIN
-        MENUITEM "&Aliases...",                 ID_EDIT_ALIASLIST
-        MENUITEM "Macros...",                   IDC_MACROBTN_EDIT
-        MENUITEM "&Triggers...",                ID_EDIT_TRIGGERLIST
-        MENUITEM SEPARATOR
-        MENUITEM "&Worlds...",                  ID_EDIT_WORLDLIST
-    END
-    POPUP "&View"
-    BEGIN
-        MENUITEM "&Connected World Window",     ID_VIEW_WORLDWINDOW
-        MENUITEM "&Macro Window",               ID_VIEW_MACROWINDOW
-        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
-        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
-    END
-    MENUITEM "Options",                     65535, GRAYED
-    MENUITEM "Plugins",                     65535, GRAYED
-    POPUP "URLs"
-    BEGIN
-        MENUITEM SEPARATOR
-    END
-    POPUP "&Window"
-    BEGIN
-        MENUITEM "&New",                        ID_WINDOW_NEW_OPEN_DOC
-    END
-    POPUP "&Help"
-    BEGIN
-        MENUITEM "&About FlipTerm...",          ID_HELP_ABOUT
-    END
-END
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -326,9 +281,9 @@ BEGIN
     LTEXT           "Static",IDC_OLDNAME,49,9,129,21
 END
 
-IDD_MACRO_BAR DIALOG 0, 0, 66, 167
-STYLE DS_SETFONT | WS_CHILD | WS_BORDER
-FONT 7, "Small Fonts"
+IDD_MACRO_BAR DIALOGEX 0, 0, 66, 167
+STYLE DS_SETFONT | WS_CHILD | WS_VISIBLE | WS_BORDER
+FONT 7, "Small Fonts", 0, 0, 0x0
 BEGIN
     PUSHBUTTON      "Edit Macros",IDC_MACROBTN_EDIT,15,2,49,14
     PUSHBUTTON      "Button1",IDC_MACROBTN1,15,17,49,14
@@ -420,7 +375,7 @@ BEGIN
 END
 
 IDD_CONNECTED_WORLD_BAR DIALOGEX 0, 0, 69, 70
-STYLE DS_SETFONT | WS_CHILD | WS_BORDER
+STYLE DS_SETFONT | WS_CHILD | WS_VISIBLE | WS_BORDER
 EXSTYLE WS_EX_TOOLWINDOW
 FONT 7, "Small Fonts", 0, 0, 0x0
 BEGIN
@@ -649,6 +604,14 @@ BEGIN
     BEGIN
     END
 
+    IDD_MACRO_BAR, DIALOG
+    BEGIN
+    END
+
+    IDD_BUTTON_EDIT, DIALOG
+    BEGIN
+    END
+
     IDD_CONNECTED_WORLD_BAR, DIALOG
     BEGIN
         RIGHTMARGIN, 68
@@ -703,6 +666,22 @@ BEGIN
     END
 END
 #endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_CONNECTED_WORLD_BAR AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_MACRO_BAR AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -780,7 +759,11 @@ END
 
 STRINGTABLE
 BEGIN
-    ID_VIEW_TOOLBAR         "Show or hide the toolbar\nToggle ToolBar"
+    ID_VIEW_TOOLBAR_MENU    "Show or hide the toolbar\nToggle ToolBar"
+END
+
+STRINGTABLE
+BEGIN
     ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle StatusBar"
 END
 
@@ -855,17 +838,6 @@ END
 STRINGTABLE
 BEGIN
     ID_DIRECT_CONNECT       "ID_DIRECT"
-    ID_HELP_CUSTOM          "Get information about this plugin."
-    ID_HELP_CUSTOM1         "Get information about this plugin."
-    ID_HELP_CUSTOM2         "Get information about this plugin."
-    ID_HELP_CUSTOM3         "Get information about this plugin."
-    ID_HELP_CUSTOM4         "Get information about this plugin."
-    ID_HELP_CUSTOM5         "Get information about this plugin."
-    ID_HELP_CUSTOM6         "Get information about this plugin."
-    ID_HELP_CUSTOM7         "Get information about this plugin."
-    ID_HELP_CUSTOM8         "Get information about this plugin."
-    ID_HELP_CUSTOM9         "Get information about this plugin."
-    ID_HELP_CUSTOM10        "Get information about this plugin."
     ID_URL_1                "Open this URL in your default browser"
 END
 

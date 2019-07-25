@@ -2,7 +2,6 @@
 
 #include "stdafx.h"
 #include "Macro.h"
-#include "Script.h"
 
 CMacro::CMacro()
 {
@@ -27,6 +26,6 @@ int CMacro::OnActivate(CMudView &rView, CWorld &rWorld)
 {
   m_sText.TrimLeft();
   m_sText.TrimRight();
-  RunScript(m_sText,rView,rWorld);
+  rView.OnUserInput(0,(long)(LPCSTR)m_sText);
   return true;
 }

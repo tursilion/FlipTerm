@@ -94,9 +94,6 @@
     <ClCompile Include="replaced.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Script.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="selarray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -141,9 +138,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Script.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Alias.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -264,27 +258,15 @@
     <ClInclude Include="wrapopti.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ANSI.TXT">
-      <Filter>document files</Filter>
-    </None>
-    <None Include="Distribution\Docs\FlipTerm MCP Handling.txt">
-      <Filter>document files</Filter>
-    </None>
-    <None Include="Distribution\Docs\FlipTerm MCP Plugin Structure.txt">
-      <Filter>document files</Filter>
-    </None>
     <None Include="Distribution\FlipTerm.txt">
       <Filter>document files</Filter>
     </None>
     <None Include="MANUAL.WRI">
-      <Filter>document files</Filter>
-    </None>
-    <None Include="Distribution\Docs\MCP 2_1 Spec.htm">
-      <Filter>document files</Filter>
-    </None>
-    <None Include="Distribution\Docs\MuckMate MCP Wrapper.txt">
       <Filter>document files</Filter>
     </None>
     <None Include="README.TXT">

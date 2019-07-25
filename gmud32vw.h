@@ -30,8 +30,6 @@ public:
 	int Connect(CWorld *pWorld);
 	BOOL __cdecl CMudView::Printf(LPSTR format, ...);
 	long ProcessOneLine(bool bSystem, CString sStr);
-	bool ProcessMCP(CString *pStr);
-	void MCPInternal(const char *pInStr);
 	void ResetTimer() { m_Time=(unsigned int)time(NULL); }
 	void ResizeInWnd(int y);
 	void MoveDivider(int y);
@@ -125,11 +123,6 @@ protected:
 
 	void SetUnSeen( BOOL bUnSeen  = TRUE  );
 
-	void ActivateMCPPlugins();
-	void TellMCPPlugins(CString pStr);
-	void CloseMCPSessions();
-	bool TellTextPlugins(char *pStr); 
-
 	PSTR m_pHostBuf;
 	BOOL m_bIsLogging;
 	bool m_bConnectionPending;
@@ -140,16 +133,7 @@ protected:
 	CString m_sName;
 	WORD m_wPort;
 
-	CString lastMCPString;
-
 	int	m_bAllowReconnect;
-
-	int m_bMCPActive;
-	int m_bMCPCountdown;
-	int m_nMCPBadKeys;
-	int m_bMCPNegotiateDone;
-	CString m_MCPKey;
-	HWND m_MCPWnd;
 
 	int FlashCount;
 	int FlashTimer;

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <Windows.h>
 #include "trigger.h"
 #include "resource.h"
 #include "mainfrm.h"
@@ -7,7 +8,6 @@
 #include "io.h"
 #include "outwnd.h"
 #include "GMud32Vw.h"
-#include "script.h"
 
 bool match(LPCSTR *szOrigTest, LPCSTR szOrigPattern,CMapStringToString &params);
 
@@ -54,7 +54,7 @@ int CTrigger::CheckActivation(LPCSTR str, CMudView *pView)
 		}
 		
 		if(!m_sMudOutput.IsEmpty()) {
-			RunScript((LPCSTR)(m_sMudOutput),*pView,*pView->m_pWorld);
+            rView.OnUserInput(0,(long)(LPCSTR)m_sMudOutput);
 		}
 		
 		if (m_fgColor) {

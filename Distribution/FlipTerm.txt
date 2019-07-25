@@ -1718,3 +1718,17 @@ WHAT'S NEW:
 
 WHAT'S FIXED:
 -Repacked crash fix - should not crash if you get unexpectedly logged out.
+
+---------
+July 2019
+---------
+WHAT'S NEW:
+-Updated to Visual Studio 2019
+-Updated to new MFC
+-Removed MCP support and plugins
+-Removed 'script' system
+
+TODO:
+-Smart window tiling
+-Word wrap fits the window even when resized
+-configuration moved back out of the registry

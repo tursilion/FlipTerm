@@ -28,7 +28,6 @@
 #include "AliasArray.h"
 #include "disconnect.h"
 #include "resource.h"
-#include "script.h"
 
 #include <io.h>
 #include <afxmt.h>
@@ -104,13 +103,8 @@ CMudView::CMudView()
 	m_fLogFile=NULL;
 	m_bConnectionPending=FALSE;
 
-	m_bMCPActive=0;			// Whether we've received MCP identification
-	m_bMCPCountdown=2;		// Two lines may be entered from the user before we stop listening
-	m_bMCPNegotiateDone=0;	// Is the Negotiate-can sequence complete?
-	m_MCPWnd=NULL;			// Used when the window is closed
 	m_Time=(unsigned int)time(NULL);
 
-	lastMCPString="";		// Used to ensure we have a *full* string
 	FlashCount=0;			// Countdown for title bar flash (needed for 95/NT)
 	FlashTimer=0;			// Not started yet
 }
@@ -129,8 +123,6 @@ CMudView::~CMudView()
 		m_bIsLogging=FALSE;
 	}
 
-	CloseMCPSessions();
-	
 	if(m_pInWnd) {
 		delete m_pInWnd;
 		m_pInWnd=NULL;
@@ -331,9 +323,6 @@ int CMudView::Connect(CWorld *pWorld)
 	m_wPort=m_pWorld->m_wPort;
 	m_sName=m_pWorld->m_sName;
 
-	m_bMCPActive=0;			// Whether we've received MCP identification
-	m_bMCPCountdown=2;		// Two lines may be entered from the user before we stop listening
-
 	OnFontChanged(0,0);
 	OnColorChanged(0,0);
 
@@ -461,7 +450,6 @@ afx_msg LONG CMudView::OnSocketDisconnected(UINT nErrCode ,LONG)
 		m_bIsLogging=FALSE;
 		Printf("%%%%%% Log file closed.\n");
 	}
-	CloseMCPSessions();
 	Printf("%%%%%% Disconnected from server.\n");
 	CFrameWnd *pWnd = (CFrameWnd *)GetParent();
 	pWnd->OnUpdateFrameTitle(GetFocus()==m_pInWnd);
@@ -517,7 +505,7 @@ afx_msg LONG CMudView::OnStringReceived(UINT ,LONG lparam)
 {
 	LPSTR pStr = (LPSTR)lparam;
 	LPSTR pStripped;
-	char *buffer, *tmpBuf;
+	char *buffer;
 	CMudDoc *pDoc = (CMudDoc *)GetDocument();
 	int idx, fCR;
 	bool ret=false;		// set to true if consumed
@@ -556,29 +544,8 @@ afx_msg LONG CMudView::OnStringReceived(UINT ,LONG lparam)
 		// Set up a work copies of the string
 		Ansimemcpy(pStripped,csOut,0,BUFFSIZE);
 
-		// Check MCP input
-		ret=false;
-		if ((m_bMCPCountdown > 0)||(m_bMCPActive)) {
-			if ((csOut.Left(2) == "#$")||(lastMCPString.GetLength() > 0)) {
-				ret=ProcessMCP(&csOut);
-			} else {
-				int nLen=csOut.GetLength();
-				if (nLen >= BUFFSIZE) nLen=BUFFSIZE-1;
-
-				tmpBuf=(char*)malloc(BUFFSIZE);
-				strncpy(tmpBuf, (LPCSTR)csOut, nLen);
-				tmpBuf[nLen]='\0';
-				if (TellTextPlugins(tmpBuf)) {
-					csOut=tmpBuf;
-				}
-
-				free(tmpBuf);
-				tmpBuf=NULL;
-			}
-		}
-
-		// If ret was true, then the MCP plugin processed the string!
-		if ((!ret) && (m_pWorld->m_bIsIRC)) {
+        // handle IRC intercepts - will set ret to true if processed
+		if (m_pWorld->m_bIsIRC) {
 			CString csPrefix;	// a place to save the prefix here
 
 			// this is bad since it assumes whole strings, not guaranteed!
@@ -677,7 +644,7 @@ afx_msg LONG CMudView::OnStringReceived(UINT ,LONG lparam)
 			}
 		}
 
-		// If ret was true, then the MCP plugin or the IRC code processed the string!
+		// If ret was true, then the IRC code processed the string!
 		if (!ret) {
 			// Look for URLs for the URL dropdown
 			{
@@ -852,7 +819,7 @@ void CMudView::SetUnSeen( BOOL bUnSeen /* = TRUE */ )
 			CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
 			pFrame->UpdateWorlds();
 			if (GetApp()->m_bShowActivity) {
-				CMDIChildWnd * pChild =	((CMDIFrameWnd*)(GetApp()->m_pMainWnd))->MDIGetActive();
+				CMDIChildWnd * pChild =	((CMDIFrameWndEx*)(GetApp()->m_pMainWnd))->MDIGetActive();
 				CMudView *pView=(CMudView*)pChild->GetActiveView();
 				if (pView != this) {
 					pView->Printf("\n\r");	// The coloring code needs the %%% to be at the beginning of the string
@@ -891,20 +858,6 @@ afx_msg LONG CMudView::OnUserInput(UINT,LONG lParam)
 		OutputDebugString(csTmp);
 	}
 	
-	// Check for MCP escaping
-	if (m_bMCPActive) {
-		if (sStr.Left(2) == "#$") {
-			sStr.Format("#$\"%s", pStr);	// Add the quote
-		}
-	}
-	if (m_bMCPCountdown > 0) {
-		m_bMCPCountdown--;
-	}
-	if ((!m_bMCPActive)&&(sStr.Left(7).CompareNoCase("connect") == 0)) {
-		// Reset count to 1 on connect
-		m_bMCPCountdown=1;
-	}
-
 	// check aliases
 	if (m_pWorld)
 	{
@@ -1069,9 +1022,9 @@ void CMudView::OnSetFocus(CWnd* pOldWnd)
 {
 	CView::OnSetFocus(pOldWnd);
 	SetUnSeen(FALSE);
-	if(m_pInWnd)
+	if(m_pInWnd) {
 		m_pInWnd->SetFocus();	
-	MCPInternal("focus");
+    }
 }
 
 CString CMudView::GetTitle()
@@ -1536,7 +1489,7 @@ bool CMudView::ProcessUserCommandLine(CString sInput)
 
 	if (strcmpi(sCommand, "/close")==0)
 	{
-		CMDIChildWnd * pChild =	((CMDIFrameWnd*)(GetApp()->m_pMainWnd))->MDIGetActive();
+		CMDIChildWnd * pChild =	((CMDIFrameWndEx*)(GetApp()->m_pMainWnd))->MDIGetActive();
 		
 		pChild->PostMessage(WM_CLOSE);
 		return TRUE;
@@ -1776,323 +1729,6 @@ void CMudView::OnViewLog()
 	if ((int)ShellExecute(NULL, "open", GetApp()->m_sLogFolder, NULL, NULL, SW_SHOWNORMAL) < 32) {
 		AfxMessageBox("Unable to open the default log folder - check that it is configured correctly.", MB_ICONSTOP | MB_OK);
 	}
-}
-
-// This function handles:
-// Initialization of m_bMCPActive
-// And processing of all MCP functionality
-bool CMudView::ProcessMCP(CString *pInStr)
-{
-	lastMCPString+=*pInStr;
-
-	if (pInStr->Right(1) != "\n") {
-		// incomplete line
-		return true;
-	}
-
-	CString pStr=lastMCPString;
-	CString pOldStr=lastMCPString;
-	lastMCPString="";
-	pStr.MakeLower();
-
-	// First, if MCP is disabled, then the only string we want to see is
-	// the MCP message
-
-	if ((!m_bMCPActive) && (pStr.Left(7) != "#$#mcp ")) {
-		// Useless. Ignore.
-		return false;
-	}
-
-	if (NULL == m_pSocket) {
-#ifdef _DEBUG
-		_asm { int 3 }	// breakpoint
-#endif
-		return false;	// we MUST have a socket!
-	}
-
-	if (!m_bMCPActive) {
-		// It's about to be - this must be an #$#mcp string
-		// Get version
-		CString version;
-		int n;
-		int l1,l2, h1,h2, low, high;
-
-		l1=99; l2=0;
-		h1=0; h2=0;
-
-		n=pStr.Find("version:");
-		if (-1 == n) {
-			// Invalid, then, discard
-			return false;
-		}
-
-		version=pStr.Mid(n+8);
-		version.Remove('\"');	// no quotes
-		sscanf(version, "%d.%d to: %d.%d", &l1,&l2, &h1,&h2);		// we may not get high ;)
-		low=l1*10+l2;
-		high=h1*10+h2;
-		if (0 == high) high=low;
-
-		if ((low>21)||(high<21)) {
-			// no good, ignore and exit
-			Printf("%%%%%% Remote server does not speak MCP 2.1 - MCP disabled.\n");
-			return false;
-		}
-		Printf("%%%%%% MCP Capability established.\n");
-
-		// We only support version 2.1
-		FILETIME myTime;
-		GetSystemTimeAsFileTime(&myTime);
-		m_MCPKey.Format("FT%u", ((unsigned int)myTime.dwLowDateTime)+((unsigned int)this));
-
-		version.Format("#$#mcp authentication-key: %s version: 2.1 to: 2.1", (LPCSTR)m_MCPKey);
-		m_pSocket->Printf("%s\n",(LPCSTR)version);
-		m_nMCPBadKeys=0;
-
-		ActivateMCPPlugins();
-
-		m_bMCPActive=true;
-		return true;
-	}
-
-	// If we get here, it's a probable MCP string, and MCP is active
-	
-	// Quoted?
-	if (pStr.Left(3) == "#$\"") {
-		pInStr->Delete(0, 3);
-		return false;		// process normally
-	}
-
-	// Is it still a command?
-	if (pStr.Left(3) != "#$#") {
-		// It's not, give it back
-		return false;
-	}
-
-	// Eliminate ANSI by terminating the string if ESC is found
-	if (pOldStr.Find((char)27)>0) {
-		pOldStr=pOldStr.Left(pOldStr.Find((char)27));
-		pStr=pOldStr;
-		pStr.MakeLower();
-	}
-
-	// Okay, verify legitimatecy
-	
-	// First check for multiline - the plugins must verify the multi-line key
-	if (pStr.Left(4) == "#$#*") {
-		TellMCPPlugins(*pOldStr);
-		return true;
-	}
-
-	// Not a multi-line - is it a cord?
-	if (pStr.Left(11) == "#$#mcp-cord") {
-		TellMCPPlugins(*pOldStr);
-		return true;
-	}
-
-	// Not a cord - we can verify the session key, then
-	int n;
-	CString key;
-	
-	n=pStr.Find(' ');
-	if (-1 == n) {
-		Printf("%%%%%% Improperly formatted MCP message received.\n");
-		return false;		// Display it in case it's not actually MCP
-	}
-
-	pStr.Remove('\r');
-	pStr.Remove('\n');
-	pStr+=" ";
-
-	key=pOldStr.Mid(n+1, (pStr.Find(' ',n+1)-n-1));
-	key.TrimLeft();
-	key.TrimRight();
-	if (key == m_MCPKey) {
-		// Check for end of negotiation
-		if (pStr.Left(17) != "mcp-negotiate-end") {
-			m_bMCPNegotiateDone=1;
-		}
-		// Check for negotiation after the end of negotiation
-		if ((pStr.Left(17) != "mcp-negotiate-can") || (m_bMCPNegotiateDone == 0)) {
-			TellMCPPlugins(pOldStr);
-		}
-		return true;
-	}
-
-	// Else, it was an invalid session key
-	m_nMCPBadKeys++;
-	OutputDebugString("[MCP] Bad Session key received.\n");
-	if (m_nMCPBadKeys >= 20) {
-		int ret=AfxMessageBox("FlipTerm has received 20 messages from this server with invalid Session Keys.\nThis may be network problems, or it may indicate that someone is attempting\nto spoof MCP commands to your machine. Would you like to disable MCP for this session?", MB_ICONQUESTION | MB_YESNO);
-		if (IDYES == ret) {
-			m_bMCPActive=false;
-			m_bMCPCountdown=0;
-			return true;
-		}
-		m_nMCPBadKeys=0;
-	}
-	return true;
-}
-
-void CMudView::ActivateMCPPlugins()
-{
-	CString csStr;
-	CString csPath;
-	DLLInfo *pDll;
-
-	// First, we advertise our built-in support - mcp-negotiate and mcp-cords
-	m_pSocket->Printf("#$#mcp-negotiate-can %s package: mcp-negotiate min-version: 2.0 max-version: 2.0\n", (LPCSTR)m_MCPKey);
-	m_pSocket->Printf("#$#mcp-negotiate-can %s package: mcp-cord min-version: 1.0 max-version: 1.0\n", (LPCSTR)m_MCPKey);
-
-	// Each plugin will have a mcp-negotiate-can sent back by this function
-	pDll=&(GetApp()->DLLList);
-
-	while (pDll) {
-		if (NULL != pDll->hDll) {
-			// Send the negotiate(s)
-			for (int idx=0; idx<pDll->MCPPlugin_GetNumberPackages(); idx++) {
-				if (0 == pDll->MCPPlugin_GetPackageLowVersion(idx)) continue;
-				csStr.Format("#$#mcp-negotiate-can %s package: \"%s\" min-version: \"%d.%d\" max-version: \"%d.%d\"\n", (LPCSTR)m_MCPKey,
-					pDll->MCPPlugin_GetPackageName(idx), pDll->MCPPlugin_GetPackageLowVersion(idx)/10, pDll->MCPPlugin_GetPackageLowVersion(idx)%10,
-					pDll->MCPPlugin_GetPackageHighVersion(idx)/10, pDll->MCPPlugin_GetPackageHighVersion(idx)%10);
-				OutputDebugString(csStr);
-				m_pSocket->Printf((char*)(LPCSTR)csStr);
-			}
-		}
-		pDll=pDll->pNext;
-	}
-
-	// Finally, we announce the end of negotiating 'can'
-	m_pSocket->Printf("#$#mcp-negotiate-end %s\n", (LPCSTR)m_MCPKey);
-}
-
-void CMudView::TellMCPPlugins(CString pStr) 
-{
-	// pass the received mcp string to all plugins,
-	// Plugins are expected to do the work of understanding the string
-	DLLInfo *pDll;
-	char *pOut;
-
-	pDll=&(GetApp()->DLLList);
-
-	while (pDll) {
-		if (NULL != pDll->hDll) {
-			pOut=NULL;
-			if (NULL == m_MCPWnd) {
-				m_MCPWnd=m_hWnd;
-			}
-			if (pDll->MCPPlugin_ProcessString((char*)(LPCSTR)pStr, m_MCPWnd, &pOut)) {
-				if (NULL != pOut) {		// The plugin returned data for the muck
-					// we only want to allow a single %s, at most. So we parse it ourselves
-					char outbuf[BUFFSIZE];
-					int idx1=0, idx2=0, nflag=0;
-					while (pOut[idx1]) {
-						if ((pOut[idx1]=='%')&&(pOut[idx1+1]=='s')&&(nflag==0)) {
-							outbuf[idx2]='\0';
-							strcat(outbuf, (LPCSTR)m_MCPKey);
-							idx2=strlen(outbuf);
-							idx1+=2;
-							nflag=1;
-							continue;
-						}
-						if (pOut[idx1]=='%') {
-							outbuf[idx2++]='%';		// extra one
-						}
-						outbuf[idx2++]=pOut[idx1++];
-					}
-					m_pSocket->Printf(outbuf, (LPCSTR)m_MCPKey);
-					m_pSocket->Printf("\n");
-					free(pOut);
-					pOut=NULL;
-				}
-				break;
-			}
-		}
-		pDll=pDll->pNext;
-	}
-}
-
-void CMudView::MCPInternal(const char *pInStr) 
-{
-	// pass the string to all plugins as an mcp-internal message
-	DLLInfo *pDll;
-	char *pOut;
-	CString pStr;
-
-	pStr.Format("#$#mcp-internal %s type: %s", m_MCPKey.GetString(), pInStr);
-
-	pDll=&(GetApp()->DLLList);
-
-	while (pDll) {
-		if (NULL != pDll->hDll) {
-			pOut=NULL;
-			if (NULL == m_MCPWnd) {
-				m_MCPWnd=m_hWnd;
-			}
-			if (pDll->MCPPlugin_ProcessString((char*)(LPCSTR)pStr, m_MCPWnd, &pOut)) {
-				if (NULL != pOut) {		// The plugin returned data for the muck (which we don't want)
-					free(pOut);
-					pOut=NULL;
-				}
-			}
-		}
-		pDll=pDll->pNext;
-	}
-}
-
-void CMudView::CloseMCPSessions()
-{
-	// Tell all the plugins that we've closed
-	DLLInfo *pDll;
-
-	if (NULL == m_MCPWnd) return;
-
-	pDll=&(GetApp()->DLLList);
-
-	while (pDll) {
-		if (NULL != pDll->hDll) {
-			pDll->MCPPlugin_CloseSession(m_MCPWnd);
-		}
-		pDll=pDll->pNext;
-	}
-
-	m_MCPWnd=NULL;
-}
-
-bool CMudView::TellTextPlugins(char *pStr) 
-{
-	// pass the received string to all plugins who want text
-	// Plugins must be able to handle color!
-	DLLInfo *pDll;
-	char *pOut;
-	bool fActive;
-	bool fChange=false;
-
-	CMDIChildWnd * pChild =	((CMDIFrameWnd*)(GetApp()->m_pMainWnd))->MDIGetActive();
-	CMudView *pView=(CMudView*)pChild->GetActiveView();
-	if (pView != this) {	// This happens when some other application has focus
-		fActive=false;
-	} else {
-		fActive=true;
-	}
-
-	pDll=&(GetApp()->DLLList);
-
-	while (pDll) {
-		if (NULL != pDll->hDll) {
-			if (pDll->MCPPlugin_WantPlainText()) {
-				pOut=pDll->MCPPlugin_ProcessTextString(pStr, fActive);
-				if (pOut) {
-					strncpy(pStr, pOut, BUFFSIZE);
-					pStr[BUFFSIZE-1]='\0';
-					free(pOut);
-					fChange=true;
-				}
-			}
-		}
-		pDll=pDll->pNext;
-	}
-	return fChange;
 }
 
 void CMudView::OnTimer(UINT nIDEvent) 

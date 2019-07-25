@@ -2,13 +2,10 @@
 // Microsoft Visual C++ generated include file.
 // Used by GMUD32.RC
 //
-#define IDR_MudTYPE_SRVR_IP             4
-#define IDR_MudTYPE_SRVR_EMB            5
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
 #define IDP_SOCKETS_INIT_FAILED         104
 #define IDR_MAINFRAME                   128
-#define IDR_MudTYPE                     129
 #define IDD_VIEW_SETTINGS               130
 #define IDD_CONNECT                     131
 #define IDD_RENAME                      132
@@ -30,6 +27,30 @@
 #define IDD_TIMER                       153
 #define IDB_NUMBERS                     155
 #define IDD_COLORS                      156
+#define IDR_POPUP_EDIT                  157
+#define ID_STATUSBAR_PANE1              158
+#define ID_STATUSBAR_PANE2              159
+#define IDS_STATUS_PANE1                160
+#define IDS_STATUS_PANE2                161
+#define IDS_TOOLBAR_STANDARD            162
+#define IDS_TOOLBAR_CUSTOMIZE           163
+#define ID_VIEW_CUSTOMIZE               164
+#define IDR_MAINFRAME_256               165
+#define ID_WINDOW_MANAGER               166
+#define IDR_THEME_MENU                  200
+#define ID_SET_STYLE                    201
+#define ID_VIEW_APPLOOK_WIN_2000        205
+#define ID_VIEW_APPLOOK_OFF_XP          206
+#define ID_VIEW_APPLOOK_WIN_XP          207
+#define ID_VIEW_APPLOOK_OFF_2003        208
+#define ID_VIEW_APPLOOK_VS_2005         209
+#define ID_VIEW_APPLOOK_VS_2008         210
+#define ID_VIEW_APPLOOK_OFF_2007_BLUE   215
+#define ID_VIEW_APPLOOK_OFF_2007_BLACK  216
+#define ID_VIEW_APPLOOK_OFF_2007_SILVER 217
+#define ID_VIEW_APPLOOK_OFF_2007_AQUA   218
+#define ID_VIEW_APPLOOK_WINDOWS_7       219
+#define IDS_EDIT_MENU                   306
 #define IDC_80columns                   1000
 #define IDC_wrapscreen                  1001
 #define IDC_wordwrap                    1004
@@ -194,11 +215,13 @@
 #define ID_OPTIONS_SWITCHES             32820
 #define IDC_HISTORYPREV                 32821
 #define IDC_HISTORYNEXT                 32822
-#define ID_VIEW_WINDOWBAR               32824
 #define ID_OPTIONS_DEFAULTCOLORS        32825
 #define ID_OPTIONS_SYSTEMMESSAGECOLOR   32826
 #define ID_FILE_EXPORTSETTINGS          32829
 #define ID_WINDOW_TILEVERTICAL          32830
+#define ID_VIEW_TOOLBAR_MENU            32832
+#define ID_OPTIONS                      32836
+#define ID_VIEW_WINDOWBAR               32837
 #define ID_VIEW_MACROWINDOW             0xE830
 #define ID_VIEW_WORLDWINDOW             0xE831
 #define ID_DIRECT_CONNECT               61216
@@ -231,9 +254,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        157
-#define _APS_NEXT_COMMAND_VALUE         32831
+#define _APS_NEXT_RESOURCE_VALUE        312
+#define _APS_NEXT_COMMAND_VALUE         32838
 #define _APS_NEXT_CONTROL_VALUE         1115
-#define _APS_NEXT_SYMED_VALUE           102
+#define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

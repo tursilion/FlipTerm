@@ -15,13 +15,9 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CChildFrame
 
-IMPLEMENT_DYNCREATE(CChildFrame, CMDIChildWnd)
+IMPLEMENT_DYNCREATE(CChildFrame, CMDIChildWndEx)
 
-BEGIN_MESSAGE_MAP(CChildFrame, CMDIChildWnd)
-	//{{AFX_MSG_MAP(CChildFrame)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG_MAP
+BEGIN_MESSAGE_MAP(CChildFrame, CMDIChildWndEx)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -40,7 +36,7 @@ BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
 	cs.style = WS_CHILD | WS_VISIBLE | WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU
 		| FWS_ADDTOTITLE | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
 
-	return CMDIChildWnd::PreCreateWindow(cs);
+	return CMDIChildWndEx::PreCreateWindow(cs);
 }
 */
 /////////////////////////////////////////////////////////////////////////////
@@ -49,12 +45,12 @@ BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
 #ifdef _DEBUG
 void CChildFrame::AssertValid() const
 {
-	CMDIChildWnd::AssertValid();
+	CMDIChildWndEx::AssertValid();
 }
 
 void CChildFrame::Dump(CDumpContext& dc) const
 {
-	CMDIChildWnd::Dump(dc);
+	CMDIChildWndEx::Dump(dc);
 }
 
 #endif //_DEBUG

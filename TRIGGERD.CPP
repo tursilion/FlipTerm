@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include <Windows.h>
 #include "gmud32.h"
 #include "triggerd.h"
 #include "trigger.h"

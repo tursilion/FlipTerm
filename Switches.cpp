@@ -16,7 +16,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 CSwitches::CSwitches(CWnd* pParent /*=NULL*/)
-	: CDialog(CSwitches::IDD, pParent)
+	: CDialogEx(CSwitches::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CSwitches)
 	m_CommandChar = _T("");
@@ -38,7 +38,7 @@ CSwitches::CSwitches(CWnd* pParent /*=NULL*/)
 
 void CSwitches::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
+	CDialogEx::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CSwitches)
 	DDX_Text(pDX, IDC_COMMANDCHAR, m_CommandChar);
 	DDV_MaxChars(pDX, m_CommandChar, 1);
@@ -58,7 +58,7 @@ void CSwitches::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(CSwitches, CDialog)
+BEGIN_MESSAGE_MAP(CSwitches, CDialogEx)
 	//{{AFX_MSG_MAP(CSwitches)
 	ON_BN_CLICKED(IDC_MULTILINEINPUT, OnMultilineinput)
 	//}}AFX_MSG_MAP
@@ -78,7 +78,9 @@ void CSwitches::OnMultilineinput()
 
 BOOL CSwitches::OnInitDialog() 
 {
-	CDialog::OnInitDialog();
+	CDialogEx::OnInitDialog();
+
+    //EnableVisualManagerStyle(TRUE);
 
 	m_CommandChar=GetApp()->m_CommandChar;
 	m_CommandStacking=GetApp()->m_bCommandStacking;
@@ -118,5 +120,5 @@ void CSwitches::OnOK()
 	GetApp()->m_bNewWindow=m_NewWindow;
 	GetApp()->m_bMapKeys=m_MapKeys;
 	
-	CDialog::OnOK();
+	CDialogEx::OnOK();
 }

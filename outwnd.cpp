@@ -413,7 +413,7 @@ int COutWnd::PutString(char * minstr, int InPaused, int Is7Bit)
 		nMaxChars=m_nCols;
 		
 		int fMax;
-		CMDIChildWnd *pChild=((CMDIFrameWnd*)(GetApp()->m_pMainWnd))->MDIGetActive(&fMax);
+		CMDIChildWnd *pChild=((CMDIFrameWndEx*)(GetApp()->m_pMainWnd))->MDIGetActive(&fMax);
 		if ((pChild)&&(fMax)) {
 			CMudView *pView=(CMudView*)pChild->GetActiveView();
 			if (pView) {
@@ -474,7 +474,7 @@ int COutWnd::PutString(char * minstr, int InPaused, int Is7Bit)
 				instr+=SkipColor((unsigned char*)instr);
 			}
 
-			m_Lines.AddHead(cstr);
+			m_Lines.AddHead((LPCTSTR)cstr);
 			while (m_Lines.GetCount() > m_iMaxLines) {
 				m_Lines.RemoveTail();
 			}
