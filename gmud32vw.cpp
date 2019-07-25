@@ -39,6 +39,8 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 extern unsigned long colormap[];
 extern CCriticalSection textLock;
+extern CMainFrame* pMainFrame;
+extern CMenu *pMainMenu;
 
 IMPLEMENT_DYNCREATE(CMudView, CView)
 BEGIN_MESSAGE_MAP(CMudView, CView)
@@ -162,8 +164,8 @@ CMudView::~CMudView()
 // CMudView drawing
 void CMudView::OnDraw(CDC* /* pDC */)
 {
-	CMudDoc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
+//	CMudDoc* pDoc = GetDocument();
+//	ASSERT_VALID(pDoc);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -686,10 +688,10 @@ afx_msg LONG CMudView::OnStringReceived(UINT ,LONG lparam)
 						csTmp="http://" + csTmp;
 					}
 
-					// Okay, now we have a URL, we need to add it to the menu
-					CMenu *pMenu=GetApp()->m_pMainWnd->GetMenu();
-					if (pMenu) {
-						pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+					// Okay, now we have a URL, we need to add it to the menu.
+                    // Still not working.. the menu seems to contain all the URLs but it's not showing up...
+					if ((csTmp != "") && (pMainMenu)) {
+						CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 						if (pMenu) {
 							CString csTmp2;
 
@@ -703,8 +705,6 @@ afx_msg LONG CMudView::OnStringReceived(UINT ,LONG lparam)
 									break;
 								}
 							}
-							// and don't add empty strings
-							if (csTmp=="") fFlag=false;
 
 							// fFlag is true if we want to add it
 							if (fFlag) {
@@ -717,6 +717,7 @@ afx_msg LONG CMudView::OnStringReceived(UINT ,LONG lparam)
 								}
 								// Now add the new one to the bottom
 								pMenu->AppendMenu(MF_ENABLED, id, csTmp);
+                                pMainFrame->DrawMenuBar();
 							}
 						}
 					}

@@ -54,7 +54,7 @@ int CTrigger::CheckActivation(LPCSTR str, CMudView *pView)
 		}
 		
 		if(!m_sMudOutput.IsEmpty()) {
-            rView.OnUserInput(0,(long)(LPCSTR)m_sMudOutput);
+            pView->OnUserInput(0,(long)(LPCSTR)m_sMudOutput);
 		}
 		
 		if (m_fgColor) {

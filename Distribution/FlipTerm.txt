@@ -1731,4 +1731,3 @@ WHAT'S NEW:
 TODO:
 -Smart window tiling
 -Word wrap fits the window even when resized
--configuration moved back out of the registry

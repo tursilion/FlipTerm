@@ -3,6 +3,7 @@
 // outwnd.h : header file
 //
 
+#pragma once
 
 class COutWnd : public CWnd
 {

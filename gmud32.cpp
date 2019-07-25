@@ -77,6 +77,8 @@ extern unsigned long colormap[];
 extern unsigned long defcolormap[];
 
 bool g_ClosingApp=false;
+CMainFrame* pMainFrame = NULL;
+CMenu *pMainMenu = NULL;
 
 /////////////////////////////////////////////////////////////////////////////
 // Our CMudApp object!
@@ -166,6 +168,12 @@ CMudApp::CMudApp()
 	m_sLogFolder=m_sDir;
 
 	memcpy(colormap, defcolormap, sizeof(unsigned long)*16);
+}
+
+CMudApp::~CMudApp() {
+    if (NULL != pMainMenu) {
+        delete pMainMenu;
+    }
 }
 
 int CMudApp::ExitInstance() 
@@ -381,15 +389,16 @@ BOOL CMudApp::InitInstance()
 	AddDocTemplate(pDocTemplate);
 
 	// create main MDI Frame window
-	CMainFrame* pMainFrame = new CMainFrame;
+	pMainFrame = new CMainFrame;
 	if (!pMainFrame) return FALSE;
 	if (!pMainFrame->LoadFrame(IDR_MAINFRAME)) {
 		delete pMainFrame;
 		return FALSE;
 	}
 	m_pMainWnd = pMainFrame;
-	CMudDoc *pDoc=NULL;
+//    pMainMenu->Attach(pMainFrame->m_wndMenuBar.GetHMenu());
 
+	CMudDoc *pDoc=NULL;
 	// create a new (empty) document
 	pDoc=(CMudDoc*)pDocTemplate->CreateNewDocument();
 	CFrameWnd* pFrame = pDocTemplate->CreateNewFrame(pDoc, NULL);
@@ -407,9 +416,8 @@ BOOL CMudApp::InitInstance()
 	pMainFrame->UpdateWindow();
 
 	// URL history
-	CMenu *pMenu=GetApp()->m_pMainWnd->GetMenu();
-	if (pMenu) {
-		pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+	if (pMainMenu) {
+		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 		if (pMenu) {
 			CString csTmp, csTmp2;
 
@@ -424,8 +432,10 @@ BOOL CMudApp::InitInstance()
 				if (idx == 0) {
 					pMenu->RemoveMenu(0, MF_BYPOSITION);
 				}
-				pMenu->AppendMenu(MF_ENABLED, ID_URL_1+idx, csTmp);
+                // MF_STRING is 0, so it's optional to specify it...
+				pMenu->AppendMenu(MF_ENABLED|MF_STRING, ID_URL_1+idx, csTmp);
 			}
+            pMainFrame->DrawMenuBar();
 		}
 	}
 
@@ -628,9 +638,8 @@ void CMudApp::OnURL1()
 {
 	CString csTmp;
 
-	CMenu *pMenu=m_pMainWnd->GetMenu();
-	if (pMenu) {
-		pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+	if (pMainMenu) {
+		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 		if (pMenu) {
 			pMenu->GetMenuString(ID_URL_1, csTmp, MF_BYCOMMAND);
 			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
@@ -642,9 +651,8 @@ void CMudApp::OnURL2()
 {
 	CString csTmp;
 
-	CMenu *pMenu=m_pMainWnd->GetMenu();
-	if (pMenu) {
-		pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+	if (pMainMenu) {
+		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 		if (pMenu) {
 			pMenu->GetMenuString(ID_URL_2, csTmp, MF_BYCOMMAND);
 			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
@@ -656,9 +664,8 @@ void CMudApp::OnURL3()
 {
 	CString csTmp;
 
-	CMenu *pMenu=m_pMainWnd->GetMenu();
-	if (pMenu) {
-		pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+	if (pMainMenu) {
+		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 		if (pMenu) {
 			pMenu->GetMenuString(ID_URL_3, csTmp, MF_BYCOMMAND);
 			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
@@ -670,9 +677,8 @@ void CMudApp::OnURL4()
 {
 	CString csTmp;
 
-	CMenu *pMenu=m_pMainWnd->GetMenu();
-	if (pMenu) {
-		pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+	if (pMainMenu) {
+		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 		if (pMenu) {
 			pMenu->GetMenuString(ID_URL_4, csTmp, MF_BYCOMMAND);
 			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
@@ -684,9 +690,8 @@ void CMudApp::OnURL5()
 {
 	CString csTmp;
 
-	CMenu *pMenu=m_pMainWnd->GetMenu();
-	if (pMenu) {
-		pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+	if (pMainMenu) {
+		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 		if (pMenu) {
 			pMenu->GetMenuString(ID_URL_5, csTmp, MF_BYCOMMAND);
 			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
@@ -698,9 +703,8 @@ void CMudApp::OnURL6()
 {
 	CString csTmp;
 
-	CMenu *pMenu=m_pMainWnd->GetMenu();
-	if (pMenu) {
-		pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+	if (pMainMenu) {
+		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 		if (pMenu) {
 			pMenu->GetMenuString(ID_URL_6, csTmp, MF_BYCOMMAND);
 			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
@@ -712,9 +716,8 @@ void CMudApp::OnURL7()
 {
 	CString csTmp;
 
-	CMenu *pMenu=m_pMainWnd->GetMenu();
-	if (pMenu) {
-		pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+	if (pMainMenu) {
+		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 		if (pMenu) {
 			pMenu->GetMenuString(ID_URL_7, csTmp, MF_BYCOMMAND);
 			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
@@ -726,9 +729,8 @@ void CMudApp::OnURL8()
 {
 	CString csTmp;
 
-	CMenu *pMenu=m_pMainWnd->GetMenu();
-	if (pMenu) {
-		pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+	if (pMainMenu) {
+		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 		if (pMenu) {
 			pMenu->GetMenuString(ID_URL_8, csTmp, MF_BYCOMMAND);
 			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
@@ -740,9 +742,8 @@ void CMudApp::OnURL9()
 {
 	CString csTmp;
 
-	CMenu *pMenu=m_pMainWnd->GetMenu();
-	if (pMenu) {
-		pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+	if (pMainMenu) {
+		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 		if (pMenu) {
 			pMenu->GetMenuString(ID_URL_9, csTmp, MF_BYCOMMAND);
 			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
@@ -754,9 +755,8 @@ void CMudApp::OnURL10()
 {
 	CString csTmp;
 
-	CMenu *pMenu=m_pMainWnd->GetMenu();
-	if (pMenu) {
-		pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+	if (pMainMenu) {
+		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 		if (pMenu) {
 			pMenu->GetMenuString(ID_URL_10, csTmp, MF_BYCOMMAND);
 			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);

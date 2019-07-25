@@ -10,7 +10,7 @@ class CConnectedBar : public CPaneDialog
 // Construction
 public:
 	CConnectedBar();   // standard constructor
-	int CConnectedBar::GetCurSel();
+	int CConnectedBar::GetCurrentSel();
 	BOOL AddName(BOOL bUnseen,CString sTitle);
 	void EmptyList();
 	void DoDataExchange(CDataExchange* pDX);

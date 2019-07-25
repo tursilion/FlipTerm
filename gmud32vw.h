@@ -3,6 +3,10 @@
 //		Mud32vw.h : interface of the CMudView class
 //
 
+#pragma once
+
+#include "outwnd.h"
+
 class CInWnd;
 class COutWnd;
 class CSmartSocket;

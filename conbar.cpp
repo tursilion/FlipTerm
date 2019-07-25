@@ -53,27 +53,42 @@ void CConnectedBar::EmptyList()
 	CListBox *pList = (CListBox *)GetDlgItem(IDC_CONNECT_LIST);
 	ASSERT_VALID(pList);
 
-	if(pList) while(pList->DeleteString(0)>0)
-					;;
+	if (pList) {
+        while (pList->DeleteString(0)>0) { }
+    }
 }
 void CConnectedBar::OnSelchangeConnectList() 
 {
 	CWnd *mainWnd;
 	int idx;
 
-	GetParent()->SendMessage(WM_SELECT_VIEW,0,(LONG)&m_sWorldName);
+    // get the list selection so we know which window to change to
+	idx=GetCurrentSel();
+    if (-1 == idx) {
+        return;
+    }
 
+    // why are we redrawing the buttons here...? I think we're just sending it
+    // to be updated afterwards... should this not be after the window change?
+    GetParent()->SendMessage(WM_SELECT_VIEW,0,(LONG)&m_sWorldName);
+
+    // get the main window so we can command the change
 	mainWnd=GetApp()->GetMainWnd();
-	idx=GetCurSel();
+    if (NULL == mainWnd) {
+        return;
+    }
 
 	mainWnd->PostMessage(WM_COMMAND,AFX_IDM_FIRST_MDICHILD+idx);
 	mainWnd->SetFocus();
 }
 
-int CConnectedBar::GetCurSel()
+int CConnectedBar::GetCurrentSel()
 {
 	CListBox *pList = (CListBox *)GetDlgItem(IDC_CONNECT_LIST);
 	ASSERT_VALID(pList);
+    if (NULL == pList) {
+        return -1;
+    }
 	return pList->GetCurSel();
 }
 

@@ -290,6 +290,7 @@
     <None Include="RES\toolbar.bmp">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GMUD32.RC">

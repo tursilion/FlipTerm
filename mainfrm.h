@@ -44,8 +44,10 @@ public:
     void OnUpdateControlBarMenu(CCmdUI* pCmdUI);
     BOOL OnBarCheck(UINT nID);
 
-protected:  // control bar embedded members
+    // this gives me a CMenu object to the m_wndMenuBar (once its created)
 	CMFCMenuBar     m_wndMenuBar;
+
+protected:  // control bar embedded members
 	CMFCStatusBar 	m_wndStatusBar;
 	CMFCToolBar 	m_wndToolBar;
 	CMFCToolBar		m_wndNumbers;

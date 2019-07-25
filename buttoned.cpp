@@ -19,8 +19,8 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 CButtonEdit::CButtonEdit(CWnd* pParent /*=NULL*/)
 	: CDialog(CButtonEdit::IDD, pParent)
 {
-	CWinAppEx *pApp = GetApp();
-	ASSERT(pApp);
+//	CWinAppEx *pApp = GetApp();
+//	ASSERT(pApp);
 	//{{AFX_DATA_INIT(CButtonEdit)
 	//}}AFX_DATA_INIT
 }
@@ -72,10 +72,10 @@ void CButtonEdit::OnOK()
 {
 	UpdateData(TRUE);
 
-	CWinAppEx *pApp = GetApp();
-	ASSERT(pApp);
-	;
-	((CMacro *)(m_pArray->Get("F1")))->m_sText=m_s1;
+//	CWinAppEx *pApp = GetApp();
+//	ASSERT(pApp);
+
+    ((CMacro *)(m_pArray->Get("F1")))->m_sText=m_s1;
 	((CMacro *)(m_pArray->Get("F2")))->m_sText=m_s2;
 	((CMacro *)(m_pArray->Get("F3")))->m_sText=m_s3;
 	((CMacro *)(m_pArray->Get("F4")))->m_sText=m_s4;

@@ -167,6 +167,7 @@
       <SubSystem>Windows</SubSystem>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
       <AdditionalDependencies>winmm.lib</AdditionalDependencies>
+      <AdditionalOptions>/EDITANDCONTINUE %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -459,6 +460,7 @@
     <ClInclude Include="wrapopti.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitignore" />
     <None Include="Distribution\FlipTerm.txt" />
     <None Include="MANUAL.WRI" />
     <None Include="README.TXT" />

@@ -79,18 +79,12 @@ IDR_MAINFRAME MENU
 BEGIN
     POPUP "&File"
     BEGIN
-        MENUITEM "&Logging...",                 ID_FILE_TOGGLELOGGING
-        MENUITEM "Paste &File...",              ID_FILE_PASTE
-        MENUITEM SEPARATOR
-        MENUITEM "&Connect...",                 ID_FILE_CONNECT
-        MENUITEM "&Disconnect",                 ID_FILE_DISCONNECT
-        MENUITEM SEPARATOR
         MENUITEM "&Save Settings",              ID_FILE_SAVESETTINGS
         MENUITEM "&Export Settings",            ID_FILE_EXPORTSETTINGS
         MENUITEM SEPARATOR
         MENUITEM "E&xit",                       ID_FILE_EXIT
     END
-    POPUP "&Edit"
+    POPUP "Edit"
     BEGIN
         MENUITEM "&Aliases...",                 ID_EDIT_ALIASLIST
         MENUITEM "Macros...",                   IDC_MACROBTN_EDIT
@@ -102,11 +96,9 @@ BEGIN
     BEGIN
         MENUITEM "&Connected World Window",     ID_VIEW_WORLDWINDOW
         MENUITEM "&Macro Window",               ID_VIEW_MACROWINDOW
-        MENUITEM "&Number Bar",                 ID_VIEW_WINDOWBAR
+        MENUITEM "Window Bar",                  ID_VIEW_WINDOWBAR
         MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
-        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
-        MENUITEM SEPARATOR
-        MENUITEM "Browse Log Folder",           ID_VIEW_BROWSELOG
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR_MENU
     END
     POPUP "Options"
     BEGIN
@@ -120,26 +112,20 @@ BEGIN
         MENUITEM "System &Message Color...",    ID_OPTIONS_SYSTEMMESSAGECOLOR
         MENUITEM SEPARATOR
         MENUITEM "Global S&ystem Colors...",    ID_OPTIONS_DEFAULTCOLORS
-    END
+	END
     POPUP "URLs"
     BEGIN
         MENUITEM SEPARATOR
     END
     POPUP "&Window"
     BEGIN
-        MENUITEM "&New Window",                 ID_WINDOW_NEW_OPEN_DOC
-        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
-        MENUITEM "&Tile Horizontal",            ID_WINDOW_TILE_HORZ
-        MENUITEM "Tile &Vertical",              ID_WINDOW_TILE_VERT
-        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
-        MENUITEM "&Pause",                      ID_WINDOW_PAUSE
+        MENUITEM "&New",                        ID_WINDOW_NEW_OPEN_DOC
     END
     POPUP "&Help"
     BEGIN
         MENUITEM "&About FlipTerm...",          ID_HELP_ABOUT
     END
 END
-
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -379,7 +365,7 @@ STYLE DS_SETFONT | WS_CHILD | WS_VISIBLE | WS_BORDER
 EXSTYLE WS_EX_TOOLWINDOW
 FONT 7, "Small Fonts", 0, 0, 0x0
 BEGIN
-    LISTBOX         IDC_CONNECT_LIST,2,9,65,59,LBS_NOINTEGRALHEIGHT | LBS_NOSEL | WS_VSCROLL | WS_TABSTOP
+    LISTBOX         IDC_CONNECT_LIST,2,9,65,59,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_SOUNDS_DIALOG DIALOG 0, 0, 164, 95

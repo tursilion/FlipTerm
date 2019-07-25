@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "Macro.h"
+#include "gmud32vw.h"
 
 CMacro::CMacro()
 {
@@ -21,8 +22,7 @@ CSelectable *CMacro::CreateCopy()
 	return pMac;
 }
 
-
-int CMacro::OnActivate(CMudView &rView, CWorld &rWorld)
+int CMacro::OnActivate(CMudView &rView, CWorld & /*rWorld*/)
 {
   m_sText.TrimLeft();
   m_sText.TrimRight();

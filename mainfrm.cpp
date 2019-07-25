@@ -27,6 +27,8 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 //#define DOCKINGMODE DT_STANDARD
 //#define DOCKINGMODE DT_IMMEDIATE
 
+extern CMenu *pMainMenu;
+
 IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWndEx)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
@@ -156,16 +158,24 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	EnableMDITabbedGroups(TRUE, mdiTabParams);
 #endif
 
+#if 0
 	if (!m_wndMenuBar.Create(this))
 	{
 		TRACE0("Failed to create menubar\n");
 		return -1;      // fail to create
 	}
-
 	m_wndMenuBar.SetPaneStyle(m_wndMenuBar.GetPaneStyle() | CBRS_SIZE_DYNAMIC | CBRS_TOOLTIPS | CBRS_FLYBY);
 
 	// prevent the menu bar from taking the focus on activation
 	CMFCPopupMenu::SetForceMenuFocus(FALSE);
+#else
+    pMainMenu = new CMenu();
+    pMainMenu->LoadMenu(IDR_MAINFRAME);
+    SetMenu(NULL);
+    ::DestroyMenu(m_hMenuDefault);
+    SetMenu(pMainMenu);
+    m_hMenuDefault = pMainMenu->GetSafeHmenu();
+#endif
 
 	if (!m_wndNumbers.Create(this, WS_CHILD | WS_VISIBLE | CBRS_TOP, ID_VIEW_WINDOWBAR) ||
 		!m_wndNumbers.LoadBitmap(IDB_NUMBERS) ||
@@ -219,7 +229,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 	m_bConnectedVisible=TRUE;
 
-    m_wndMenuBar.EnableDocking(CBRS_ALIGN_ANY);
+//  m_wndMenuBar.EnableDocking(CBRS_ALIGN_ANY);  // if it's not dockable, it acts like a normal menubar...
 	m_wndNumbers.EnableDocking(CBRS_ALIGN_ANY);
 	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
 	m_wndMacroBar.EnableDocking(CBRS_ALIGN_ANY);
@@ -228,7 +238,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	EnableDocking(CBRS_ALIGN_ANY);
 
 	// new docking
-	DockPane(&m_wndMenuBar);
+//	DockPane(&m_wndMenuBar);    // if it's not dockable, it acts like a normal menubar...
 	DockPane(&m_wndToolBar);
 	DockPane(&m_wndNumbers);
     DockPane(&m_wndConnected);
@@ -442,9 +452,8 @@ void CMainFrame::OnClose()
 	SaveBarState(AfxGetAppName());
 	
 	// Write out the URL history
-	CMenu *pMenu=GetApp()->m_pMainWnd->GetMenu();
-	if (pMenu) {
-		pMenu=pMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
+	if (pMainMenu) {
+		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
 		if (pMenu) {
 			CString csTmp, csTmp2;
 			int idx2=1;
@@ -718,7 +727,6 @@ int CMainFrame::UpdateWorlds()
 
 afx_msg LONG CMainFrame::OnViewSelected(UINT,LONG /*lParam*/)
 {
-	UpdateButtons();
 	UpdateWorlds();
 	return TRUE;
 }
