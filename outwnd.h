@@ -30,6 +30,8 @@ public:
 	void ColorString(CString *pStr, int nCol);
 	void ParseColor(CString *pStr, int nColored);
 
+    BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+
 	int GetNCols() { return m_nCols; }
 	int GetOffset() { return m_iOffset; }
 	void ScrollTo(int nPos) { OnVScroll(SB_THUMBPOSITION, nPos, NULL); }

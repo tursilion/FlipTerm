@@ -49,17 +49,18 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
 	ON_COMMAND(ID_EDIT_ALIASLIST, OnEditAliaslist)
 	ON_BN_CLICKED(IDC_MACROBTN1, OnButton1)
 	ON_WM_TIMER()
-	ON_COMMAND_EX(ID_VIEW_MACROWINDOW, OnBarCheck)
-	ON_COMMAND_EX(ID_VIEW_WINDOWBAR, OnBarCheck)
-	ON_COMMAND_EX(ID_VIEW_WORLDWINDOW, OnBarCheck)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_MACROWINDOW,OnUpdateControlBarMenu)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_WINDOWBAR,OnUpdateControlBarMenu)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_WORLDWINDOW,OnUpdateControlBarMenu)
     ON_COMMAND(ID_WINDOW_MANAGER, &CMainFrame::OnWindowManager)
 	ON_COMMAND(ID_VIEW_CUSTOMIZE, &CMainFrame::OnViewCustomize)
 	ON_REGISTERED_MESSAGE(AFX_WM_CREATETOOLBAR, &CMainFrame::OnToolbarCreateNew)
-	ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnApplicationLook)
-	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnUpdateApplicationLook)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_MACROWINDOW,&CMainFrame::OnUpdateControlBarMenu)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_WINDOWBAR,&CMainFrame::OnUpdateControlBarMenu)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_WORLDWINDOW,&CMainFrame::OnUpdateControlBarMenu)
+    ON_UPDATE_COMMAND_UI(ID_VIEW_TOOLBAR_MENU, &CMainFrame::OnUpdateControlBarMenu)
+    ON_COMMAND(ID_VIEW_WINDOWBAR, &CMainFrame::OnViewWindowbar)
+    ON_COMMAND(ID_VIEW_MACROWINDOW, &CMainFrame::OnViewMacrowindow)
+    ON_COMMAND(ID_VIEW_WORLDWINDOW, &CMainFrame::OnViewWorldwindow)
+    ON_COMMAND(ID_VIEW_TOOLBAR_MENU, &CMainFrame::OnViewToolbarMenu)
+    ON_WM_INITMENUPOPUP()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -130,7 +131,6 @@ static UINT BASED_CODE indicators[] =
 
 CMainFrame::CMainFrame()
 {
-	theApp.m_nAppLook = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_WIN_XP);
 	m_bMacrosVisible=FALSE;	
 	m_bConnectedVisible=FALSE;
 	nTimer=0;
@@ -209,9 +209,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         m_wndStatusBar.GetPaneInfo(0, Id, Style, Width);
 	    m_wndStatusBar.SetPaneInfo(0, Id, SBPS_STRETCH, 200);
     }
-    m_wndStatusBar.SetPaneInfo(1, IDOK, SBPS_NORMAL, 100);
-	m_wndStatusBar.SetPaneInfo(2, IDCANCEL, SBPS_NORMAL, 50);
-	m_wndStatusBar.SetPaneInfo(3, IDRETRY, SBPS_NORMAL, 45);
+    m_wndStatusBar.SetPaneInfo(1, IDOK, SBPS_NORMAL, 100);      // lines
+	m_wndStatusBar.SetPaneInfo(2, IDCANCEL, SBPS_NORMAL, 70);   // connect timer
+	m_wndStatusBar.SetPaneInfo(3, IDRETRY, SBPS_NORMAL, 80);    // MORE prompt
 	nTimer=SetTimer(1, 1000, NULL);
 	
     DWORD myDockStyle = AFX_CBRS_FLOAT | AFX_CBRS_CLOSE;     // no tabs, no auto-hide, no resize, no rollup
@@ -229,37 +229,27 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 	m_bConnectedVisible=TRUE;
 
-//  m_wndMenuBar.EnableDocking(CBRS_ALIGN_ANY);  // if it's not dockable, it acts like a normal menubar...
-	m_wndNumbers.EnableDocking(CBRS_ALIGN_ANY);
-	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
-	m_wndMacroBar.EnableDocking(CBRS_ALIGN_ANY);
-	m_wndConnected.EnableDocking(CBRS_ALIGN_ANY);
-
+    // enable docking on the window anywhere
 	EnableDocking(CBRS_ALIGN_ANY);
-
-	// new docking
-//	DockPane(&m_wndMenuBar);    // if it's not dockable, it acts like a normal menubar...
-	DockPane(&m_wndToolBar);
-	DockPane(&m_wndNumbers);
-    DockPane(&m_wndConnected);
-    DockPane(&m_wndMacroBar);
-
 	// enable docking window behavior
 	CDockingManager::SetDockingMode(DOCKINGMODE);
-	// enable Visual Studio 2005 style docking window auto-hide behavior
-	//EnableAutoHidePanes(CBRS_ALIGN_ANY);
-	// set the visual manager and style based on persisted value
-	OnApplicationLook(theApp.m_nAppLook);
 
-#if 0
-    // Enable toolbar and docking window menu replacement
-    // This allows automatic population of show/hide but only for
-    // the two toolbars, it's no good for the other windows we show/hide
-    // Figure out how to make OnBarCheck and OnUpdateControlBarMenu work for us.
-    m_wndToolBar.SetWindowText("Toolbar");
-    m_wndNumbers.SetWindowTextA("Numbers");
-	EnablePaneMenu(TRUE, 0, "", ID_TOOLBARS_PLACEHOLDER, FALSE, FALSE);
-#endif
+    // Set up the docking - force some defaults then allow any
+//  m_wndMenuBar.EnableDocking(CBRS_ALIGN_ANY);  // if it's not dockable, it acts like a normal menubar...
+//	DockPane(&m_wndMenuBar);    // if it's not dockable, it acts like a normal menubar...
+
+    m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
+	m_wndMacroBar.EnableDocking(CBRS_ALIGN_ANY);
+	m_wndNumbers.EnableDocking(CBRS_ALIGN_LEFT);
+	m_wndConnected.EnableDocking(CBRS_ALIGN_LEFT);
+
+    DockPane(&m_wndNumbers);
+	m_dockManager.DockPaneLeftOf(&m_wndToolBar, &m_wndNumbers);
+    DockPane(&m_wndConnected);
+    DockPane(&m_wndMacroBar);
+	
+    m_wndNumbers.EnableDocking(CBRS_ALIGN_ANY);
+	m_wndConnected.EnableDocking(CBRS_ALIGN_ANY);
 
     // enable quick (Alt+drag) toolbar customization
 	CMFCToolBar::EnableQuickCustomization();
@@ -332,84 +322,6 @@ LRESULT CMainFrame::OnToolbarCreateNew(WPARAM wp,LPARAM lp)
 	return lres;
 }
 
-void CMainFrame::OnApplicationLook(UINT id)
-{
-	// this seems silly... right now we don't let the user change it, though they
-    // could in the registry, I guess :)
-	CWaitCursor wait;
-
-	theApp.m_nAppLook = id;
-
-	switch (theApp.m_nAppLook)
-	{
-	case ID_VIEW_APPLOOK_WIN_2000:
-		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManager));
-		break;
-
-	case ID_VIEW_APPLOOK_OFF_XP:
-		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerOfficeXP));
-		break;
-
-	case ID_VIEW_APPLOOK_WIN_XP:
-		CMFCVisualManagerWindows::m_b3DTabsXPTheme = TRUE;
-		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerWindows));
-		break;
-
-	case ID_VIEW_APPLOOK_OFF_2003:
-		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerOffice2003));
-		CDockingManager::SetDockingMode(DOCKINGMODE);
-		break;
-
-	case ID_VIEW_APPLOOK_VS_2005:
-		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerVS2005));
-		CDockingManager::SetDockingMode(DOCKINGMODE);
-		break;
-
-	case ID_VIEW_APPLOOK_VS_2008:
-		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerVS2008));
-		CDockingManager::SetDockingMode(DOCKINGMODE);
-		break;
-
-	case ID_VIEW_APPLOOK_WINDOWS_7:
-		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerWindows7));
-		CDockingManager::SetDockingMode(DOCKINGMODE);
-		break;
-
-	default:
-		switch (theApp.m_nAppLook)
-		{
-		case ID_VIEW_APPLOOK_OFF_2007_BLUE:
-			CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_LunaBlue);
-			break;
-
-		case ID_VIEW_APPLOOK_OFF_2007_BLACK:
-			CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_ObsidianBlack);
-			break;
-
-		case ID_VIEW_APPLOOK_OFF_2007_SILVER:
-			CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_Silver);
-			break;
-
-		case ID_VIEW_APPLOOK_OFF_2007_AQUA:
-			CMFCVisualManagerOffice2007::SetStyle(CMFCVisualManagerOffice2007::Office2007_Aqua);
-			break;
-		}
-
-		CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerOffice2007));
-		CDockingManager::SetDockingMode(DOCKINGMODE);
-	}
-
-	RedrawWindow(NULL, NULL, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_FRAME | RDW_ERASE);
-
-	theApp.WriteInt(_T("ApplicationLook"), theApp.m_nAppLook);
-}
-
-void CMainFrame::OnUpdateApplicationLook(CCmdUI* pCmdUI)
-{
-	pCmdUI->SetRadio(theApp.m_nAppLook == pCmdUI->m_nID);
-}
-
-
 BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParentWnd, CCreateContext* pContext)
 {
 	// base class does the real work
@@ -452,20 +364,13 @@ void CMainFrame::OnClose()
 	SaveBarState(AfxGetAppName());
 	
 	// Write out the URL history
-	if (pMainMenu) {
-		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-		if (pMenu) {
-			CString csTmp, csTmp2;
-			int idx2=1;
+    {
+		CString csTmp, csTmp2;
 
-			// Read and save each URL string
-			int nCnt=pMenu->GetMenuItemCount();
-			for (int idx=0; idx<nCnt; idx++) {
-				pMenu->GetMenuString(idx, csTmp, MF_BYPOSITION);
-				if (csTmp == "") continue;
-				csTmp2.Format("URL%d", idx2++);
-				GetApp()->WriteProfileString("URLs", csTmp2, csTmp);
-			}
+		// save each URL string
+		for (int idx=0; idx<10; idx++) {
+			csTmp2.Format("URL%d", idx+1);
+			GetApp()->WriteProfileString("URLs", csTmp2, menuItems[idx]);
 		}
 	}
 
@@ -793,12 +698,63 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 	CMDIFrameWndEx::OnTimer(nIDEvent);
 }
 
+// The View->XXX toggles
+
+// The menu checkbox handler is shared, and we don't do status as it's automatic
 void CMainFrame::OnUpdateControlBarMenu(CCmdUI* pCmdUI)
 {
-    CFrameWnd::OnUpdateControlBarMenu( pCmdUI );
+    // display the check mark in the menu if needed
+    switch (pCmdUI->m_nID) {
+        case ID_VIEW_MACROWINDOW:
+            pCmdUI->SetCheck(m_wndMacroBar.IsWindowVisible());
+            break;
+
+        case ID_VIEW_WINDOWBAR:
+            pCmdUI->SetCheck(m_wndNumbers.IsWindowVisible());
+            break;
+
+        case ID_VIEW_WORLDWINDOW:
+            pCmdUI->SetCheck(m_wndConnected.IsWindowVisible());
+            break;
+
+        case ID_VIEW_TOOLBAR_MENU:
+            pCmdUI->SetCheck(m_wndToolBar.IsWindowVisible());
+            break;
+
+        default:
+            OutputDebugString("Got unknown view command");
+    }
 }
 
-BOOL CMainFrame::OnBarCheck(UINT nID)
-{
-    return CFrameWnd::OnBarCheck( nID );
+// The actual window toggles are distinct
+void CMainFrame::OnViewToolbarMenu() {
+    m_wndToolBar.ShowPane(!m_wndToolBar.IsWindowVisible(), FALSE, FALSE);
+}
+void CMainFrame::OnViewWindowbar() {
+    m_wndNumbers.ShowPane(!m_wndNumbers.IsWindowVisible(), FALSE, FALSE);
+}
+void CMainFrame::OnViewMacrowindow() {
+    m_wndMacroBar.ShowPane(!m_wndMacroBar.IsWindowVisible(), FALSE, FALSE);
+}
+void CMainFrame::OnViewWorldwindow() {
+    m_wndConnected.ShowPane(!m_wndConnected.IsWindowVisible(), FALSE, FALSE);
+}
+
+// populates the URL menu during popup
+afx_msg void CMainFrame::OnInitMenuPopup(CMenu *pMenu, UINT menuIdx, BOOL bSysMenu) {
+    // Not sure why the index is -1 here, but it is.
+    if ((!bSysMenu)&&(menuIdx == URL_MENU_INDEX)) {
+        for (int idx=0; idx<10; ++idx) {
+            if (menuItems[idx].IsEmpty()) {
+                if (pMenu->GetMenuItemCount() < idx+1) break;
+                pMenu->RemoveMenu(idx, MF_BYPOSITION);
+            } else {
+                if (pMenu->GetMenuItemCount() < idx+1) {
+                    pMenu->AppendMenu(MF_ENABLED, ID_URL_1+idx, menuItems[idx]);
+                } else {
+                    pMenu->ModifyMenu(idx, MF_BYPOSITION|MF_ENABLED, ID_URL_1+idx, menuItems[idx]);
+                }
+            }
+        }
+    }
 }

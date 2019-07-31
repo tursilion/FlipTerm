@@ -6,6 +6,7 @@
 #include "textfrmt.h"
 #define END_OF_LINE '\n'
 
+// returns how many characters the current ANSI sequence is (0 for end, 1 for non-ANSI sequence)
 int MyAnsiNext(LPCSTR pStr)
 {
 	if(!*pStr)
@@ -49,6 +50,10 @@ abort:
 	
 }
 
+// return the number of printable characters till the end of the line
+// takes the width into account ('columns')
+// This does not seem to be used anywhere but Ansimemcpy anymore, so 'columns=80'
+// is probably misleading.
 int AnsiChars(LPCSTR str, int columns /* = 80 */)
 {
 	int charat=0;
@@ -67,10 +72,14 @@ int AnsiChars(LPCSTR str, int columns /* = 80 */)
 	return (str-strstart);
 }
 
+// copies a string from src to dest starting at first, for length printable characters
+// strips out all ANSI codes
 int Ansimemcpy(LPSTR pDest,LPCSTR pSrc,int iFirstChar,int iLength)
 {
-	if(iFirstChar)
+	if(iFirstChar) {
+        // skip processing of a previous line
 		pSrc+=AnsiChars(pSrc,iFirstChar);
+    }
 	int charat=0;
 	while(*pSrc && charat < iLength)
 	{

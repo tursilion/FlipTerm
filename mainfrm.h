@@ -42,7 +42,6 @@ public:
 	CConnectedBar *GetWndConnected() { return &m_wndConnected; }
 
     void OnUpdateControlBarMenu(CCmdUI* pCmdUI);
-    BOOL OnBarCheck(UINT nID);
 
     // this gives me a CMenu object to the m_wndMenuBar (once its created)
 	CMFCMenuBar     m_wndMenuBar;
@@ -83,6 +82,13 @@ protected:
 	afx_msg void OnButton1();
 	afx_msg void OnTimer(UINT nIDEvent);
 	DECLARE_MESSAGE_MAP()
+public:
+    afx_msg void OnViewToolbarMenu();
+    afx_msg void OnUpdateViewToolbarMenu(CCmdUI *pCmdUI);
+    afx_msg void OnViewWindowbar();
+    afx_msg void OnViewMacrowindow();
+    afx_msg void OnViewWorldwindow();
+    afx_msg void OnInitMenuPopup(CMenu*, UINT, BOOL);
 };
 
 /////////////////////////////////////////////////////////////////////////////

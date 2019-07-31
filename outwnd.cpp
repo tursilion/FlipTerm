@@ -33,6 +33,7 @@ BEGIN_MESSAGE_MAP(COutWnd, CWnd)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
+	ON_WM_MOUSEWHEEL()
 	ON_WM_TIMER()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -392,14 +393,14 @@ void COutWnd::ColorString(CString *pStr, int nCol) {
 
 int COutWnd::PutString(char * minstr, int InPaused, int Is7Bit)
 {
+    static unsigned char cstr[BUFFSIZE];    // static to avoid allocations
 	CString CStrOut;
-	unsigned char *cstr = new unsigned char[BUFFSIZE];
 	unsigned char *instr, *pLastBreak, *pLastBroken;
 	unsigned char *str;
 	int colored, nCharat, nMaxChars;
 	bool fEndOfLine;
 
-	static int nLineCount=0;	// to reduce hogging the CPU, we sleep briefly every 20 lines scrolled (any 20)
+	static int nLineCount=0;	// to reduce hogging the CPU, we sleep briefly every 40 lines scrolled (any 40)
 
 	if (!*minstr) {
 		delete minstr;
@@ -493,7 +494,7 @@ int COutWnd::PutString(char * minstr, int InPaused, int Is7Bit)
 
 			UpdateWindow();
 			nLineCount++;
-			if (nLineCount >= 20) {
+			if (nLineCount >= 40) {
 				Sleep(1);				// Gives windows a chance to run
 				nLineCount=0;
 			}
@@ -554,7 +555,6 @@ int COutWnd::PutString(char * minstr, int InPaused, int Is7Bit)
 
 	textLock.Unlock();
 
-	delete cstr;
 	free(minstr);
 	return true;
 }
@@ -1225,3 +1225,19 @@ void COutWnd::ParseColor(CString *pInStr, int nColored)
 
 	*pInStr=pOut;
 }
+
+#define STEP 20
+BOOL COutWnd::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) {
+	int tPos;
+	CMudView *pView;
+
+	pView=(CMudView*)(GetParent());
+	if (pView) {
+		tPos=pView->m_pOutWnd->GetScrollPos(SB_VERT);
+		tPos-=(zDelta/STEP);
+		pView->m_pOutWnd->ScrollTo(tPos);
+	}
+
+	return CWnd::OnMouseWheel(nFlags, zDelta, pt);
+}
+

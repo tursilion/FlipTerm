@@ -503,18 +503,17 @@ void CMudView::OnUpdateServerDisconnect(CCmdUI* pCmdUI)
 	pCmdUI->Enable(m_pSocket->IsConnected() || m_bConnectionPending);
 }
 
+// process an inbound message on lparam, which must be freed
 afx_msg LONG CMudView::OnStringReceived(UINT ,LONG lparam)
 {
+	static char pStripped[BUFFSIZE];  // large work buffer, static to avoid reallocating
 	LPSTR pStr = (LPSTR)lparam;
-	LPSTR pStripped;
 	char *buffer;
 	CMudDoc *pDoc = (CMudDoc *)GetDocument();
 	int idx, fCR;
 	bool ret=false;		// set to true if consumed
 	char *ptr;
 	CString csOut;
-
-	pStripped=(char*)malloc(BUFFSIZE);
 
 	// work the string one line at a time
 	// fix up end of lines, ensure they are always \n and nothing else
@@ -670,11 +669,13 @@ afx_msg LONG CMudView::OnStringReceived(UINT ,LONG lparam)
 					}
 					// strip some likely bad characters
 					char tmpstr[33];
-					int idx2;
-					for (idx2=0; idx2<31; idx2++) {
-						tmpstr[idx2]=(char)(idx2+1);
-					}
-					tmpstr[idx2]='\0';
+                    {
+                        int idx2;
+					    for (idx2=0; idx2<31; idx2++) {
+						    tmpstr[idx2]=(char)(idx2+1);
+					    }
+					    tmpstr[idx2]='\0';
+                    }
 					y=csTmp.FindOneOf(tmpstr);
 					if (y != -1) {
 						csTmp=csTmp.Left(y);
@@ -688,38 +689,32 @@ afx_msg LONG CMudView::OnStringReceived(UINT ,LONG lparam)
 						csTmp="http://" + csTmp;
 					}
 
-					// Okay, now we have a URL, we need to add it to the menu.
-                    // Still not working.. the menu seems to contain all the URLs but it's not showing up...
-					if ((csTmp != "") && (pMainMenu)) {
-						CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-						if (pMenu) {
-							CString csTmp2;
+					// Okay, now we have a URL, we need to add it to the menu item list
+					if (csTmp != "") {
+						// Check whether we already have this one in the menu
+						bool fFlag=true;
+                        for (int idx2=0; idx2<10; ++idx2) {
+                            if (menuItems[idx2].IsEmpty()) {
+                                // add it here and finish
+                                menuItems[idx2] = csTmp;
+                                fFlag = false;
+                                break;
+                            }
+                            if (menuItems[idx2].Compare(csTmp) == 0) {
+                                fFlag=false;
+                                break;
+                            }
+                        }
 
-							// Check whether we already have this one in the menu
-							int nCnt=pMenu->GetMenuItemCount();
-							bool fFlag=true;
-							for (int menuidx=0; menuidx<nCnt; menuidx++) {
-								pMenu->GetMenuString(menuidx, csTmp2, MF_BYPOSITION);
-								if (!csTmp.Compare(csTmp2)) {
-									fFlag=false;
-									break;
-								}
-							}
-
-							// fFlag is true if we want to add it
-							if (fFlag) {
-								DWORD id=nCnt+ID_URL_1;
-								// If there are more than 10 URLs, scroll the top one off
-								if (nCnt>9) {
-									id=pMenu->GetMenuItemID(0);
-									if (id == 0) id=ID_URL_1;		// handle the separator
-									pMenu->RemoveMenu(0, MF_BYPOSITION);
-								}
-								// Now add the new one to the bottom
-								pMenu->AppendMenu(MF_ENABLED, id, csTmp);
-                                pMainFrame->DrawMenuBar();
-							}
-						}
+						// fFlag is true if we want to add it (and the list is full)
+						if (fFlag) {
+                            // scroll the list up
+                            for (int idx2=0; idx2<9; ++idx2) {
+                                menuItems[idx2] = menuItems[idx2+1];
+                            }
+                            // add the new one
+                            menuItems[9] = csTmp;
+                        }
 					}
 				}
 			}
@@ -782,6 +777,9 @@ afx_msg LONG CMudView::OnStringReceived(UINT ,LONG lparam)
 				}
 			}
 
+            // we have to malloc a new buffer for the output window to free
+            // it's kind of amazing all these allocs and temp strings ran as well
+            // as it did, eh? ;)
 			buffer=(char*)malloc(BUFFSIZE);
 			int tmpLen=csOut.GetLength()>BUFFSIZE-1 ? BUFFSIZE-1 : csOut.GetLength();
 			memcpy(buffer, (LPCSTR)csOut, tmpLen);
@@ -807,7 +805,6 @@ afx_msg LONG CMudView::OnStringReceived(UINT ,LONG lparam)
 	CMainFrame *pFrame = (CMainFrame *)AfxGetMainWnd();
 	pFrame->UpdateWorlds();
 	free(pStr);
-	free(pStripped);
 	return TRUE;
 }
 
@@ -989,6 +986,7 @@ long CMudView::ProcessOneLine(bool bSystem, CString sStr)
 	if (m_pWorld) {
 		if ((m_pWorld->m_bIsIRC) && (!bSystem) && (GetApp()->m_bEcho)) {
 			// IRC won't echo your formatted command back, so just pretend it did by running it through the parser
+            // We must allocate pTmpStr because OnStringReceived needs to free it
 			char *pTmpStr=(char*)malloc(sStr.GetLength() + m_pWorld->m_csNick.GetLength() + 6);
 			strcpy(pTmpStr, ":");
 			strcat(pTmpStr, m_pWorld->m_csNick);

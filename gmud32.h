@@ -18,6 +18,7 @@ const HANDLE TheHeap=GetProcessHeap();	// Our shared memory heap
 #define free(x) HeapFree(TheHeap, 0, x)
 
 #define URL_MENU_INDEX 5
+extern CString menuItems[10];
 
 extern bool g_ClosingApp;
 
@@ -39,7 +40,6 @@ public:
 	virtual int ExitInstance();
 
 // Implementation
-	UINT  m_nAppLook;
 	BOOL  m_bHiColorIcons;
 
 	virtual void PreLoadState();

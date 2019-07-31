@@ -1727,7 +1727,13 @@ WHAT'S NEW:
 -Updated to new MFC
 -Removed MCP support and plugins
 -Removed 'script' system
+-Mouse wheel works on output window
 
 TODO:
--Smart window tiling
 -Word wrap fits the window even when resized
+    -I think we'll just do it hacky - maintain two lists. One contains the strings as received 
+    (and maybe color formatted), the other contains the word-wrapped versions. The latter is 
+    regenerated from the former on window resize.
+
+
+

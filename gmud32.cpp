@@ -35,6 +35,9 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
+// yeah.. global, whatever...
+CString menuItems[10];
+
 void StartupThread(void *pDat);
 
 BEGIN_MESSAGE_MAP(CMudApp, CWinAppEx)
@@ -97,20 +100,14 @@ class CAboutDlg : public CDialog
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
 	enum { IDD = IDD_ABOUTBOX };
-	CButton	m_btn2;
-	//}}AFX_DATA
 
 // Implementation
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//{{AFX_MSG(CAboutDlg)
 	virtual BOOL OnInitDialog();
-	afx_msg void OnURLBtn2();
-	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
 };
 
 BOOL CAboutDlg::OnInitDialog() 
@@ -124,32 +121,15 @@ BOOL CAboutDlg::OnInitDialog()
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	DDX_Control(pDX, IDC_BUTTON2, m_btn2);
-	//}}AFX_DATA_MAP
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-	ON_BN_CLICKED(IDC_BUTTON2, OnURLBtn2)
-	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
-
-void CAboutDlg::OnURLBtn2() 
-{
-	char url[512];
-
-	m_btn2.GetWindowText(url, 512);
-
-	ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWDEFAULT);
-}
 
 /////////////////////////////////////////////////////////////////////////////
 // CMudApp construction
@@ -415,31 +395,20 @@ BOOL CMudApp::InitInstance()
 	pMainFrame->ShowWindow(m_nCmdShow);
 	pMainFrame->UpdateWindow();
 
-	// URL history
-	if (pMainMenu) {
-		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-		if (pMenu) {
-			CString csTmp, csTmp2;
+	// URL history - for now just load it into an array
+    {
+		CString csTmp, csTmp2;
 
-			// Read and add each URL string, till there are no more
-			for (int idx=0; idx<10; idx++) {
-				csTmp2.Format("URL%d", idx+1);
-				csTmp=GetApp()->GetProfileString("URLs", csTmp2);
-				if (csTmp=="") break;
-				// There's a separator bar by default in the dropdown, used
-				// to help the menu work when empty. If there are any valid items,
-				// we remove it now to prevent problems later when we wrap
-				if (idx == 0) {
-					pMenu->RemoveMenu(0, MF_BYPOSITION);
-				}
-                // MF_STRING is 0, so it's optional to specify it...
-				pMenu->AppendMenu(MF_ENABLED|MF_STRING, ID_URL_1+idx, csTmp);
-			}
-            pMainFrame->DrawMenuBar();
+		// Read and add each URL string, till there are no more
+		for (int idx=0; idx<10; idx++) {
+			csTmp2.Format("URL%d", idx+1);
+			csTmp=GetApp()->GetProfileString("URLs", csTmp2);
+			if (csTmp=="") break;
+            menuItems[idx] = csTmp;
 		}
 	}
 
-	CWorld *pWorld = NULL;
+    CWorld *pWorld = NULL;
 	bool firstWindow=true;
 	// Enumerate through the loaded worlds and see which ones we need to connect
 	for (int idx=0; idx < pDoc->m_aWorlds.GetSize(); idx++) {
@@ -636,133 +605,83 @@ void CMudApp::OnAppAbout()
 
 void CMudApp::OnURL1()
 {
-	CString csTmp;
+    const int index = 0;
 
-	if (pMainMenu) {
-		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-		if (pMenu) {
-			pMenu->GetMenuString(ID_URL_1, csTmp, MF_BYCOMMAND);
-			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
-		}
+    if (!menuItems[index].IsEmpty()) {
+    	ShellExecute(NULL, "open", menuItems[index], NULL, NULL, SW_SHOWNORMAL);
 	}
-
 }
 void CMudApp::OnURL2()
 {
-	CString csTmp;
+    const int index = 1;
 
-	if (pMainMenu) {
-		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-		if (pMenu) {
-			pMenu->GetMenuString(ID_URL_2, csTmp, MF_BYCOMMAND);
-			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
-		}
+    if (!menuItems[index].IsEmpty()) {
+    	ShellExecute(NULL, "open", menuItems[index], NULL, NULL, SW_SHOWNORMAL);
 	}
-
 }
 void CMudApp::OnURL3()
 {
-	CString csTmp;
+    const int index = 2;
 
-	if (pMainMenu) {
-		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-		if (pMenu) {
-			pMenu->GetMenuString(ID_URL_3, csTmp, MF_BYCOMMAND);
-			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
-		}
+    if (!menuItems[index].IsEmpty()) {
+    	ShellExecute(NULL, "open", menuItems[index], NULL, NULL, SW_SHOWNORMAL);
 	}
-
 }
 void CMudApp::OnURL4()
 {
-	CString csTmp;
+    const int index = 3;
 
-	if (pMainMenu) {
-		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-		if (pMenu) {
-			pMenu->GetMenuString(ID_URL_4, csTmp, MF_BYCOMMAND);
-			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
-		}
+    if (!menuItems[index].IsEmpty()) {
+    	ShellExecute(NULL, "open", menuItems[index], NULL, NULL, SW_SHOWNORMAL);
 	}
-
 }
 void CMudApp::OnURL5()
 {
-	CString csTmp;
+    const int index = 4;
 
-	if (pMainMenu) {
-		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-		if (pMenu) {
-			pMenu->GetMenuString(ID_URL_5, csTmp, MF_BYCOMMAND);
-			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
-		}
+    if (!menuItems[index].IsEmpty()) {
+    	ShellExecute(NULL, "open", menuItems[index], NULL, NULL, SW_SHOWNORMAL);
 	}
-
 }
 void CMudApp::OnURL6()
 {
-	CString csTmp;
+    const int index = 5;
 
-	if (pMainMenu) {
-		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-		if (pMenu) {
-			pMenu->GetMenuString(ID_URL_6, csTmp, MF_BYCOMMAND);
-			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
-		}
+    if (!menuItems[index].IsEmpty()) {
+    	ShellExecute(NULL, "open", menuItems[index], NULL, NULL, SW_SHOWNORMAL);
 	}
-
 }
 void CMudApp::OnURL7()
 {
-	CString csTmp;
+    const int index = 6;
 
-	if (pMainMenu) {
-		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-		if (pMenu) {
-			pMenu->GetMenuString(ID_URL_7, csTmp, MF_BYCOMMAND);
-			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
-		}
+    if (!menuItems[index].IsEmpty()) {
+    	ShellExecute(NULL, "open", menuItems[index], NULL, NULL, SW_SHOWNORMAL);
 	}
-
 }
 void CMudApp::OnURL8()
 {
-	CString csTmp;
+    const int index = 7;
 
-	if (pMainMenu) {
-		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-		if (pMenu) {
-			pMenu->GetMenuString(ID_URL_8, csTmp, MF_BYCOMMAND);
-			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
-		}
+    if (!menuItems[index].IsEmpty()) {
+    	ShellExecute(NULL, "open", menuItems[index], NULL, NULL, SW_SHOWNORMAL);
 	}
-
 }
 void CMudApp::OnURL9()
 {
-	CString csTmp;
+    const int index = 8;
 
-	if (pMainMenu) {
-		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-		if (pMenu) {
-			pMenu->GetMenuString(ID_URL_9, csTmp, MF_BYCOMMAND);
-			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
-		}
+    if (!menuItems[index].IsEmpty()) {
+    	ShellExecute(NULL, "open", menuItems[index], NULL, NULL, SW_SHOWNORMAL);
 	}
-
 }
 void CMudApp::OnURL10()
 {
-	CString csTmp;
+    const int index = 9;
 
-	if (pMainMenu) {
-		CMenu *pMenu=pMainMenu->GetSubMenu(URL_MENU_INDEX);		// fixed location (URLs)
-		if (pMenu) {
-			pMenu->GetMenuString(ID_URL_10, csTmp, MF_BYCOMMAND);
-			ShellExecute(NULL, "open", csTmp, NULL, NULL, SW_SHOWNORMAL);
-		}
+    if (!menuItems[index].IsEmpty()) {
+    	ShellExecute(NULL, "open", menuItems[index], NULL, NULL, SW_SHOWNORMAL);
 	}
-
 }
 
 void CMudApp::OnSave()

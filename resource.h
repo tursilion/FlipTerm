@@ -222,6 +222,12 @@
 #define ID_VIEW_TOOLBAR_MENU            32832
 #define ID_OPTIONS                      32836
 #define ID_VIEW_WINDOWBAR               32837
+#define ID_WINDOW_CASCADE32838          32838
+#define ID_WINDOW_TILESMART             32839
+#define ID_WINDOW_TILEVERTICAL32840     32840
+#define ID_WINDOW_TILEHORIZONTAL        32841
+#define ID_WINDOW_ARRANGE32842          32842
+#define ID_WINDOW_TILE_HORIZ            32843
 #define ID_VIEW_MACROWINDOW             0xE830
 #define ID_VIEW_WORLDWINDOW             0xE831
 #define ID_DIRECT_CONNECT               61216
@@ -254,8 +260,8 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        312
-#define _APS_NEXT_COMMAND_VALUE         32838
+#define _APS_NEXT_RESOURCE_VALUE        313
+#define _APS_NEXT_COMMAND_VALUE         32844
 #define _APS_NEXT_CONTROL_VALUE         1115
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
