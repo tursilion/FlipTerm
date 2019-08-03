@@ -9,6 +9,8 @@ I wrote this when GMUD stopped working on my Windows 2000 machine, and used it a
 
 Download the latest release installer here: [https://github.com/tursilion/flipterm/raw/master/dist/InstallFlipTerm.exe](https://github.com/tursilion/flipterm/raw/master/dist/InstallFlipTerm.exe)
 
+1.12.0 removes a few old features that were never fully used. In particular, MCP support and plugins were removed.
+
 Note if you install the new 1.12.0 overtop of an old install, it will leave some tailings behind (old source, old docs, old plugins). You can either delete these manually, or uninstall BEFORE you install the new one. To preserve your settings:
 
 - Use File->Export Settings to save a copy of your settings. Check the exported reg file in Notepad to make sure it's not empty!
