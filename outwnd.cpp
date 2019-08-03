@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(COutWnd, CWnd)
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEWHEEL()
 	ON_WM_TIMER()
+    ON_MESSAGE(WM_USER+3, handleReformat)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -67,7 +68,7 @@ unsigned long defcolormap[16]=	// default colors
 unsigned long colormap[16];
 
 // Local functions for handling color
-int SkipColor(unsigned char *ptr) {
+int SkipColor(const unsigned char *ptr) {
 	if (((*ptr)&0xff) == 0xff) { 
 		return 2;
 	} else {
@@ -294,10 +295,43 @@ void COutWnd::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	SetScrollPos(SB_VERT,m_Lines.GetCount()-m_iOffset,TRUE);
 }
 
+afx_msg LRESULT COutWnd::handleReformat(WPARAM, LPARAM) {
+    reformatAll();
+    return 0;
+}
+
+// reformats all data in m_rawLines for m_Lines per the current configuration
+void COutWnd::reformatAll() {
+    // wipe the output queue
+    m_bLastEOL = true;
+    m_Lines.RemoveAll();
+
+    // determine whether we're processing in 7 bit mode
+    bool is7bit = true;
+    CMudView *pView;
+	pView=(CMudView*)(GetParent());
+   	if ((pView)&&(pView->m_pWorld)) {
+		if (!pView->m_pWorld->m_bIs7Bit) {
+            is7bit = false;
+        }
+    }
+
+    // reprocess the rawLines buffer
+    POSITION pos = m_rawLines.GetTailPosition();
+    for (int idx = 0; idx < m_rawLines.GetCount(); ++idx) {
+        // refill the buffer - last argument prevents update of screen or freeing of input
+        PutString(const_cast<char*>(m_rawLines.GetPrev(pos).GetString()), false, is7bit, true);
+    }
+
+    // request a redraw
+    Invalidate(TRUE);
+}
+
 // The only annoyance in here is when the MDI window is maximized, the other windows
 // do not get all the appropriate messages for sizing.
 // We handle this in the output function - if the active form is maximized, we just
 // use it's count instead, as it should be correct.
+// (8/3/2019 - whatever I was talking about above doesn't seem to be true anymore... )
 void COutWnd::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
@@ -308,6 +342,11 @@ void COutWnd::OnSize(UINT nType, int cx, int cy)
 	if ((cx > 0)&&(cy > 0)) {
 		CalcFontHeight();
 	}
+
+    // if not locked to 80 columns, then reformat the display
+    if (GetApp()->m_bScreenWrap) {
+        reformatAll();
+    }
 }
 
 BOOL COutWnd::OnEraseBkgnd(CDC* pDC) 
@@ -391,11 +430,15 @@ void COutWnd::ColorString(CString *pStr, int nCol) {
 	*pStr=OutBuf;
 }
 
-int COutWnd::PutString(char * minstr, int InPaused, int Is7Bit)
+// minstr is the input string (unprocessed). free()d if bufferOnly is false
+// InPaused is whether we are pausing output
+// Is7Bit is whether to strip high ASCII
+// bufferOnly (default false) skips output and m_rawLines and only populates m_Lines (for resize)
+int COutWnd::PutString(char * minstr, int InPaused, bool Is7Bit, bool bufferOnly)
 {
     static unsigned char cstr[BUFFSIZE];    // static to avoid allocations
 	CString CStrOut;
-	unsigned char *instr, *pLastBreak, *pLastBroken;
+	const unsigned char *instr, *pLastBreak, *pLastBroken;
 	unsigned char *str;
 	int colored, nCharat, nMaxChars;
 	bool fEndOfLine;
@@ -432,18 +475,44 @@ int COutWnd::PutString(char * minstr, int InPaused, int Is7Bit)
 
 	if(!m_bLastEOL)						// the last line didn't end with a carriage return.
 	{
+        // So this block is a little problematic. What it wants to do is erase just the
+        // last line from the screen so that it can redraw it after appending the new
+        // data. But rawLines has /everything/ received, which could conceivably by many
+        // lines, and we want both to be up to date. So, we do a little bit of tricky
+        // processing to update both arrays. Luckily we're much faster than in 1999 ;)
+
+        if (!bufferOnly) {
+            // first, special processing for rawLines (if it's not FROM rawLines)
+            CStrOut = m_rawLines.GetHead();
+		    colored=CStrOut.GetLength();	// Note how much was already processed
+		    CStrOut+=minstr;				// Add the new string to it
+            ParseColor(&CStrOut, colored);  // special color parse call (extra work)
+            m_rawLines.RemoveHead();        // remove the old head
+            m_rawLines.AddHead(CStrOut);    // and add in the new one
+        }
+
+        // now, slightly less processing for the output lines
 		CStrOut=m_Lines.GetHead();		// Get the line so we can append to it
 		colored=CStrOut.GetLength();	// Note how much was already processed
 		CStrOut+=minstr;				// Add the new string to it
-		m_Lines.RemoveHead();			// Remove it from the buffer
-		InvalidateLine(0);				// Erase it from the screen
+		m_Lines.RemoveHead();			// Remove old from the buffer
+		InvalidateLine(0);				// Erase old from the screen
 	}
 
-	ParseColor(&CStrOut, colored);		// Fix up the coloring and special characters
-	instr=(unsigned char*)(const char*)CStrOut;	// Pointer to the string
+    if (!bufferOnly) {
+    	ParseColor(&CStrOut, colored);		// Fix up the coloring and special characters
+    }
+
+    if ((m_bLastEOL)&&(!bufferOnly)) {
+        // in this case, we did not do a special case on rawLines, so save the
+        // newly colored line there. rawLines processing is now done.
+        m_rawLines.AddHead(CStrOut);
+    }
+
+	instr=(unsigned char*)CStrOut.GetString();	// const Pointer to the string (unsigned cause telnet codes)
 	pLastBreak=NULL;					// Last word-wrap position noted
 	pLastBroken=NULL;					// Last place we actually DID break
-	str=cstr;
+	str=cstr;                           // str points into the static output buffer at cstr
 
 	nCharat=0;
 	fEndOfLine=false;
@@ -452,12 +521,12 @@ int COutWnd::PutString(char * minstr, int InPaused, int Is7Bit)
 		// Process the string - every character includes the color code!
 		
 		// Check for end of line
-		if ((*instr=='\0')|(*instr=='\n')|(nCharat >= nMaxChars)) {
+		if ((*instr=='\0')||(*instr=='\n')||(nCharat >= nMaxChars)) {
 			if (*instr != '\0') {
 				fEndOfLine=true;
 			}
 			// Check for wordwrap
-			if (((GetApp()->m_bWordWrap)&(nCharat >= nMaxChars)&(pLastBreak!=NULL)) && (pLastBreak > pLastBroken)) {
+			if (((GetApp()->m_bWordWrap)&&(nCharat >= nMaxChars)&&(pLastBreak!=NULL)) && (pLastBreak > pLastBroken)) {
 				str-=(instr - pLastBreak);
 				instr=pLastBreak;
 				while (*instr == ' ') {
@@ -475,29 +544,34 @@ int COutWnd::PutString(char * minstr, int InPaused, int Is7Bit)
 				instr+=SkipColor((unsigned char*)instr);
 			}
 
-			m_Lines.AddHead((LPCTSTR)cstr);
+			m_Lines.AddHead((LPCTSTR)cstr); // cast needed to go from unsigned char*
 			while (m_Lines.GetCount() > m_iMaxLines) {
 				m_Lines.RemoveTail();
 			}
 
-			if (InPaused) {
-				m_iOffset++;				// Adjust offset - don't scroll
-				SetScrollPos(SB_VERT,m_Lines.GetCount()-m_iOffset,TRUE);	// fix scroll bar
-			} else {
-				if (m_bLastEOL) {
-					ScrollUp(1);
-				} else {
-					InvalidateLine(0);
-				}
-			}
-			m_bLastEOL=fEndOfLine;
+            if (!bufferOnly) {
+			    if (InPaused) {
+				    m_iOffset++;				// Adjust offset - don't scroll
+				    SetScrollPos(SB_VERT,m_Lines.GetCount()-m_iOffset,TRUE);	// fix scroll bar
+			    } else {
+				    if (m_bLastEOL) {
+					    ScrollUp(1);
+				    } else {
+					    InvalidateLine(0);
+				    }
+			    }
 
-			UpdateWindow();
-			nLineCount++;
-			if (nLineCount >= 40) {
-				Sleep(1);				// Gives windows a chance to run
-				nLineCount=0;
-			}
+                // tell Windows to do stuff
+    			UpdateWindow();
+
+                // Sleeping during input is okay, but don't lag the resize
+                nLineCount++;
+			    if (nLineCount >= 40) {
+				    Sleep(1);				// Gives windows a chance to run
+				    nLineCount=0;
+			    }
+            }
+			m_bLastEOL=fEndOfLine;
 
 			str=cstr;					// new output string
 			nCharat=0;
@@ -515,8 +589,10 @@ int COutWnd::PutString(char * minstr, int InPaused, int Is7Bit)
 				break;
 			}
 		} else {
-			if ((*instr == 7)&(GetApp()->m_bBell)) {
-				MessageBeep(0xffffffff);		// play windows beep
+			if ((*instr == 7)&&(GetApp()->m_bBell)) {
+                if (!bufferOnly) {
+				    MessageBeep(0xffffffff);		// play windows beep
+                }
 				instr++;
 				instr+=SkipColor(instr);
 			} else if (*instr == 1) {
@@ -527,7 +603,7 @@ int COutWnd::PutString(char * minstr, int InPaused, int Is7Bit)
 				}
 				*(str++)=*(instr++);
 			} else {
-				if ((*instr >= ' ')&((!Is7Bit)|(*instr<0x80))) {
+				if ((*instr >= ' ')&&((!Is7Bit)||(*instr<0x80))) {
 					if (strchr("-/:;,.", *instr)) {
 						if ((*(instr+1))&&(*(instr+2))) {
 							pLastBreak = instr+2;
@@ -550,12 +626,18 @@ int COutWnd::PutString(char * minstr, int InPaused, int Is7Bit)
 		}
 	}
 
-	SetScrollRange(SB_VERT,0,m_Lines.GetCount(),FALSE);
-	SetScrollPos(SB_VERT,m_Lines.GetCount()-m_iOffset,TRUE);
+    if (!bufferOnly) {
+	    SetScrollRange(SB_VERT,0,m_Lines.GetCount(),FALSE);
+	    SetScrollPos(SB_VERT,m_Lines.GetCount()-m_iOffset,TRUE);
+    }
 
 	textLock.Unlock();
 
-	free(minstr);
+    if (!bufferOnly) {
+        // if bufferOnly is set, then we are pulling from rawLines, and should
+        // not free the input.
+    	free(minstr);
+    }
 	return true;
 }
 

@@ -20,7 +20,7 @@ public:
 	int NewFont(LPLOGFONT lf);
 	void OnEnterPressed();
 	CPoint PointToChar( CPoint pt);
-	int PutString(char * str, int InPaused, int Is7Bit=1);
+	int PutString(char * str, int InPaused, bool Is7Bit, bool bufferOnly = false);
 	int ScrollUp(int numlines  = 1 );
 	int VTPutString(const char * minstr);
 	void AbortLine();
@@ -29,6 +29,7 @@ public:
 	BOOL IsInSelection(int x,int y);
 	void ColorString(CString *pStr, int nCol);
 	void ParseColor(CString *pStr, int nColored);
+    void reformatAll();
 
     BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 
@@ -39,6 +40,7 @@ public:
     // data
     LOGFONT m_LogFont;
 	CStringList m_Lines;	// Color is now stored as a byte after every character, high nibble foreground
+    CStringList m_rawLines; // the received and colored data as above, but without word wrap applied
 		
 protected:
 	// Generated message map functions
@@ -52,6 +54,7 @@ protected:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnTimer(UINT nIDEvent);
+    afx_msg LRESULT handleReformat(WPARAM, LPARAM);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 		

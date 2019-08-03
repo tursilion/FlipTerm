@@ -571,6 +571,29 @@ void CMudApp::OnViewWrap()
 		m_bScreenWrap = dlg.m_iWrapWidth;
 		m_bWordWrap = dlg.m_iWordWrap;
 		m_bIndent=dlg.m_bIndent;
+
+#if 0
+        // reformat the active window - others should reformat on activate
+        // this works except if windows are not maximized, then only the active
+        // window reformats.
+        if (NULL != pMainFrame) {
+            CMDIChildWnd * pChild=pMainFrame->MDIGetActive();
+            if (pChild) {
+                CMudView *pView=(CMudView*)pChild->GetActiveView();
+                if (pView) {
+                    if (pView->m_pOutWnd) {
+                        pView->m_pOutWnd->reformatAll();
+                    }
+                }
+            }
+        }
+#else
+        // try to request all views reformat with a broadcast message
+        if (NULL != pMainFrame) {
+            pMainFrame->SendMessageToDescendants(WM_USER+3, 0, 0, TRUE, TRUE);
+        }
+#endif
+
 	}
 }
 

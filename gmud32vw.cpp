@@ -784,7 +784,7 @@ afx_msg LONG CMudView::OnStringReceived(UINT ,LONG lparam)
 			int tmpLen=csOut.GetLength()>BUFFSIZE-1 ? BUFFSIZE-1 : csOut.GetLength();
 			memcpy(buffer, (LPCSTR)csOut, tmpLen);
 			buffer[tmpLen]='\0';
-			m_pOutWnd->PutString(buffer, m_pSocket->m_bPaused, m_pWorld->m_bIs7Bit);	// this function frees the buffer
+			m_pOutWnd->PutString(buffer, m_pSocket->m_bPaused, (m_pWorld->m_bIs7Bit != 0));	// this function frees the buffer
 		}
 
 		// Skip end of line - no more than 1 CRLF pair
@@ -1192,20 +1192,24 @@ void CMudView::OnFileTogglelogging()
 				Printf("%%%%%% Opened log file %s.\n", dlg.GetPathName().GetString());
 				
 				textLock.Lock();
-				if (m_pOutWnd->m_Lines.GetCount()) {
+				if (m_pOutWnd->m_rawLines.GetCount()) {
 					if (IDYES == AfxMessageBox("Would you like to begin the log at the beginning of the buffer?", MB_ICONQUESTION | MB_YESNO)) {
-						POSITION pos = m_pOutWnd->m_Lines.GetTailPosition();
+						POSITION pos = m_pOutWnd->m_rawLines.GetTailPosition();
 						CString sTmp, sOut;
 
 						while (pos) {
-							sTmp=m_pOutWnd->m_Lines.GetPrev(pos);
+							sTmp=m_pOutWnd->m_rawLines.GetPrev(pos);
 							if (sTmp.GetAt(0) != 0x01) {
 								// We need to filter out the color codes
 								sOut="";
 								for (int i=0; i<sTmp.GetLength(); i+=2) {
 									sOut+=sTmp.GetAt(i);
 								}
-								sOut+='\n';		// need end of line, too
+                                // we don't need an EOL because (in theory) the data in
+                                // the buffer already has one. It's possible we got called
+                                // between two lines, but that's an edge case I'm willing
+                                // to live with.
+								//sOut+='\n';		// need end of line, too
 								m_fLogFile->WriteString(sOut);
 							}
 						}
@@ -1293,7 +1297,7 @@ BOOL __cdecl CMudView::Printf(LPSTR format, ...)
 		strcpy(buffer, (LPCSTR)StrOut);		// Copy it back if it'll fit
 	}
 
-	m_pOutWnd->PutString(buffer, m_pSocket->m_bPaused);
+	m_pOutWnd->PutString(buffer, m_pSocket->m_bPaused, true);
 	
 	return TRUE;
 }
