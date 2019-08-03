@@ -17,68 +17,20 @@ ComponentText "This program will install the FlipTerm MUD client to your machine
 Section "FlipTerm Client" ; (default, required section)
 SectionIn 1 2
 SetOutPath "$INSTDIR"
-File "C:\work\gmud\Distribution\FlipTerm.exe"
-File "C:\work\gmud\Distribution\FlipTerm.txt"
-File "C:\work\gmud\Distribution\SHFolder.dll"
+File "D:\work\gmud\Distribution\FlipTerm.exe"
+File "D:\work\gmud\Distribution\FlipTerm.txt"
+File "D:\work\gmud\Distribution\source_code.txt"
 CreateDirectory "$STARTMENU\Programs\FlipTerm"
 CreateShortcut "$STARTMENU\Programs\FlipTerm\FlipTerm.lnk" "$INSTDIR\FlipTerm.exe"
 CreateShortcut "$STARTMENU\Programs\FlipTerm\Notes.lnk" "$INSTDIR\FlipTerm.txt"
 SectionEnd ; end of default section
 
-Section "Plugins (recommended)"
-SectionIn 1 2
-SetOutPath "$INSTDIR"
-File /r "C:\work\gmud\Distribution\Plugins"
-; Initialize the 3D plugin here
-WriteRegStr HKEY_CURRENT_USER "SOFTWARE\TursiSoft\FlipTerm\PlugIns\3DView" "Cache" "$INSTDIR\Plugins\3DGraphics"
-WriteRegDWORD HKEY_CURRENT_USER "SOFTWARE\TursiSoft\FlipTerm\PlugIns\3DView" "Size" 1
-CreateShortcut "$STARTMENU\Programs\FlipTerm\Plugins Folder.lnk" "$INSTDIR\Plugins"
-SectionEnd ; end of section 'Plugins'
-
-Section "Default Worlds (optional)"
-SectionIn 1 2
-; Just sets up default mucks in the registry - don't overwrite any others though
-ClearErrors
-;
-ReadRegStr $0 HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\0\" "Name"
-IfErrors 0 +9
-WriteRegStr HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\0\" "Name" "FlipSide"
-WriteRegStr HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\0\" "AliasList" "Default"
-WriteRegStr HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\0\" "Description" "http://flipsidemuck.org"
-WriteRegStr HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\0\" "Host" "muck.flipsidemuck.org"
-WriteRegStr HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\0\" "MacroList" "Default"
-WriteRegStr HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\0\" "TriggerList" "Default"
-WriteRegDWORD HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\0\" "Port" 9999
-WriteRegDWORD HKCU "SOFTWARE\TursiSoft\FlipTerm" "WorldCount" 1
-;
-ReadRegStr $0 HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\1\" "Name"
-IfErrors 0 +9
-WriteRegStr HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\1\" "Name" "TLK Muck"
-WriteRegStr HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\1\" "AliasList" "Default"
-WriteRegStr HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\1\" "Description" "Unofficial Lion King Muck"
-WriteRegStr HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\1\" "Host" "muck.tlkmuck.org"
-WriteRegStr HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\1\" "MacroList" "Default"
-WriteRegStr HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\1\" "TriggerList" "Default"
-WriteRegDWORD HKCU "SOFTWARE\TursiSoft\FlipTerm\Worlds\1\" "Port" 7675
-WriteRegDWORD HKCU "SOFTWARE\TursiSoft\FlipTerm" "WorldCount" 2
-;
-SectionEnd
-
-Section "Documentation (optional)"
-SectionIn 1 2
-SetOutPath "$INSTDIR"
-File /r "C:\work\gmud\distribution\old gmud docs"
-File /r "C:\work\gmud\distribution\docs"
-CreateShortcut "$STARTMENU\Programs\FlipTerm\Documentation.lnk" "$INSTDIR\Docs"
-CreateShortcut "$STARTMENU\Programs\FlipTerm\Old GMud Docs.lnk" "$INSTDIR\old gmud docs"
-SectionEnd
-
-Section "Source Code (optional)"
+Section "Old GMUD Documentation (optional)"
 SectionIn 2
 SetOutPath "$INSTDIR"
-File /r "C:\work\gmud\distribution\src"
-CreateShortcut "$STARTMENU\Programs\FlipTerm\Source Code.lnk" "$INSTDIR\Src"
-SectionEnd ; end of section 'Source Code'
+File /r "D:\work\gmud\distribution\old gmud docs"
+CreateShortcut "$STARTMENU\Programs\FlipTerm\Old GMud Docs.lnk" "$INSTDIR\old gmud docs"
+SectionEnd
 
 Section "-post" ; (post install section, happens last after any optional sections)
 ; add any commands that need to happen after any optional sections here

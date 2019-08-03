@@ -1719,21 +1719,14 @@ WHAT'S NEW:
 WHAT'S FIXED:
 -Repacked crash fix - should not crash if you get unexpectedly logged out.
 
----------
-July 2019
----------
+-------------
+3 August 2019
+-------------
 WHAT'S NEW:
--Updated to Visual Studio 2019
+-Updated to Visual Studio 2017
 -Updated to new MFC
 -Removed MCP support and plugins
 -Removed 'script' system
 -Mouse wheel works on output window
-
-TODO:
 -Word wrap fits the window even when resized
-    -I think we'll just do it hacky - maintain two lists. One contains the strings as received 
-    (and maybe color formatted), the other contains the word-wrapped versions. The latter is 
-    regenerated from the former on window resize.
-
-
 
