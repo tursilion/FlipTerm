@@ -31,6 +31,7 @@
 
 #include <io.h>
 #include <afxmt.h>
+#include <MSTcpIP.h>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -324,6 +325,24 @@ int CMudView::Connect(CWorld *pWorld)
 	m_sAddress=m_pWorld->m_sHostName;
 	m_wPort=m_pWorld->m_wPort;
 	m_sName=m_pWorld->m_sName;
+
+    // set the keepalive time on the socket shorter so people
+    // can idle forever. 4m50 should work better than the default 2hrs
+    {
+        // a tcp_keepalive structure - is this defined somewhere?
+        struct {
+            u_long onoff;
+            u_long keepalivetime;
+            u_long keepaliveinterval;
+        } params;
+        params.onoff = 1;
+        params.keepalivetime = 290000;      // in ms - 4m50
+        params.keepaliveinterval = 1000;    // in ms - 1s (default)
+        DWORD bytesReturned = 0;
+        if (WSAIoctl(m_pSocket->m_hSocket, SIO_KEEPALIVE_VALS, &params, sizeof(params), NULL, 0, &bytesReturned, NULL, NULL)) {
+            Printf("%%%%%% Failed to set keepalive (%d), continuing connect...\n", WSAGetLastError());
+        }
+    }
 
 	OnFontChanged(0,0);
 	OnColorChanged(0,0);

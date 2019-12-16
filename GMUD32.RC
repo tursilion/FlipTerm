@@ -191,7 +191,7 @@ BEGIN
     LTEXT           "Released for FlipSide Muck under the",IDC_STATIC,40,50,134,8
     LTEXT           "terms of the original code agreement.",IDC_STATIC,40,60,134,8
     LTEXT           "This software may not be sold.",IDC_STATIC,40,70,134,8
-    LTEXT           "Release Version 1.12.0\r\n3 Aug 2018 - 1:02am",IDC_STATIC,41,84,95,16
+    LTEXT           "Release Version 1.13.0\r\n12 Dec 2019 - 11:44pm",IDC_STATIC,41,84,95,16
 END
 
 IDD_VIEW_SETTINGS DIALOG 0, 0, 235, 108
@@ -546,8 +546,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,12,0,0
- PRODUCTVERSION 1,12,0,0
+ FILEVERSION 1,13,0,0
+ PRODUCTVERSION 1,13,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -564,12 +564,12 @@ BEGIN
         BEGIN
             VALUE "Comments", "Derived from GMud32 by Dan Kelly"
             VALUE "FileDescription", "32 bit Mud client for XP/Vista/7/10"
-            VALUE "FileVersion", "3 Aug 2019"
+            VALUE "FileVersion", "12 Dec 2019"
             VALUE "InternalName", "FlipTerm"
             VALUE "LegalCopyright", "Original Copyright © 1995 Genewic, Dan Kelly - Updates © 2002-2019 by Mike Brent"
             VALUE "OriginalFilename", "FlipTerm.EXE"
             VALUE "ProductName", "FlipTerm - MUD client based on GMud32"
-            VALUE "ProductVersion", "1.12.0.0"
+            VALUE "ProductVersion", "1.13.0.0"
         END
     END
     BLOCK "VarFileInfo"
