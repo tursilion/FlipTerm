@@ -742,17 +742,21 @@ void CMainFrame::OnViewWorldwindow() {
 
 // populates the URL menu during popup
 afx_msg void CMainFrame::OnInitMenuPopup(CMenu *pMenu, UINT menuIdx, BOOL bSysMenu) {
-    // Not sure why the index is -1 here, but it is.
-    if ((!bSysMenu)&&(menuIdx == URL_MENU_INDEX)) {
-        for (int idx=0; idx<10; ++idx) {
-            if (menuItems[idx].IsEmpty()) {
-                if (pMenu->GetMenuItemCount() < idx+1) break;
-                pMenu->RemoveMenu(idx, MF_BYPOSITION);
-            } else {
-                if (pMenu->GetMenuItemCount() < idx+1) {
-                    pMenu->AppendMenu(MF_ENABLED, ID_URL_1+idx, menuItems[idx]);
+    if (!bSysMenu) {
+        // see whether the index is for the URLs menu
+        CMenu *mainMenu = GetMenu();
+        CString cs;
+        if ((mainMenu->GetMenuString(menuIdx, cs, MF_BYPOSITION)) && (cs == "&URLs")) {
+            for (int idx=0; idx<10; ++idx) {
+                if (menuItems[idx].IsEmpty()) {
+                    if (pMenu->GetMenuItemCount() < idx+1) break;
+                    pMenu->RemoveMenu(idx, MF_BYPOSITION);
                 } else {
-                    pMenu->ModifyMenu(idx, MF_BYPOSITION|MF_ENABLED, ID_URL_1+idx, menuItems[idx]);
+                    if (pMenu->GetMenuItemCount() < idx+1) {
+                        pMenu->AppendMenu(MF_ENABLED, ID_URL_1+idx, menuItems[idx]);
+                    } else {
+                        pMenu->ModifyMenu(idx, MF_BYPOSITION|MF_ENABLED, ID_URL_1+idx, menuItems[idx]);
+                    }
                 }
             }
         }

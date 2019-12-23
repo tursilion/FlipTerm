@@ -17,7 +17,6 @@ const HANDLE TheHeap=GetProcessHeap();	// Our shared memory heap
 #define malloc(x) HeapAlloc(TheHeap, 0, x)
 #define free(x) HeapFree(TheHeap, 0, x)
 
-#define URL_MENU_INDEX 5
 extern CString menuItems[10];
 
 extern bool g_ClosingApp;
