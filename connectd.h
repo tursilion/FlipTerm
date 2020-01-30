@@ -40,6 +40,7 @@ public:
 	CString	m_sConnectString;
 	CString	m_sHostName;
 	UINT	m_wPort;
+    BOOL    m_bSSL;
 	CString	m_sWorldName;
 	CString	m_sDescription;
 	CString	m_sTriggerSetName;

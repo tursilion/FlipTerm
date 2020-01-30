@@ -136,6 +136,7 @@ protected:
 	CString m_sAddress;
 	CString m_sName;
 	WORD m_wPort;
+    bool m_useSSL;
 
 	int	m_bAllowReconnect;
 

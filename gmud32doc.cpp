@@ -258,26 +258,6 @@ int CMudDoc::EditTriggerList(CWorld *pWorld)
 //	return FALSE;
 }
 
-CWorld *CMudDoc::GetWorld(CString sName,WORD wPort)
-{
-	for(int loop=0;loop<m_aWorlds.GetSize();loop++)
-	{
-		CWorld *pWorld = (CWorld *)m_aWorlds[loop];
-
-		if(wPort)
-		{
-			if(pWorld->m_sHostName.CompareNoCase(sName)==0 && pWorld->m_wPort == wPort)
-				return pWorld;
-		}
-		else
-		{
-			if(pWorld->m_sName.CompareNoCase(sName)==0)
-				return pWorld;
-		}
-	}
-	return NULL;
-}
-
 int CMudDoc::AddWorld(CWorld *pWorld)
 {
 	return m_aWorlds.Add(pWorld);

@@ -117,13 +117,14 @@ static UINT BASED_CODE numbers[] =
 
 static UINT BASED_CODE indicators[] =
 {
-	ID_SEPARATOR,			// Status indicator
-	ID_SEPARATOR,			// Number of lines
-	ID_SEPARATOR,           // Connected timer
-	ID_SEPARATOR,			// 'More' indicator
-	ID_INDICATOR_CAPS,
-	ID_INDICATOR_NUM,
-	ID_INDICATOR_SCRL,
+	ID_SEPARATOR,			// Status indicator - 0 (MFC)
+	ID_SEPARATOR,			// Number of lines  - 1
+	ID_SEPARATOR,           // Connected timer  - 2
+	ID_SEPARATOR,			// 'More' indicator - 3
+    ID_SEPARATOR,           // 'SSL' indicator  - 4
+	ID_INDICATOR_CAPS,      // Caps lock        - 5 (MFC)
+	ID_INDICATOR_NUM,       // Num lock         - 6 (MFC)
+	ID_INDICATOR_SCRL,      // Scroll lock      - 7 (MFC)
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -158,24 +159,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	EnableMDITabbedGroups(TRUE, mdiTabParams);
 #endif
 
-#if 0
-	if (!m_wndMenuBar.Create(this))
-	{
-		TRACE0("Failed to create menubar\n");
-		return -1;      // fail to create
-	}
-	m_wndMenuBar.SetPaneStyle(m_wndMenuBar.GetPaneStyle() | CBRS_SIZE_DYNAMIC | CBRS_TOOLTIPS | CBRS_FLYBY);
-
-	// prevent the menu bar from taking the focus on activation
-	CMFCPopupMenu::SetForceMenuFocus(FALSE);
-#else
     pMainMenu = new CMenu();
     pMainMenu->LoadMenu(IDR_MAINFRAME);
     SetMenu(NULL);
     ::DestroyMenu(m_hMenuDefault);
     SetMenu(pMainMenu);
     m_hMenuDefault = pMainMenu->GetSafeHmenu();
-#endif
 
 	if (!m_wndNumbers.Create(this, WS_CHILD | WS_VISIBLE | CBRS_TOP, ID_VIEW_WINDOWBAR) ||
 		!m_wndNumbers.LoadBitmap(IDB_NUMBERS) ||
@@ -212,6 +201,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_wndStatusBar.SetPaneInfo(1, IDOK, SBPS_NORMAL, 100);      // lines
 	m_wndStatusBar.SetPaneInfo(2, IDCANCEL, SBPS_NORMAL, 70);   // connect timer
 	m_wndStatusBar.SetPaneInfo(3, IDRETRY, SBPS_NORMAL, 80);    // MORE prompt
+	m_wndStatusBar.SetPaneInfo(4, IDIGNORE, SBPS_NORMAL, 40);   // SSL indicator
 	nTimer=SetTimer(1, 1000, NULL);
 	
     DWORD myDockStyle = AFX_CBRS_FLOAT | AFX_CBRS_CLOSE;     // no tabs, no auto-hide, no resize, no rollup
@@ -688,6 +678,13 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 					nTime=(int)time(NULL) - pView->m_Time;
 					tmp.Format("%d:%02d:%02d", nTime/3600, (nTime%3600)/60, nTime%60);
 					m_wndStatusBar.SetPaneText(2, tmp, true);
+
+                    // we redo the SSL status too in case the world changed
+                    if (pView->m_pWorld->m_useSSL) {
+                        m_wndStatusBar.SetPaneText(4, "SSL", true);
+                    } else {
+                        m_wndStatusBar.SetPaneText(4, "", true);
+                    }
 				}
 
 

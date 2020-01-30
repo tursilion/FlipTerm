@@ -18,7 +18,6 @@ class CMudDoc : public CDocument
 	public:
 		int EditWorldList();
 		int EditTriggerList(CWorld *pWorld);
-		CWorld *GetWorld(CString sName,WORD wPort=0);
 		int AddWorld(CWorld *pWorld);
 		void Save();
 		void Load();

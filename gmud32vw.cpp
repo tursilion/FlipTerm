@@ -325,6 +325,7 @@ int CMudView::Connect(CWorld *pWorld)
 	m_sAddress=m_pWorld->m_sHostName;
 	m_wPort=m_pWorld->m_wPort;
 	m_sName=m_pWorld->m_sName;
+    m_useSSL=m_pWorld->m_useSSL;
 
     // set the keepalive time on the socket shorter so people
     // can idle forever. 4m50 should work better than the default 2hrs
@@ -350,6 +351,7 @@ int CMudView::Connect(CWorld *pWorld)
 	if(atoi(m_pWorld->m_sHostName))
 	{
 		Printf("%%%%%% Connecting to %s on port %d.\n",(LPCSTR)m_pWorld->m_sHostName,(int)m_pWorld->m_wPort);
+        m_pSocket->m_bUseSSL = m_pWorld->m_useSSL;
 		m_pSocket->Connect((LPCSTR)m_pWorld->m_sHostName,m_pWorld->m_wPort);
 	}
 	else
@@ -410,6 +412,7 @@ afx_msg LONG CMudView::OnAsynchGetHostCompleted(UINT,LONG lParam)
 	wsprintf(temps,"%d.%d.%d.%d",(int)(unsigned char)pHost[0],(int)(unsigned char)pHost[1],(int)(unsigned char)pHost[2],(int)(unsigned char)pHost[3]);
 	m_sAddress = temps;
 	Printf("%%%%%% Connecting to %s on port %d\n",temps,(int)m_pWorld->m_wPort);
+    m_pSocket->m_bUseSSL=m_pWorld->m_useSSL;
 	m_pSocket->Connect(temps,m_pWorld->m_wPort);
 	SetUnSeen();
 	m_bConnectionPending=TRUE;	
@@ -1460,6 +1463,7 @@ bool CMudView::ProcessUserCommandLine(CString sInput)
 				m_pWorld=pW;
 		}
 		ASSERT_VALID(m_pWorld);
+        m_pSocket->m_bUseSSL = m_pWorld->m_useSSL;
 		m_pSocket->Connect((LPCSTR)m_pWorld->m_sHostName,m_pWorld->m_wPort);
 		return TRUE;
 	}
@@ -1786,7 +1790,8 @@ void CMudView::OnTimer(UINT nIDEvent)
 				m_pWorld=pW;
 		}
 		ASSERT_VALID(m_pWorld);
-		m_pSocket->Connect((LPCSTR)m_pWorld->m_sHostName,m_pWorld->m_wPort);
+		m_pSocket->m_bUseSSL = m_pWorld->m_useSSL;
+        m_pSocket->Connect((LPCSTR)m_pWorld->m_sHostName,m_pWorld->m_wPort);
 		break;
 
 	case 99:	// Window flash

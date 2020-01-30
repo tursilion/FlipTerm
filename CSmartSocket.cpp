@@ -2,6 +2,7 @@
 #include "csmartsocket.h"
 #include "gmud32.h"
 
+
 CSmartSocket::CSmartSocket()
 {
 	m_pParent=0;
@@ -13,6 +14,15 @@ CSmartSocket::CSmartSocket()
 	m_bConnected=FALSE;
 	m_bPaused=FALSE;
 	m_LastNegotiated="";
+
+    // SSL settings
+    m_bUseSSL = false;
+    ctx = NULL;
+    ssl = NULL;
+    scert = NULL;
+    meth = NULL;
+    ERR_load_crypto_strings();
+    SSL_load_error_strings(); // just once
 }
 
 CSmartSocket::~CSmartSocket()
@@ -29,12 +39,34 @@ int CSmartSocket::SetParentWnd(CWnd *pParent)
 	return TRUE;
 }
 
+// goes to the window, if possible
+void CSmartSocket::Notify(LPSTR format, ...) {
+
+    LPSTR pBuf = (LPSTR)malloc(BUFFSIZE);
+    if (NULL == pBuf) return;
+
+    va_list marker;
+	va_start(marker,format);
+	vsprintf(pBuf,format,marker);
+	va_end(marker);
+
+    OutputDebugString(pBuf);
+
+    if (m_pParent) {
+		m_pParent->SendMessage(WM_SOCKET_STRING_RECIEVED,0,(long)pBuf);
+	} else {
+        free(pBuf);
+    }
+}
+
+// goes out on the socket
 BOOL __cdecl CSmartSocket::Printf(LPSTR format, ...)
 {
 	ASSERT_VALID(this);
 	
-	if(!m_bConnected)
+	if(!m_bConnected) {
 		return FALSE;
+    }
 	// do the sprintf stuff
 	LPSTR buffer = (LPSTR)malloc(BUFFSIZE);
 
@@ -52,8 +84,109 @@ BOOL __cdecl CSmartSocket::Printf(LPSTR format, ...)
 
 void CSmartSocket::OnConnect(int nErrorCode)
 {
-	if(!nErrorCode)
-		m_bConnected=TRUE;
+	if(!nErrorCode) {
+        // experimental SSL support
+        // http://languageshelp.blogspot.com/2008/01/ssl-openssl-with-visual-c.html
+        if (m_bUseSSL) {
+
+            // SSL setup - not sure if I need all this every time
+            meth = TLS_client_method();
+            ctx = SSL_CTX_new (meth); 
+            if (NULL == ctx) {
+                Notify("%%%%%% Failed to get SSL context - failing.\n");
+                OnClose(WSANOTINITIALISED);
+                return;
+            }
+
+            // Start the SSL connection
+            ssl = SSL_new(ctx);
+            if (NULL == ssl) {
+                Notify("%%%%%% Failed to create new SSL - failing.\n");
+                OnClose(WSAECONNABORTED);
+                return;
+            }
+
+            SSL_set_fd(ssl, m_hSocket);
+            // non-blocking socket may return WANT_READ or WANT_WRITE, we just delay here...
+            // https://stackoverflow.com/questions/3952104/how-to-handle-openssl-ssl-error-want-read-want-write-on-non-blocking-sockets
+            int timeout = 100;  // roughly 2 seconds total
+            int delay = 20;
+            for (;;) {
+                if (--timeout <= 0) {
+                    Notify("%%%%%% Timeout on SSL connection - aborting\n");
+                    
+                    // TODO: should get proper errors into here...
+                    OnClose(WSAEOPNOTSUPP);
+                    return;
+                }
+
+                int conval = SSL_connect(ssl);
+                if (conval < 0) {
+                    int x = SSL_get_error(ssl, conval);
+                    if (x == SSL_ERROR_WANT_READ) {
+                        OutputDebugString("SSL Socket connect WANT_READ\n");
+                        Sleep(delay);
+                        continue;
+                    }
+                    if (x == SSL_ERROR_WANT_WRITE) {
+                        OutputDebugString("SSL Socket connect WANT_WRITE\n");
+                        Sleep(delay);
+                        continue;
+                    }
+                
+                    Notify("%%%%%% SSL Socket error %d\n", x);
+
+                    // Not convinced this is working right... seem to get zero here...
+                    char msg[1024];
+                    int err = ERR_get_error();
+                    ERR_error_string_n(err, msg, sizeof(msg));
+                    Notify("%%%%%% %s %s %s %s\n", msg, ERR_lib_error_string(err), ERR_func_error_string(err), ERR_reason_error_string(err));
+
+                    // TODO: should get proper errors into here...
+                    OnClose(WSAEOPNOTSUPP);
+                    return;
+                } else {
+                    break;
+                }
+            }
+
+            Notify("%%%%%% Successful SSL connection using %s\n", SSL_get_cipher(ssl));
+            Notify("%%%%%% You should verify the certificate information:\n");
+
+            // for now, we display the certificate information. The user should verify it!
+            scert = SSL_get_peer_certificate(ssl);
+            if (NULL == scert) {
+                // TODO: is this an error??
+                Notify("%%%%%% No certificate gathered, continuing...\n");
+            } else {
+                // TODO: But what do you check? The whole cert? Is the name enough?
+                char *txt = X509_NAME_oneline(X509_get_subject_name(scert), 0, 0);
+                if (NULL == txt) {
+                    Notify("%%%%%% Cert subject: (unknown)\n");
+                } else {
+                    Notify("%%%%%% Cert subject: %s\n", txt);
+                }
+                OPENSSL_free(txt);
+
+                txt = X509_NAME_oneline(X509_get_issuer_name(scert), 0, 0);
+                if (NULL == txt) {
+                    Notify("%%%%%% Cert issuer: (unknown)\n");
+                } else {
+                    Notify("%%%%%% Cert issuer: %s\n", txt);
+                }
+                OPENSSL_free(txt);
+
+                X509_free(scert);
+                scert = NULL;
+            }
+            // at this point SSL is up, but we need to use the SSL functions
+            // for everything instead of the default ones...
+        }
+
+        // set this last
+        m_bConnected=TRUE;
+    }
+
 	m_pParent->SendMessage(WM_SOCKET_CONNECTED,nErrorCode);
 	m_bPaused=FALSE;
 }
@@ -62,20 +195,50 @@ void CSmartSocket::OnSend(int /*nErrorCode*/ )
 {
 	while(m_asOutBuffer.GetSize())
 	{
-		if(Send(m_asOutBuffer[0],m_asOutBuffer[0].GetLength())==SOCKET_ERROR) {
-			break;
-		} else {
-			m_asOutBuffer.RemoveAt(0);
-		}
+        if ((m_bUseSSL)&&(NULL != ssl)) {
+            // encrypted
+            if (-1 == SSL_write(ssl, m_asOutBuffer[0],m_asOutBuffer[0].GetLength())) {
+                break;
+            } else {
+			    m_asOutBuffer.RemoveAt(0);
+		    }
+        } else {
+            // unencrypted
+		    if(Send(m_asOutBuffer[0],m_asOutBuffer[0].GetLength())==SOCKET_ERROR) {
+			    break;
+		    } else {
+			    m_asOutBuffer.RemoveAt(0);
+		    }
+        }
 	}
 }
 
 void CSmartSocket::OnClose(int nErrorCode)
 {
 	m_bConnected=FALSE;
-	Close();
+
+    wrapClose();
+
 	m_pParent->PostMessage(WM_SOCKET_DISCONNECTED,nErrorCode);
 	Pause(FALSE);
+}
+
+void CSmartSocket::wrapClose() {
+    // just wraps the Async close method so we can
+    // always do the SSL steps too
+    if ((m_bUseSSL)&&(NULL != ssl)) {
+        SSL_shutdown(ssl);
+    }
+
+	Close();
+
+    if (m_bUseSSL) {
+        SSL_free(ssl);
+        ssl = NULL;
+        SSL_CTX_free(ctx);
+        ctx = NULL;
+        // TODO: what about meth?
+    }
 }
 
 BOOL CSmartSocket::HardClose()
@@ -93,7 +256,9 @@ BOOL CSmartSocket::HardClose()
 
     //  Close the socket.
 	ShutDown(2);	// both send and receive
-    Close();
+
+    wrapClose();
+
 	m_hSocket = INVALID_SOCKET;
 	if (m_pParent->m_hWnd) {
 		m_pParent->SendMessage(WM_SOCKET_DISCONNECTED);
@@ -126,7 +291,11 @@ void CSmartSocket::OnReceive(int /*nErrorCode*/ )
 		pAdjBuf+=strlen(pBuf);
 	}
 	int retcode=1;
-	retcode = Receive(pAdjBuf,BUFFSIZE-50);
+    if ((m_bUseSSL)&&(NULL != ssl)) {
+        retcode = SSL_read(ssl, pAdjBuf, BUFFSIZE-50);
+    } else {
+    	retcode = Receive(pAdjBuf,BUFFSIZE-50);
+    }
 	if(retcode>0 && retcode !=SOCKET_ERROR)
 	{
 		pAdjBuf[retcode]=0;	// null terminate it.

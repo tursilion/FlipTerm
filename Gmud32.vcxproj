@@ -73,6 +73,14 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Flipterm</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Flipterm</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSdk_71A_IncludePath);D:\work\openSSL\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSdk_71A_LibraryPath_x86);D:\work\openSSL\lib\VC\static</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSdk_71A_IncludePath);D:\work\openSSL\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSdk_71A_LibraryPath_x86);D:\work\openSSL\lib\VC\static</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
       <MkTypLibCompatible>true</MkTypLibCompatible>
@@ -114,7 +122,7 @@
       <ProgramDatabaseFile>.\WinRel/FlipTerm.pdb</ProgramDatabaseFile>
       <TargetMachine>MachineX86</TargetMachine>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>Winmm.lib</AdditionalDependencies>
+      <AdditionalDependencies>Winmm.lib;crypt32.lib;libcrypto32MT.lib;libssl32MT.lib</AdditionalDependencies>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -166,7 +174,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <SubSystem>Windows</SubSystem>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
-      <AdditionalDependencies>winmm.lib</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;crypt32.lib;libcrypto32MTd.lib;libssl32MTd.lib</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <Bscmake>

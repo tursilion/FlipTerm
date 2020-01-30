@@ -16,6 +16,7 @@ CWorld::CWorld()
 	m_sName="";
 	m_sHostName="";
 	m_wPort=23;
+    m_useSSL=false;
 	m_sConnectString="";
 	m_sAutologFile="";
 	m_sLastAutologFilename="";
@@ -49,6 +50,7 @@ void CWorld::Save(int num) {
 
 	GetApp()->WriteProfileString(szPath, "Host", m_sHostName);
 	GetApp()->WriteProfileInt(szPath, "Port", m_wPort);
+    GetApp()->WriteProfileInt(szPath, "SSL", m_useSSL?1:0);
 	cTmp=m_sConnectString;
 	if (cTmp.GetLength() > 0) {
 		for (int idx=0; idx<cTmp.GetLength(); idx++) {
@@ -111,8 +113,10 @@ void CWorld::Load(int num) {
 
 	m_sHostName=GetApp()->GetProfileString(szPath, "Host", "Unknown");
 	m_wPort=(unsigned short)GetApp()->GetProfileInt(szPath, "Port", 23);
+    m_useSSL=GetApp()->GetProfileInt(szPath, "SSL", 0) ? true : false;
 	m_sConnectString=GetApp()->GetProfileString(szPath, "ConnectString", "");
 	
+    // TODO: what was this token for?
 	if (m_sConnectString.Left(3) == "}~{") {
 		if (m_sConnectString.GetLength()>3) {
 			m_sConnectString = m_sConnectString.Mid(3);

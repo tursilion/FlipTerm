@@ -15,6 +15,7 @@ class CWorld : public CObject
 		CString m_sName;
 		CString m_sHostName;
 		WORD m_wPort;
+        bool m_useSSL;
 		CString m_sConnectString;
 
 		CString m_sDescription;

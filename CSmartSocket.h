@@ -2,14 +2,19 @@
 #ifndef SMART_SOCKET_DEFINED
 #define SMART_SOCKET_DEFINED
 
+// Open SSL stuff
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+
 
 class CSmartSocket : public CAsyncSocket
 {
 	public:
 		CSmartSocket();
 		~CSmartSocket();
-			BOOL __cdecl Printf(LPSTR format, ...);
-		int SetParentWnd(CWnd *pParent);
+	    void CSmartSocket::Notify(LPSTR format, ...);
+        BOOL __cdecl Printf(LPSTR format, ...);
+        int SetParentWnd(CWnd *pParent);
 
 		BOOL IsConnected();
 
@@ -21,6 +26,7 @@ class CSmartSocket : public CAsyncSocket
 		
 		//
 		int Pause( BOOL bPause);
+        void wrapClose();
 		BOOL HardClose();
 		LPSTR SockerrToString( UINT serr );
 		CWnd *m_pParent;
@@ -32,6 +38,14 @@ class CSmartSocket : public CAsyncSocket
 		BOOL m_bPaused;
 
 		CString m_LastNegotiated;
+
+        // SSL member data
+        bool m_bUseSSL;
+        SSL_CTX * ctx;
+        SSL * ssl;
+        X509* scert;
+        const SSL_METHOD *meth;
+
 };
 
 #define WM_SOCKET_BASE WM_USER+1234

@@ -22,11 +22,12 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 CConnectDialog::CConnectDialog(CWnd* pParent /*=NULL*/)
 	: CDialog(CConnectDialog::IDD, pParent)
-{
+    , m_bSSL(false) {
 	//{{AFX_DATA_INIT(CConnectDialog)
 	m_sConnectString = _T("");
 	m_sHostName = _T("");
 	m_wPort = 0;
+    m_bSSL = false;
 	m_sWorldName = _T("");
 	m_sDescription = _T("");
 	m_sTriggerSetName = _T("");
@@ -87,6 +88,7 @@ void CConnectDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_AUTORECONNECT, m_Reconnect);
 	DDX_Check(pDX, IDC_AUTOCONNECT, m_bAutoConnect);
 	DDX_Check(pDX, IDC_7BIT, m_b7Bit);
+    DDX_Check(pDX, IDC_SSL, m_bSSL);
 	DDX_Text(pDX, IDC_FONT_SETTING, m_FontName);
 	//}}AFX_DATA_MAP
 }
@@ -222,6 +224,7 @@ void CConnectDialog::GetWorld(CWorld *pWorld)
 	UpdateData(TRUE);
 	pWorld->m_sHostName = m_sHostName;
 	pWorld->m_wPort = (WORD) m_wPort;
+    pWorld->m_useSSL = m_bSSL;
 	pWorld->m_sConnectString = m_sConnectString;
 	pWorld->m_sDescription = m_sDescription;
 	pWorld->m_sTriggerList = m_sTriggerSetName;
@@ -330,6 +333,7 @@ void CConnectDialog::ShowWorld(CWorld *pWorld)
 	m_sWorldName=pWorld->m_sName;
 	m_sHostName=pWorld->m_sHostName ;
 	m_wPort=pWorld->m_wPort ;
+    m_bSSL = pWorld->m_useSSL;
 	m_sConnectString=pWorld->m_sConnectString ;
 
 	m_sDescription=pWorld->m_sDescription ;
@@ -428,6 +432,7 @@ void CConnectDialog::OnDeleteWorld()
 		m_sConnectString = _T("");
 		m_sHostName = _T("");
 		m_wPort = 0;
+        m_bSSL = false;
 		m_sWorldName = _T("");
 		m_FontName = _T("");
 		m_sDescription="";

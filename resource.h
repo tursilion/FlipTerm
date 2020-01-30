@@ -174,6 +174,8 @@
 #define IDC_NEWANTIIDLE                 1112
 #define IDC_CONFIRMCLOSE                1113
 #define IDC_IRC                         1114
+#define IDC_IRC2                        1115
+#define IDC_SSL                         1115
 #define ID_CANCEL_EDIT_SRVR             32769
 #define ID_SERVER_CONNECT               32771
 #define ID_SERVER_DISCONNECT            32772
@@ -260,7 +262,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        313
+#define _APS_NEXT_RESOURCE_VALUE        314
 #define _APS_NEXT_COMMAND_VALUE         32844
 #define _APS_NEXT_CONTROL_VALUE         1115
 #define _APS_NEXT_SYMED_VALUE           310
