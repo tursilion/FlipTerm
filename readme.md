@@ -1,6 +1,6 @@
 This depot is not guaranteed to build at any given time - it's my bleeding edge repository.
 
-FlipTerm MUCK Client v 1.12.0
+FlipTerm MUCK Client v 1.15.0
 =============================
 
 ![Screenshot](https://github.com/tursilion/flipterm/raw/master/dist/flipterm.jpg)
