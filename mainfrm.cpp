@@ -16,6 +16,7 @@
 #include "world.h"
 #include "aliasarray.h"
 #include "disconnect.h"
+#include "CSmartSocket.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -26,6 +27,13 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #define DOCKINGMODE DT_SMART
 //#define DOCKINGMODE DT_STANDARD
 //#define DOCKINGMODE DT_IMMEDIATE
+
+// status line panes
+#define PANE_READY 0
+#define PANE_ENCRYPT 1
+#define PANE_LINES 2
+#define PANE_CONNECT 3
+#define PANE_MORE 4
 
 extern CMenu *pMainMenu;
 
@@ -195,13 +203,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     {
         UINT Id, Style;
         int Width;
-        m_wndStatusBar.GetPaneInfo(0, Id, Style, Width);
-	    m_wndStatusBar.SetPaneInfo(0, Id, SBPS_STRETCH, 200);
+        m_wndStatusBar.GetPaneInfo(PANE_READY, Id, Style, Width);
+	    m_wndStatusBar.SetPaneInfo(PANE_READY, Id, SBPS_STRETCH, 200);
     }
-    m_wndStatusBar.SetPaneInfo(1, IDOK, SBPS_NORMAL, 100);      // lines
-	m_wndStatusBar.SetPaneInfo(2, IDCANCEL, SBPS_NORMAL, 70);   // connect timer
-	m_wndStatusBar.SetPaneInfo(3, IDRETRY, SBPS_NORMAL, 80);    // MORE prompt
-	m_wndStatusBar.SetPaneInfo(4, IDIGNORE, SBPS_NORMAL, 40);   // SSL indicator
+	m_wndStatusBar.SetPaneInfo(PANE_ENCRYPT, IDIGNORE, SBPS_NORMAL, 200);  // SSL type
+    m_wndStatusBar.SetPaneInfo(PANE_LINES,   IDOK,     SBPS_NORMAL, 100);  // lines
+	m_wndStatusBar.SetPaneInfo(PANE_CONNECT, IDCANCEL, SBPS_NORMAL, 70);   // connect timer
+	m_wndStatusBar.SetPaneInfo(PANE_MORE,    IDRETRY,  SBPS_NORMAL, 80);   // MORE prompt
 	nTimer=SetTimer(1, 1000, NULL);
 	
     DWORD myDockStyle = AFX_CBRS_FLOAT | AFX_CBRS_CLOSE;     // no tabs, no auto-hide, no resize, no rollup
@@ -666,28 +674,26 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 			if (pView) {
 				if (pView->m_pOutWnd) {
 					tmp.Format("%d lines", pView->m_pOutWnd->m_Lines.GetCount());
-					m_wndStatusBar.SetPaneText(1, tmp, true);
+					m_wndStatusBar.SetPaneText(PANE_LINES, tmp, true);
 					if (pView->m_pOutWnd->GetOffset()) {
-						m_wndStatusBar.SetPaneText(3, ">MORE<", true);
+						m_wndStatusBar.SetPaneText(PANE_MORE, ">MORE<", true);
 					} else {
-						m_wndStatusBar.SetPaneText(3, " ", true);
+						m_wndStatusBar.SetPaneText(PANE_MORE, " ", true);
 					}
 				}
 				
 				if (pView->m_pWorld) {
 					nTime=(int)time(NULL) - pView->m_Time;
 					tmp.Format("%d:%02d:%02d", nTime/3600, (nTime%3600)/60, nTime%60);
-					m_wndStatusBar.SetPaneText(2, tmp, true);
+					m_wndStatusBar.SetPaneText(PANE_CONNECT, tmp, true);
 
                     // we redo the SSL status too in case the world changed
-                    if (pView->m_pWorld->m_useSSL) {
-                        m_wndStatusBar.SetPaneText(4, "SSL", true);
+                    if (pView->m_pWorld->m_useSSL) { 
+                        m_wndStatusBar.SetPaneText(PANE_ENCRYPT, pView->m_pSocket->m_encryption, true);
                     } else {
-                        m_wndStatusBar.SetPaneText(4, "", true);
+                        m_wndStatusBar.SetPaneText(PANE_ENCRYPT, "", true);
                     }
 				}
-
-
 			}
 		}
 	}

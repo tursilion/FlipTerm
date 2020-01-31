@@ -11,6 +11,7 @@ class CWorld : public CObject
 		
 		void Load(int num);
 		void Save(int num);
+        void setFingerprint(const char *);
 
 		CString m_sName;
 		CString m_sHostName;
@@ -24,6 +25,7 @@ class CWorld : public CObject
 		CString m_sAliasList;
 		CString m_sAutologFile;
 		CString m_sLastAutologFilename;
+        CString m_sslFingerprint;
 		CString m_csIRCChannel;		// not persistent
 		CString m_csNick;			// not persistent
 		int	m_nAutologMode;

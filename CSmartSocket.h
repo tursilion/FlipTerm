@@ -45,7 +45,8 @@ class CSmartSocket : public CAsyncSocket
         SSL * ssl;
         X509* scert;
         const SSL_METHOD *meth;
-
+        CString m_encryption;                   // just used for the status bar
+        char fingerprint[EVP_MAX_MD_SIZE*4];    // used to test the fingerprint
 };
 
 #define WM_SOCKET_BASE WM_USER+1234
@@ -54,6 +55,8 @@ class CSmartSocket : public CAsyncSocket
 #define WM_SOCKET_CONNECTED			WM_SOCKET_BASE+1
 #define WM_SOCKET_STRING_RECIEVED	WM_SOCKET_BASE+2
 #define WM_ASYNCH_GETHOST_COMPLETE	WM_SOCKET_BASE+3
+#define WM_VERIFY_CERT              WM_SOCKET_BASE+4
+#define WM_PRINTF_MSG               WM_SOCKET_BASE+5
 
 
 

@@ -10,15 +10,10 @@ credit, which I'm not. Please read the relevant documentation for the original
 licensing. This software may not be sold, although reasonable media and copying
 fees are fine so long as you offer me a free copy. ;)
 
-The reason for this update was two-fold. First, I needed a client that had ALL
-the features I wanted in one place, and I always liked GMud. So when I found the
-source code, I got to work.
+Finally, FlipTerm now includes SSL support using OpenSSL. They request I say:
 
-Second, FlipSide added support for enhanced graphics in the muck, and I needed a
-terminal program to bolt my protocol to. You'll find a description of the extension
-in another document. There's also a .DLL available in the source folder for use in
-your own projects - please read the documentation available there.
-
+This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)
+This product includes cryptographic software written by Eric Young (eay@cryptsoft.com)
 
 
 ----------------------
@@ -1729,4 +1724,9 @@ WHAT'S NEW:
 -Removed 'script' system
 -Mouse wheel works on output window
 -Word wrap fits the window even when resized
+
+---------------
+31 January 2020
+---------------
+-Added SSL support
 

@@ -55,7 +55,9 @@ BEGIN_MESSAGE_MAP(CMudView, CView)
 	ON_MESSAGE(WM_SOCKET_DISCONNECTED,OnSocketDisconnected)
 	ON_MESSAGE(WM_SOCKET_CONNECTED,OnSocketConnected)
 	ON_MESSAGE(WM_SOCKET_STRING_RECIEVED,OnStringReceived)
+    ON_MESSAGE(WM_PRINTF_MSG,OnPrintfMsg)
 	ON_MESSAGE(WM_ASYNCH_GETHOST_COMPLETE,OnAsynchGetHostCompleted)
+    ON_MESSAGE(WM_VERIFY_CERT,OnVerifyCert)
 	ON_MESSAGE(WM_ENTER_PRESSED,OnUserInput)
 	ON_MESSAGE(WM_FONTCHANGED,OnFontChanged)
 	ON_MESSAGE(WM_COLORCHANGED,OnColorChanged)
@@ -392,6 +394,54 @@ int CMudView::Connect(CWorld *pWorld)
 	return TRUE;
 }
 
+// we want to check the certificate fingerprint again the stored one
+// return 0 if the user does not accept the key. If we do accept it,
+// make sure that we save it to the world info.
+// lParam is a pointer to a string containing the fingerprint
+afx_msg LONG CMudView::OnVerifyCert(UINT,LONG lParam) {
+    if (NULL == m_pWorld) {
+        // this is not possible?
+        OutputDebugString("Null world on verify cert...\n");
+        return 0;
+    }
+    if (0 == lParam) {
+        // this is programmer error
+        OutputDebugString("0 string on verify cert...\n");
+        return 0;
+    }
+
+    // We have three possible outcomes:
+    // 1. The world has no key - this is our first connection
+    // 2. The world has a key and it matches
+    // 3. The world has a key and it is different
+
+    // 2 is the simplest, so we'll check that first
+    if (0 == strcmp((char*)lParam, m_pWorld->m_sslFingerprint)) {
+        // it's all good
+        return 1;
+    }
+
+    // okay, so the only difference here really is what we ask the user
+    char buf[1024];
+    if (0 == strlen(m_pWorld->m_sslFingerprint)) {
+        _snprintf(buf, sizeof(buf), "First time connecting, check fingerprint:\r\n\r\n%s\r\n\r\nContinue connecting?", (char*)lParam);
+    } else {
+        _snprintf(buf, sizeof(buf), "Received fingerprint does not match stored fingerprint.\r\n\r\nStored: %s\r\nReceived: %s\r\n\r\nUpdate and continue connecting?", m_pWorld->m_sslFingerprint.GetString(), (char*)lParam);
+    }
+    buf[1023]='\0';
+    if (IDYES != AfxMessageBox(buf, MB_ICONEXCLAMATION | MB_YESNO)) {
+        // user has said NO
+        return 0;
+    }
+
+    // user said yes, so we need to update the fingerprint
+    m_pWorld->setFingerprint((char*)lParam);
+    GetDocument()->Save();      // need to repeat the save since we changed fingerprint
+
+    // return okay
+    return 1;
+}
+
 // dns lookup has finished
 afx_msg LONG CMudView::OnAsynchGetHostCompleted(UINT,LONG lParam)
 {
@@ -523,6 +573,13 @@ void CMudView::OnUpdateServerConnect(CCmdUI* pCmdUI)
 void CMudView::OnUpdateServerDisconnect(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(m_pSocket->IsConnected() || m_bConnectionPending);
+}
+
+// this is just a request to send to printf and then free the message
+afx_msg LONG CMudView::OnPrintfMsg(UINT, LONG lparam) {
+    Printf("%s", (char*)lparam);
+    free((void*)lparam);
+    return 0;
 }
 
 // process an inbound message on lparam, which must be freed

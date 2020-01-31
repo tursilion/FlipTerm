@@ -38,6 +38,11 @@ CWorld::~CWorld()
 
 }
 
+void CWorld::setFingerprint(const char *str) {
+    // will be saved with the standard save code
+    m_sslFingerprint = str;
+}
+
 void CWorld::Save(int num) {
 	char szPath[1024];
 	POSITION pos;
@@ -51,6 +56,8 @@ void CWorld::Save(int num) {
 	GetApp()->WriteProfileString(szPath, "Host", m_sHostName);
 	GetApp()->WriteProfileInt(szPath, "Port", m_wPort);
     GetApp()->WriteProfileInt(szPath, "SSL", m_useSSL?1:0);
+    GetApp()->WriteProfileStringA(szPath, "Fingerprint", m_sslFingerprint);
+
 	cTmp=m_sConnectString;
 	if (cTmp.GetLength() > 0) {
 		for (int idx=0; idx<cTmp.GetLength(); idx++) {
@@ -114,6 +121,7 @@ void CWorld::Load(int num) {
 	m_sHostName=GetApp()->GetProfileString(szPath, "Host", "Unknown");
 	m_wPort=(unsigned short)GetApp()->GetProfileInt(szPath, "Port", 23);
     m_useSSL=GetApp()->GetProfileInt(szPath, "SSL", 0) ? true : false;
+    m_sslFingerprint=GetApp()->GetProfileString(szPath, "Fingerprint", "");
 	m_sConnectString=GetApp()->GetProfileString(szPath, "ConnectString", "");
 	
     // TODO: what was this token for?

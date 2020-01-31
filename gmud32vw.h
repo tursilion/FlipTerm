@@ -93,7 +93,9 @@ public:
 	afx_msg LONG OnSocketDisconnected(UINT nErrCode,LONG);
 	afx_msg LONG OnSocketConnected(UINT nErrCode,LONG);
 	afx_msg LONG OnStringReceived(UINT ,LONG lparam);
+    afx_msg LONG OnPrintfMsg(UINT, LONG lparam);
 	afx_msg LONG OnAsynchGetHostCompleted(UINT,LONG);
+    afx_msg LONG OnVerifyCert(UINT,LONG);
 	afx_msg LONG OnUserInput(UINT,LONG lParam);
 	afx_msg LONG OnFontChanged(UINT,LONG);
 	afx_msg LONG OnColorChanged(UINT,LONG);

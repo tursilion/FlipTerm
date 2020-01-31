@@ -297,4 +297,9 @@
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="OpenSSL_Readme.txt">
+      <Filter>document files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

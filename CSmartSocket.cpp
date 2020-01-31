@@ -21,6 +21,7 @@ CSmartSocket::CSmartSocket()
     ssl = NULL;
     scert = NULL;
     meth = NULL;
+    m_encryption = "";
     ERR_load_crypto_strings();
     SSL_load_error_strings(); // just once
 }
@@ -53,7 +54,7 @@ void CSmartSocket::Notify(LPSTR format, ...) {
     OutputDebugString(pBuf);
 
     if (m_pParent) {
-		m_pParent->SendMessage(WM_SOCKET_STRING_RECIEVED,0,(long)pBuf);
+		m_pParent->SendMessage(WM_PRINTF_MSG,0,(long)pBuf);
 	} else {
         free(pBuf);
     }
@@ -150,10 +151,11 @@ void CSmartSocket::OnConnect(int nErrorCode)
                 }
             }
 
-            Notify("%%%%%% Successful SSL connection using %s\n", SSL_get_cipher(ssl));
-            Notify("%%%%%% You should verify the certificate information:\n");
+            m_encryption = SSL_get_cipher(ssl);
+            Notify("%%%%%% Successful SSL connection using %s\n", m_encryption.GetString());
 
-            // for now, we display the certificate information. The user should verify it!
+            // for now, we display the certificate information.
+            strcpy(fingerprint, "");
             scert = SSL_get_peer_certificate(ssl);
             if (NULL == scert) {
                 // TODO: is this an error??
@@ -176,9 +178,28 @@ void CSmartSocket::OnConnect(int nErrorCode)
                 }
                 OPENSSL_free(txt);
 
+                const EVP_MD *digest = EVP_get_digestbyname("sha1");
+                unsigned char md_value[EVP_MAX_MD_SIZE];
+                unsigned int n = sizeof(md_value);
+                X509_digest(scert, digest, md_value, &n);
+                for (unsigned int i=0; i<n; ++i) {
+                    sprintf(fingerprint, "%s:%02X", fingerprint, md_value[i]);
+                }
+                Notify("%%%%%% Fingerprint: %s\n", fingerprint);
+
                 X509_free(scert);
                 scert = NULL;
             }
+
+            // check the certificate fingerprint
+            if (!m_pParent->SendMessage(WM_VERIFY_CERT,0,(long)fingerprint)) {
+                // the user has rejected the key, so disconnect
+                Notify("%%%%%% Key fingerprint rejected\n");
+                // TODO: should get proper errors into here...
+                OnClose(WSANO_DATA);
+                return;
+            }
+
             // at this point SSL is up, but we need to use the SSL functions
             // for everything instead of the default ones...
         }

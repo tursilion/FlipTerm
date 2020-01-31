@@ -5,7 +5,7 @@ FlipTerm MUCK Client v 1.12.0
 
 ![Screenshot](https://github.com/tursilion/flipterm/raw/master/dist/flipterm.jpg)
 
-I wrote this when GMUD stopped working on my Windows 2000 machine, and used it and updated it for over a decade. FlipTerm has many features and extensions over the original GMud, as requested by a great crew of beta testers, but the main goal is it's stable.
+I wrote this when GMUD stopped working on my Windows 2000 machine, and used it and updated it for over a decade. FlipTerm has many features and extensions over the original GMud, as requested by a great crew of beta testers, but the main goal is it's stable. FlipTerm now supports SSL.
 
 Download the latest release installer here: [https://github.com/tursilion/flipterm/raw/master/dist/InstallFlipTerm.exe](https://github.com/tursilion/flipterm/raw/master/dist/InstallFlipTerm.exe)
 
@@ -26,6 +26,9 @@ It ALSO means that the oldest supported version is Windows XP. I've also left up
 
 *(I previously said the old installer was good for pre-XP machines, but it turns out that was a lie. You need XP or later.)*
 
+This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)
+
+This product includes cryptographic software written by Eric Young (eay@cryptsoft.com)
 
 Want to donate?
 ---------------
