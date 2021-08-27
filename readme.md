@@ -1,6 +1,6 @@
 This depot is not guaranteed to build at any given time - it's my bleeding edge repository.
 
-FlipTerm MUCK Client v 1.15.0
+FlipTerm MUCK Client v 1.16.0
 =============================
 
 ![Screenshot](https://github.com/tursilion/flipterm/raw/master/dist/flipterm.jpg)
@@ -22,9 +22,7 @@ If you just install overtop of the old version, it won't hurt anything! So it's 
 
 The new FlipTerm uses a much newer version of MFC. They changed lots in the docking code, so you will have to redock your windows, but everything else SHOULD come across. The basic improvements are better handling of high-DPI monitors when docking, the newer toolbar interface (just better tooltips and docking modes really), and proper wrap-to-window even if you resize the window. ;)
 
-It ALSO means that the oldest supported version is Windows XP. I've also left up the old version in case people have trouble with all the updates. [https://github.com/tursilion/flipterm/raw/master/dist/InstallFlipTerm_old.exe](https://github.com/tursilion/flipterm/raw/master/dist/InstallFlipTerm_old.exe)
-
-*(I previously said the old installer was good for pre-XP machines, but it turns out that was a lie. You need XP or later.)*
+It ALSO means that the oldest supported version is Windows XP. 
 
 This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)
 
