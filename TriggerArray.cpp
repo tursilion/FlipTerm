@@ -28,6 +28,7 @@ void CTriggerArray::Save(int num)
 		GetApp()->WriteProfileString(path, "Output", pTr->m_sMudOutput);
 		GetApp()->WriteProfileString(path, "File", pTr->m_sFileName);
 		GetApp()->WriteProfileInt(path, "fgColor", pTr->m_fgColor);
+		GetApp()->WriteProfileInt(path, "caseSensitive", pTr->m_bCaseSensitive ? 1 : 0);
 	}
 }
 
@@ -48,6 +49,7 @@ void CTriggerArray::Load(int num)
 		pTr->m_sMudOutput=GetApp()->GetProfileString(path, "Output", "");
 		pTr->m_sFileName=GetApp()->GetProfileString(path, "File", "");
 		pTr->m_fgColor=GetApp()->GetProfileInt(path, "fgColor", 0);
+		pTr->m_bCaseSensitive = GetApp()->GetProfileInt(path, "caseSensitive", 0) ? true : false;
 		Add(pTr);
 	}
 }

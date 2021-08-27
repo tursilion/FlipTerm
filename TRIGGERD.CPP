@@ -54,6 +54,7 @@ void CTriggerDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_RENAME, m_Rename);
 	DDX_Control(pDX, IDC_TRIGGERLIST, m_Triggers);
 	DDX_Control(pDX, IDC_CHANGECOLOR, m_ChangeCol);
+	DDX_Control(pDX, IDC_CHKCASE, m_CheckCase);
 	DDX_Control(pDX, IDC_TEST_SOUND, m_Test);
 	DDX_Control(pDX, IDC_PLAYFILE, m_PlayFile);
 	DDX_Control(pDX, IDC_MUDTEXT, m_cText);
@@ -74,6 +75,7 @@ void CTriggerDialog::EnableControls() {
 	if (pCombo) pCombo->EnableWindow(true);	// can't use an automatic var due to the subclassing
 	m_Delete.EnableWindow(true);
 	m_ChangeCol.EnableWindow(true);
+	m_CheckCase.EnableWindow(true);
 	m_Browse.EnableWindow(true);
 	m_cFilename.EnableWindow(true);
 	m_cText.EnableWindow(true);
@@ -87,6 +89,7 @@ void CTriggerDialog::DisableControls() {
 	if (pCombo) pCombo->EnableWindow(false);
 	m_Delete.EnableWindow(false);
 	m_ChangeCol.EnableWindow(false);
+	m_CheckCase.EnableWindow(false);
 	m_Browse.EnableWindow(false);
 	m_cFilename.EnableWindow(false);
 	m_cText.EnableWindow(false);
@@ -173,6 +176,7 @@ void CTriggerDialog::OnOK()
 		} else {
 			pTrigger->m_fgColor=0;
 		}
+		pTrigger->m_bCaseSensitive = (m_CheckCase.GetCheck() != 0);
 	}
 	CDialog::OnOK();
 }
@@ -241,6 +245,7 @@ void CTriggerDialog::OnSelchangeTriggerlist()
 		} else {
 			pTrigger->m_fgColor=0;
 		}
+		pTrigger->m_bCaseSensitive = (m_CheckCase.GetCheck() != 0);
 	}
 
 	pTrigger=GetTrigger(m_sTrigger);
@@ -258,6 +263,7 @@ void CTriggerDialog::OnSelchangeTriggerlist()
 			m_comboForeground.EnableWindow(false);
 			m_ChangeCol.SetCheck(false);
 		}
+		m_CheckCase.SetCheck(pTrigger->m_bCaseSensitive);
 		EnableControls();
 		m_OldTrigger=m_sTrigger;
 	}
@@ -330,6 +336,7 @@ void CTriggerDialog::OnRename()
 	} else {
 		pTrigger->m_fgColor=0;
 	}
+	pTrigger->m_bCaseSensitive = (m_CheckCase.GetCheck()!=0);
 
 	DisableControls();
 	m_Triggers.ResetContent();

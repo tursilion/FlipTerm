@@ -9,13 +9,14 @@
 #include "outwnd.h"
 #include "GMud32Vw.h"
 
-bool match(LPCSTR *szOrigTest, LPCSTR szOrigPattern,CMapStringToString &params);
+bool match(LPCSTR &szOrigTest, LPCSTR szOrigPattern,CMapStringToString &params,bool caseSensitive);
 
 CTrigger::CTrigger()
 {
 	m_sMudOutput="";
 	m_sFileName="";
 	m_fgColor=0;
+	m_bCaseSensitive=false;
 }
 
 CTrigger::~CTrigger()
@@ -29,22 +30,31 @@ CSelectable *CTrigger::CreateCopy()
 	pTrig->m_sMudOutput = m_sMudOutput;
 	pTrig->m_sFileName = m_sFileName;
 	pTrig->SetName(GetName());
+	pTrig->m_bCaseSensitive = m_bCaseSensitive;
 	return pTrig;
 }
 
 // return 0 for none, 1 for processed, 2 to change string color
+// str - pointer to input string from MUCK
+// pView - pointer to the view object for variables and output
 int CTrigger::CheckActivation(LPCSTR str, CMudView *pView)
 {
 	int ret;
+
+	if ((NULL == str) || (NULL == pView)) {
+		return 0;
+	}
 	
-	if (!GetName().GetLength())	// if the trigger string is set...
-	{
+	if (0 == GetName().GetLength()) {	// if the trigger string is set...
 		return 0;
 	}
 	
 	ret=0;
 	
-	while(str && *str && match(&str,GetName(),*pView->GetUserVariables()))
+	// TODO: frankly, I think I might delete the user variables - it would simplify
+	// a lot of the code and I can't help but think it was meant for the incomplete
+	// scripting, which I did delete. But for the moment, they can stay...
+	while(str && *str && match(str, GetName(), *pView->GetUserVariables(), m_bCaseSensitive))
 	{
 		str+=GetName().GetLength();
 		CMudApp *pApp = GetApp();
@@ -65,23 +75,32 @@ int CTrigger::CheckActivation(LPCSTR str, CMudView *pView)
 	return ret;
 }
 
-
-bool match(LPCSTR *szOrigTest, LPCSTR szOrigPattern,CMapStringToString &params)
+// szOrigTest - refernce to source string pointer (will be updated to the match point)
+// szOrigPattern - pointer to match string
+// params - reference to view's user variables
+// caseSensitive - true to match the trigger name in a case-sensitive manner
+bool match(LPCSTR &szOrigTest, LPCSTR szOrigPattern, CMapStringToString &params, bool caseSensitive)
 {
-	
-	if(!*szOrigPattern)
+	// verify input pointers have strings
+	if((NULL == szOrigTest) || (0 == *szOrigTest)) {
 		return false;
-	LPCSTR szTest=*szOrigTest;
-	LPCSTR szPattern=szOrigPattern;
-	LPCSTR szNonMatch =szTest;
-	bool bMatching=false;
-	CMapStringToString aTempParams;
+	}
+	if ((NULL == szOrigPattern) || ( 0 == *szOrigPattern)) {
+		return false;
+	}
+
+	// make some locals to work with
+	LPCSTR szTest=szOrigTest;			// source string search
+	LPCSTR szPattern=szOrigPattern;		// pattern string search
+	LPCSTR szNonMatch=szTest;			// beginning of search stored when pattern is found
+	bool bMatching=false;				// whether we are currently matching
+	CMapStringToString aTempParams;		// I have no idea
 	
 	while(*szTest && *szPattern)
 	{
 		CString sVarName;
 
-		if(*szPattern == '%')
+		if(*szPattern == '%')			// this pulls a %VARNAME from the string - I don't think I actually USE variables anymore...
 		{
 			szPattern++;
 			while(*szPattern && !isspace(*szPattern))
@@ -94,22 +113,24 @@ bool match(LPCSTR *szOrigTest, LPCSTR szOrigPattern,CMapStringToString &params)
 		if (sVarName.GetLength()) {
 			CString sVarValue;
 			// Search for the first matching char or EOL
-			while(*szTest && (*szTest != *szPattern))
+			while(*szTest && (*szTest != *szPattern))	// var searches are always case-sensitive?
 			{
 				sVarValue+=*szTest;
 				szTest++;
 			}
 			aTempParams.SetAt(sVarName,sVarValue);
 			bMatching=true;
-		}
-		else if(toupper(*szTest) == toupper(*szPattern))
-		{
+		} else if ((!caseSensitive)&&(toupper(*szTest) == toupper(*szPattern))) {
 			bMatching=true;
 			szTest++;
 			szPattern++;
-		}
-		else 
+		} else if ((caseSensitive)&&(*szTest == *szPattern)) {
+			bMatching=true;
+			szTest++;
+			szPattern++;
+		} else {
 			bMatching=false;
+		}
 		if(!bMatching)
 		{
 			szPattern=szOrigPattern;
@@ -117,11 +138,12 @@ bool match(LPCSTR *szOrigTest, LPCSTR szOrigPattern,CMapStringToString &params)
 			szTest=szNonMatch;
 		}
 	}
-	if(*szPattern)
+	if(*szPattern) {
 		bMatching=false;
+	}
 	if(bMatching)
 	{
-		*szOrigTest=szTest;
+		szOrigTest=szTest;
 		for(POSITION pos = aTempParams.GetStartPosition(); pos != NULL; )
 		{
 			CString sKey,sVal;

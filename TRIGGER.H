@@ -17,6 +17,7 @@ class CTrigger :public CSelectable
 		CString m_sMudOutput;
 		CString m_sFileName;
 		int m_fgColor;
+		bool m_bCaseSensitive;
 };
 
 #define ANTIIDLETRIGGERTEXT "~~IDLE~~ "

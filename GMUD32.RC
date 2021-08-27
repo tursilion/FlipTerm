@@ -190,7 +190,7 @@ BEGIN
     LTEXT           "Patched, cleaned up, then hacked all over again by Tursi",IDC_STATIC,39,37,207,8
     LTEXT           "Released for FlipSide Muck under the terms of the original code agreement.",IDC_STATIC,40,50,185,18
     LTEXT           "This software may not be sold.",IDC_STATIC,40,70,134,8
-    LTEXT           "Release Version 1.15.0\r\n31 Jan 2020 - 12:39am",IDC_STATIC,40,133,95,16
+    LTEXT           "Release Version 1.16.0\r\n26 August 2021 6:55pm",IDC_STATIC,40,133,95,16
     LTEXT           "This product includes software developed by the OpenSSL Project for use in the OpenSSL Tookit (http://www.openssl.org/)",IDC_STATIC,41,82,186,25
     LTEXT           "This product includes cryptographic software written by Eric Young (eay@cryptsoft.com)",IDC_STATIC,41,110,186,18
 END
@@ -326,27 +326,27 @@ BEGIN
     RTEXT           "F10",IDC_STATIC,197,186,13,8
 END
 
-IDD_TRIGGER_DIALOG DIALOG 0, 0, 344, 149
+IDD_TRIGGER_DIALOG DIALOGEX 0, 0, 344, 157
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 CAPTION "Triggers"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
-    DEFPUSHBUTTON   "&OK",IDOK,297,129,35,14
-    EDITTEXT        IDC_MUDTEXT,177,25,153,21,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL
-    EDITTEXT        IDC_FILENAME,177,62,153,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "&Browse",IDC_BROWSE_FILE,179,79,49,14
-    PUSHBUTTON      "&Test",IDC_TEST_SOUND,237,79,49,14
-    PUSHBUTTON      "&Delete",IDC_DELETE,179,129,35,14
-    PUSHBUTTON      "&Add",IDADD,218,129,35,14
-    CTEXT           "Trigger Text, case is NOT significant.",IDC_STATIC,7,3,167,8
-    LTEXT           "Output simple Text to MUD when triggered.",IDC_STATIC,177,13,153,11
-    LTEXT           "Play sound file when triggered",IDC_PLAYFILE,177,50,153,8
+    DEFPUSHBUTTON   "&OK",IDOK,297,136,35,14
+    EDITTEXT        IDC_MUDTEXT,179,33,153,21,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL
+    EDITTEXT        IDC_FILENAME,179,70,153,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&Browse",IDC_BROWSE_FILE,179,87,49,14
+    PUSHBUTTON      "&Test",IDC_TEST_SOUND,237,87,49,14
+    PUSHBUTTON      "&Delete",IDC_DELETE,179,136,35,14
+    PUSHBUTTON      "&Add",IDADD,218,136,35,14
+    LTEXT           "Output simple Text to MUD when triggered.",IDC_STATIC,179,22,153,11
+    LTEXT           "Play sound file when triggered",IDC_PLAYFILE,179,59,153,8
     CONTROL         "Change text color when triggered",IDC_CHANGECOLOR,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,179,100,130,10
-    COMBOBOX        IDC_COMBO1,179,112,154,50,CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | WS_VSCROLL | WS_TABSTOP
-    LISTBOX         IDC_TRIGGERLIST,9,16,156,110,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Update Trigger",IDC_RENAME,9,129,156,14
-    PUSHBUTTON      "Anti-&Idle",IDC_NEWANTIIDLE,258,129,35,14
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,179,106,130,10
+    COMBOBOX        IDC_COMBO1,179,118,154,50,CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | WS_VSCROLL | WS_TABSTOP
+    LISTBOX         IDC_TRIGGERLIST,9,6,156,125,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Update Trigger",IDC_RENAME,9,136,156,14
+    PUSHBUTTON      "Anti-&Idle",IDC_NEWANTIIDLE,258,136,35,14
+    CONTROL         "Case-Sensitive Trigger",IDC_CHKCASE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,179,7,85,10
 END
 
 IDD_TEXT_COLOR DIALOG 0, 0, 219, 117
@@ -548,8 +548,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,15,0,0
- PRODUCTVERSION 1,15,0,0
+ FILEVERSION 1,16,0,0
+ PRODUCTVERSION 1,16,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -566,12 +566,12 @@ BEGIN
         BEGIN
             VALUE "Comments", "Derived from GMud32 by Dan Kelly"
             VALUE "FileDescription", "32 bit Mud client for XP/Vista/7/10"
-            VALUE "FileVersion", "31 January 2020"
+            VALUE "FileVersion", "26 August 2021"
             VALUE "InternalName", "FlipTerm"
-            VALUE "LegalCopyright", "Original Copyright © 1995 Genewic, Dan Kelly - Updates © 2002-2020 by Mike Brent"
+            VALUE "LegalCopyright", "Original Copyright © 1995 Genewic, Dan Kelly - Updates © 2002-2021 by Mike Brent"
             VALUE "OriginalFilename", "FlipTerm.EXE"
             VALUE "ProductName", "FlipTerm - MUD client based on GMud32"
-            VALUE "ProductVersion", "1.15.0.0"
+            VALUE "ProductVersion", "1.16.0.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -604,6 +604,11 @@ BEGIN
 
     IDD_BUTTON_EDIT, DIALOG
     BEGIN
+    END
+
+    IDD_TRIGGER_DIALOG, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 149
     END
 
     IDD_CONNECTED_WORLD_BAR, DIALOG
@@ -683,6 +688,11 @@ BEGIN
 END
 
 IDD_CONNECT AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_TRIGGER_DIALOG AFX_DIALOG_LAYOUT
 BEGIN
     0
 END

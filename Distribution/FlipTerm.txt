@@ -1730,3 +1730,8 @@ WHAT'S NEW:
 ---------------
 -Added SSL support
 
+--------------
+26 August 2021
+--------------
+- added the option to make triggers case sensitive
+

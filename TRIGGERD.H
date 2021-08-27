@@ -21,6 +21,7 @@ public:
 	CButton	m_Rename;
 	CListBox	m_Triggers;
 	CButton	m_ChangeCol;
+	CButton m_CheckCase;
 	CButton	m_Test;
 	CStatic	m_PlayFile;
 	CEdit	m_cText;
