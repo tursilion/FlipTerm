@@ -1,7 +1,4 @@
-This depot is not guaranteed to build at any given time - it's my bleeding edge repository.
-
-FlipTerm MUCK Client v 1.16.0
-=============================
+1.16.0
 
 ![Screenshot](https://github.com/tursilion/flipterm/raw/master/dist/flipterm.jpg)
 
@@ -27,10 +24,3 @@ It ALSO means that the oldest supported version is Windows XP.
 This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)
 
 This product includes cryptographic software written by Eric Young (eay@cryptsoft.com)
-
-Want to donate?
----------------
-
-- Click here for [Ko-Fi](https://ko-fi.com/tursilion)...
-- Alternately, there's my [Amazon Wishlist](http://www.amazon.com/gp/registry/2AFCOAM5DD1L6/ref=cm_aya_wl/103-5991996-6483001)
-
