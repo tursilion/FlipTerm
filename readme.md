@@ -2,7 +2,7 @@
 
 I wrote this when GMUD stopped working on my Windows 2000 machine, and used it and updated it for over a decade. FlipTerm has many features and extensions over the original GMud, as requested by a great crew of beta testers, but the main goal is it's stable. FlipTerm now supports SSL.
 
-Download the latest release installer here: [https://github.com/tursilion/flipterm/raw/master/dist/InstallFlipTerm.exe](https://github.com/tursilion/flipterm/raw/master/dist/InstallFlipTerm.exe)
+Download the latest release installer here: [https://github.com/tursilion/flipterm/raw/main/dist/InstallFlipTerm.exe](https://github.com/tursilion/flipterm/raw/main/dist/InstallFlipTerm.exe)
 
 Note if you install the new overtop of an old install older than version 1.12.0, it will leave some tailings behind (old source, old docs, old plugins). You can either delete these manually, or uninstall BEFORE you install the new one. To preserve your settings:
 
